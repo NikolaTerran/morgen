@@ -1,0 +1,32 @@
+parametrix equation
+	define curves
+
+Parametric equations define curves as systems of equations in term
+of a single independent variable
+
+x = f(t)
+y = f(t)
+
+Parametric line
+(x0,y0) -> (x1,y1)
+x = f(t)
+y = g(t)
+               (x1,y1)
+             /  t = 1
+            /
+           /  t = 0.5
+(x0,t0)   /
+       t = 0
+
+Parametric Circle
+(Cx,Cy),f
+x = f(t)
+y = g(t)
+
+f(t) = cos(2PI * t) + Cx
+g(t) = sin(2PI * t) + Cy
+
+
+
+
+
