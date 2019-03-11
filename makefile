@@ -1,6 +1,6 @@
-all: main.o matrix.o parser.o line.o util.o random.o engine.h
-	gcc -lm main.o matrix.o line.o util.o random.o
-	gcc -o parser parser.o
+all: main.o matrix.o parser.o line.o util.o curve.o random.o engine.h
+	gcc main.o matrix.o line.o util.o random.o curve.o -lm
+	gcc -o parser matrix.o line.o util.o random.o parser.o -lm
 
 main.o: main.c engine.h
 	gcc -c main.c
@@ -20,6 +20,9 @@ random.o: random.c engine.h
 parser.o: parser.c engine.h
 	gcc -c parser.c
 
+curve.o: curve.c engine.h
+	gcc -c curve.c
+	
 run:
 	./a.out
 

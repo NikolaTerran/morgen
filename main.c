@@ -3,7 +3,8 @@
 int main(){
 
 struct Matrix edge;
-
+edge = bezier(50,50,100,100,150,150,50,200);
+/*
 //necessary init statement
 edge.row = 4;
 
@@ -54,10 +55,10 @@ result = mx_addc(result,transform);
 result = mx_addc(result,rotatex);
 result = mx_addc(result,rotatey);
 result = mx_addc(result,rotatez);
-
+*/
 //mx_print(result);
 printf("done!\n");
-mx_export(result);
+mx_export(edge);
 
 
 }
