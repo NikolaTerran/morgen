@@ -2,14 +2,19 @@
 
 int main(){
 
+//edge don't require mx_init for some reason
 struct Matrix edge;
-edge = bezier(50,50,100,100,150,150,50,200);
-/*
-//necessary init statement
 edge.row = 4;
 
+//edge = addedge(edge,50,50,0,51.499850,51.500000,0);
+edge = bezier(edge,50,50,200,100,150,150,50,200);
+
+/*
+//necessary init statement
+
+
 //initial triangular prism
-edge = addedge(edge,50,50,0,150,50,0);
+
 edge = addedge(edge,50,50,0,100,150,0);
 edge = addedge(edge,100,150,0,150,50,0);
 
