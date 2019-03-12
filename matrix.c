@@ -1,5 +1,10 @@
 #include "engine.h"
 
+/////////////////////////////
+//basic matrix manipulation//
+/////////////////////////////
+
+
 void mx_print(struct Matrix mx){
 	int i,j;
 	for(i = 0; i < mx.row; i++){
@@ -251,16 +256,24 @@ void mx_export(struct Matrix mx){
 	push(array,fd);
 }
 
+
+
+/////////////////////////////
+// matrix tranformation /////
+/////////////////////////////
+
+
+
 //create a transformation matrix 4 x 4
-struct Matrix mx_dilation(struct Matrix mx, double factor){
+struct Matrix mx_dilation(struct Matrix mx, double x, double y, double z){
 	struct Matrix id = mx_iden(mx,1);
 	
-	
 	int i = 0;
-	while(i < id.col){
-		id = mx_set(id, i, i, factor);
-		i++;
-	}
+	
+	id = mx_set(id,0,0,x);
+	id = mx_set(id,1,1,y);
+	id = mx_set(id,2,2,z);
+	
 	return id;
 }
 
@@ -278,15 +291,15 @@ struct Matrix mx_transform(struct Matrix mx, double x, double y, double z){
 }
 
 //axis == x,y
-struct Matrix mx_rotate(struct Matrix mx, char axis, double radian){
+struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
 	struct Matrix id;
 	id = mx_iden(mx,1);
-	if(axis == 'x'){
+	if(axis == 0){
 		id = mx_set(id,1,1,cos(radian));
 		id = mx_set(id,1,2,-sin(radian));
 		id = mx_set(id,2,1,sin(radian));
 		id = mx_set(id,2,2,cos(radian));
-	}else if(axis == 'y'){
+	}else if(axis == 1){
 		id = mx_set(id,0,0,cos(radian));
 		id = mx_set(id,0,2,sin(radian));
 		id = mx_set(id,2,0,-sin(radian));

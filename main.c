@@ -22,7 +22,7 @@ edge = addedge(edge,150,50,0,150,50,100);
 
 //dilate by a factor of 2
 struct Matrix dilation;
-dilation = mx_dilation(edge,2);
+dilation = mx_dilation(edge,2,2.5,1.5);
 dilation = mx_mult(dilation,edge);
 
 //transform edge matrix 200 px right, 200 px down, 50 px forward
@@ -32,18 +32,18 @@ transform = mx_mult(transform,edge);
 
 //rotate transformed edge matrix 1 radian around x-axis
 struct Matrix rotatex;
-rotatex = mx_rotate(transform,'x',1);
+rotatex = mx_rotate(transform,0,1);
 rotatex = mx_mult(rotatex,transform);
 
 //rotate transformed edge matrix 1 radian around y-axis
 struct Matrix rotatey;
-rotatey = mx_rotate(transform,'y',1);
+rotatey = mx_rotate(transform,1,1);
 rotatey = mx_mult(rotatey,transform);
 mx_print(rotatey);
 
 //rotate transformed edge matrix 1 radian around z-axis
 struct Matrix rotatez;
-rotatez = mx_rotate(transform,'z',1);
+rotatez = mx_rotate(transform,2,1);
 rotatez = mx_mult(rotatez,transform);
 mx_print(rotatez);
 

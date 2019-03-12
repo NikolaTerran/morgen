@@ -1,6 +1,6 @@
 all: main.o matrix.o parser.o line.o util.o random.o engine.h
-	gcc -lm main.o matrix.o line.o util.o random.o
-	gcc -o parser parser.o
+	gcc main.o matrix.o line.o util.o random.o -lm
+	gcc -o parser parser.o matrix.o line.o util.o random.o -lm
 
 main.o: main.c engine.h
 	gcc -c main.c
