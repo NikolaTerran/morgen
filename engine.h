@@ -41,6 +41,9 @@ struct Matrix mx_rotate(struct Matrix, int axis, double radian);
 
 
 
+/////////////////////curve////////////////////////////
+#define t_step 0.01
+struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
 
 ////////////////////general//////////////////////////
 void initialize(int array[][500][3], int color[]);

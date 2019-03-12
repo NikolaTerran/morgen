@@ -62,6 +62,7 @@ double mx_get(struct Matrix mx, int row, int col){
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val){/*
 	int f = fork();
 	if(!f){*/
+	
     if(row >= mx.row || col >= mx.col){
     	printf("ERROR: mx_set, target row or column doesn't exist, return original Matrix\n");
     	return mx;
@@ -132,12 +133,15 @@ struct Matrix mx_addc(struct Matrix m1, struct Matrix m2){
 		printf("ERROR: mx_addc, two matrices have different numbers of rows, return an empty matrix\n");
 		return m3;
 	}else{
+	
 		int column = m1.col + m2.col;
 		m3 = mx_init(m1.row,column);
 		int i, j;
 		for(i = 0; i < m3.row; i++){
 			for(j = 0; j < m3.col; j++){
+			
 				if(j < m1.col){
+				
 					m3 = mx_set(m3,i,j,m1.grid[i * m1.col + j]);
 				}else{
 					m3 = mx_set(m3,i,j,m2.grid[i * m2.col + j - m1.col]);
@@ -145,6 +149,7 @@ struct Matrix mx_addc(struct Matrix m1, struct Matrix m2){
 			}
 			j = 0;
 		}
+	
 		return m3;
 	}
 }
@@ -183,7 +188,7 @@ struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, 
 	brr[1] = e;
 	brr[2] = f;
 	brr[3] = 1;
-
+	
 	mx = mx_qac(mx,arr,4);
 	mx = mx_qac(mx,brr,4);
 	return mx;
@@ -243,10 +248,10 @@ void mx_export(struct Matrix mx){
 			mx = mx_rmc(mx);
 			mx = mx_rmc(mx);
 		}else{
-			drawLine(array, (int)mx_get(mx,0,0) + (int)mx_get(mx,2,0)/2,
-						    (int)mx_get(mx,1,0) - (int)mx_get(mx,2,0)/4,
-						    (int)mx_get(mx,0,1) + (int)mx_get(mx,2,1)/2,
-						    (int)mx_get(mx,1,1) - (int)mx_get(mx,2,1)/4, rgb);
+			drawLine(array, round(mx_get(mx,0,0)) + round(mx_get(mx,2,0)/2),
+						    round(mx_get(mx,1,0)) - round(mx_get(mx,2,0)/4),
+						    round(mx_get(mx,0,1)) + round(mx_get(mx,2,1)/2),
+						    round(mx_get(mx,1,1)) - round(mx_get(mx,2,1)/4), rgb);
 			mx = mx_rmc(mx);
 			mx = mx_rmc(mx);
 		}
