@@ -12,7 +12,7 @@ void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, in
 
 
 /////////////////////matrix//////////////////////////
-
+#define INIT_VALUE 0;
 struct Matrix{
 	double * grid;
 	int row;
@@ -34,7 +34,9 @@ struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double re
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 void mx_export(struct Matrix mx);
-/////////////////transformation
+
+
+/////////////////transformation///////////////////////
 struct Matrix mx_dilation(struct Matrix mx, double x,double y, double z);
 struct Matrix mx_transform(struct Matrix mx, double x, double y, double z);
 struct Matrix mx_rotate(struct Matrix, int axis, double radian);
@@ -42,8 +44,10 @@ struct Matrix mx_rotate(struct Matrix, int axis, double radian);
 
 
 /////////////////////curve////////////////////////////
-#define t_step 0.01
+#define t_step 0.02
+#define ERR_MARGIN 1
 struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
+struct Matrix circle(struct Matrix mx, double x, double y, double z, double r);
 
 ////////////////////general//////////////////////////
 void initialize(int array[][500][3], int color[]);

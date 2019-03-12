@@ -37,7 +37,7 @@ struct Matrix mx_init(int row, int col){
 	mx.grid = (double*) calloc (row * col, sizeof(double));
 
 	int i, j;
-	double ini = 0.0;
+	double ini = INIT_VALUE;
 	i = row;
 	j = col;
 	for(i = 0; i < row; i++){

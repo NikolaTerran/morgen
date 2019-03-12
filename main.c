@@ -2,13 +2,16 @@
 
 int main(){
 
+printf("Please read README.md first\n");
 //edge don't require mx_init for some reason
 struct Matrix edge;
 edge.row = 4;
 
 //edge = addedge(edge,50,50,0,51.499850,51.500000,0);
 edge = bezier(edge,50,50,200,100,150,150,50,200);
-
+edge = circle(edge,250,250,10,50);
+edge = circle(edge,250,250,0,50);
+mx_print(edge);
 /*
 //necessary init statement
 

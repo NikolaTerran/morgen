@@ -1,7 +1,7 @@
 all: main.o matrix.o parser.o line.o util.o curve.o random.o engine.h
 	gcc main.o matrix.o line.o util.o random.o curve.o -lm
 	gcc -o parser matrix.o line.o util.o random.o parser.o curve.o -lm
-
+	rm *.o
 
 main.o: main.c engine.h
 	gcc -c main.c
@@ -28,4 +28,4 @@ run:
 	./a.out
 
 clean:
-	rm *.o
+	rm a.out parser image.ppm
