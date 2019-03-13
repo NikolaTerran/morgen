@@ -164,8 +164,8 @@ struct Matrix mx_qac(struct Matrix mx, double arr[], int size){
 	}
 	
 	my = mx_addc(mx,mw);
-	mx_free(mw);
-	mx_free(mx);
+	//mx_free(mw);
+	//mx_free(mx);
 	return my;
 }
 
@@ -221,45 +221,7 @@ struct Matrix mx_rmc(struct Matrix mx){
 }
 
 
-//never use point matrix for this
-void mx_export(struct Matrix mx){
-	int fd, i, j , k;
-	int array[500][500][3];
-	int rgb[3];
-	rgb[0] = 255;
-	rgb[1] = 255;
-	rgb[2] = 255;
-	initialize(array,rgb);
-	fd = open("image.ppm", O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	
-	//initialize color
-		rgb[0] = 0;
-		rgb[1] = 0;
-		rgb[2] = 0;
 
-	while(mx.col >= 1){
-
-		/*
-		drawLine(array,0,0,500,0,rgb);
-		drawLine(array,0,0,500,500,rgb);
-		*/
-		if((int)mx_get(mx,3,0) == 0 && (int)mx_get(mx,3,1)){
-			drawLine(array, (int)mx_get(mx,0,0), (int)mx_get(mx,1,0), (int)mx_get(mx,0,1), (int)mx_get(mx,1,1), rgb);
-			mx = mx_rmc(mx);
-			mx = mx_rmc(mx);
-		}else{
-			drawLine(array, round(mx_get(mx,0,0)) + round(mx_get(mx,2,0)/2),
-						    round(mx_get(mx,1,0)) - round(mx_get(mx,2,0)/4),
-						    round(mx_get(mx,0,1)) + round(mx_get(mx,2,1)/2),
-						    round(mx_get(mx,1,1)) - round(mx_get(mx,2,1)/4), rgb);
-			mx = mx_rmc(mx);
-			mx = mx_rmc(mx);
-		}
-		
-	}
-	
-	push(array,fd);
-}
 
 
 
@@ -316,4 +278,46 @@ struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
 		id = mx_set(id,1,1,cos(radian));
 	}
 	return id;
+}
+
+
+
+//never use point matrix for this
+void mx_export(struct Matrix mx){
+	int fd, i, j , k;
+	int array[500][500][3];
+	int rgb[3];
+	rgb[0] = 255;
+	rgb[1] = 255;
+	rgb[2] = 255;
+	initialize(array,rgb);
+	fd = open("image.ppm", O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	
+	//initialize color
+		rgb[0] = 0;
+		rgb[1] = 0;
+		rgb[2] = 0;
+
+	while(mx.col >= 1){
+	printf("lol\n");
+		/*
+		drawLine(array,0,0,500,0,rgb);
+		drawLine(array,0,0,500,500,rgb);
+		*/
+		if((int)mx_get(mx,3,0) == 0 && (int)mx_get(mx,3,1)){
+			drawLine(array, (int)mx_get(mx,0,0), (int)mx_get(mx,1,0), (int)mx_get(mx,0,1), (int)mx_get(mx,1,1), rgb);
+			mx = mx_rmc(mx);
+			mx = mx_rmc(mx);
+		}else{
+			drawLine(array, round(mx_get(mx,0,0)) + round(mx_get(mx,2,0)/2),
+						    round(mx_get(mx,1,0)) - round(mx_get(mx,2,0)/4),
+						    round(mx_get(mx,0,1)) + round(mx_get(mx,2,1)/2),
+						    round(mx_get(mx,1,1)) - round(mx_get(mx,2,1)/4), rgb);
+			mx = mx_rmc(mx);
+			mx = mx_rmc(mx);
+		}
+		
+	}
+	
+	push(array,fd);
 }

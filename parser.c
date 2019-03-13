@@ -20,7 +20,8 @@ int main(int argc, char *argv[]){
   
     //Matrix conf//////////////////////////////
     struct Matrix edge;
-	edge.row = 4;
+    edge = mx_init(4,1);
+	//edge.row = 4;
 	struct Matrix trans;
 	struct Matrix result;
 
@@ -38,10 +39,12 @@ int main(int argc, char *argv[]){
     }
 
 
-
+    int line_n = 1;
     //Operations//////////////////////////////
     //all input changed to int////////////////
     while((nread = getline(&line, &len, fp)) != -1){
+	printf("line number:%d\n",line_n);
+	line_n++; 
         if(!strcmp(line,"line\n")){
             if(nread = getline(&line, &len, fp) == -1){
                 printf("ERR: need numbers\n");
@@ -167,9 +170,9 @@ int main(int argc, char *argv[]){
 
     }
 
-    result.row = 4;
-    result = mx_addc(result,edge);
-	mx_export(result);
+    //result.row = 4;
+    //result = mx_addc(result,edge);
+	mx_export(edge);
 	mx_free(edge);
 
     free(line);
