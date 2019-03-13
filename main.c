@@ -9,9 +9,11 @@ edge.row = 4;
 
 //edge = addedge(edge,50,50,0,51.499850,51.500000,0);
 edge = bezier(edge,50,50,200,100,150,150,50,200);
+edge = hermite(edge,50,50,200,100,150,150,50,200);
 edge = circle(edge,250,250,10,50);
 edge = circle(edge,250,250,0,50);
-mx_print(edge);
+edge = addedge(edge,50,50,0,50,200,0);
+
 /*
 //necessary init statement
 

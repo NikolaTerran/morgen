@@ -7,7 +7,7 @@ struct Matrix circle(struct Matrix mx, double x, double y, double z, double r){
 	double xx = r * cos(t) + x;
 	double yy = r * sin(t) + y;
 	//t += t_step * (2 * M_PI);
-	while(t <= (2 * M_PI) + ERR_MARGIN){
+	while(t <= (2 * M_PI) + t_step){
 		double xxx = r * cos(t) + x;
 		double yyy = r * sin(t) + y;
 		mx = addedge(mx,xx,yy,z,xxx,yyy,z);
@@ -39,7 +39,7 @@ struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y
 	double t = 0;
 	int xx = x1;
 	int yy = y1;
-	while(t <= 1){
+	while(t <= 1 + t_step){
 		double xxx = (1-t) * ((1-t) * ((1-t) * x1 + t * x2) + t * ((1-t) * x2 + t * x3)) + t * ((1-t) * ((1-t) * x2 + t * x3) + t * ((1-t) * x3 + t * x4));
 		double yyy = (1-t) * ((1-t) * ((1-t) * y1 + t * y2) + t * ((1-t) * y2 + t * y3)) + t * ((1-t) * ((1-t) * y2 + t * y3) + t * ((1-t) * y3 + t * y4));
 		mx = addedge(mx,xx,yy,0,xxx,yyy,0);
@@ -52,8 +52,17 @@ struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y
 //*/
 
 struct Matrix hermite(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4){
-	double t = 0;
-	int xx = x1;
-	int yy = y1;
-//	f(p_0,v_0,v_1,p_1,t) = p_0(2 t^3-3 t^2+1)+v_1(t^3-t^2)+v_0(t^3-2 t^2+t)+p_1(3 t^2-2 t^3)
+	double t = t_step;
+	double xx = x1;
+	double yy = y1;
+	while(t <= 1 + t_step){
+		double xxx = x1 * (2 * pow(t,3) - 3 * pow(t,2) + 1) + x3 * (pow(t,3) -pow(t,2)) + x2 * (pow(t,3) - 2 * pow(t,2) + t) + x4 * (3 * pow(t,2) - 2 * pow(t,3));
+		double yyy = y1 * (2 * pow(t,3) - 3 * pow(t,2) + 1) + y3 * (pow(t,3) -pow(t,2)) + y2 * (pow(t,3) - 2 * pow(t,2) + t) + y4 * (3 * pow(t,2) - 2 * pow(t,3));
+		mx = addedge(mx,xx,yy,0,xxx,yyy,0);
+		xx = xxx;
+		yy = yyy;
+		t += t_step;
+	}
 }
+
+

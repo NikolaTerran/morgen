@@ -22,6 +22,8 @@ int main(int argc, char *argv[]){
     struct Matrix edge;
 	edge.row = 4;
 	struct Matrix trans;
+	struct Matrix result;
+
     ///////////////////////////////////////////
 
     char *line = NULL;
@@ -46,7 +48,7 @@ int main(int argc, char *argv[]){
                 exit(1);
             }
             char * seg;
-            int input[6];
+            double input[6];
 	    	int i;
 	    	for(i = 0; i < 6; i++){
 	    		seg = strsep(&line," ");
@@ -61,41 +63,86 @@ int main(int argc, char *argv[]){
                 exit(1);
             } 
             char * seg;
-            int input[3];
+            double input[3];
 	    	int i;
 	    	for(i = 0; i < 3; i++){
 	    		seg = strsep(&line," ");
     	  		input[i] = atoi(seg);
 	    	}
-	    	trans = mx_dilation(edge,input[0],input[1],input[2]);
+	    	edge = mx_dilation(edge,input[0],input[1],input[2]);
 	    }else if(!strcmp(line,"move\n")){
 	        if(nread = getline(&line, &len, fp) == -1){
                 printf("ERR: need numbers\n");
                 exit(1);
             }
             char * seg;
-            int input[3];
+            double input[3];
 	    	int i;
 	    	for(i = 0; i < 3; i++){
 	    		seg = strsep(&line," ");
     	  		input[i] = atoi(seg);
 	    	}
-	    	trans = mx_transform(edge,input[0],input[1],input[2]);	    	
+	    	edge = mx_transform(edge,input[0],input[1],input[2]);	    	
 	    }else if(!strcmp(line,"rotate\n")){
 	        if(nread = getline(&line, &len, fp) == -1){
                 printf("ERR: need numbers\n");
                 exit(1);
             }
             char * seg;
-            int input[2];
+            double input[2];
 	    	int i;
 	    	for(i = 0; i < 2; i++){
 	    		seg = strsep(&line," ");
     	  		input[i] = atoi(seg);
 	    	}
-	    	trans = mx_rotate(edge,input[0],input[1]);	 
+	    	edge = mx_rotate(edge,input[0],input[1]);
+	    }else if(!strcmp(line,"circle\n")){
+	    	if(nread = getline(&line, &len, fp) == -1){
+                printf("ERR: need numbers\n");
+                exit(1);
+            }
+            char * seg;
+            double input[4];
+	    	int i;
+	    	for(i = 0; i < 4; i++){
+	    		seg = strsep(&line," ");
+    	  		input[i] = atoi(seg);
+	    	}
+	    	edge = circle(edge,input[0],input[1],input[2],input[3]);
+	    }else if(!strcmp(line,"hermite\n")){
+	    	if(nread = getline(&line, &len, fp) == -1){
+                printf("ERR: need numbers\n");
+                exit(1);
+            }
+            char * seg;
+            double input[8];
+	    	int i;
+	    	for(i = 0; i < 8; i++){
+	    		seg = strsep(&line," ");
+    	  		input[i] = atoi(seg);
+	    	}
+	    	edge = hermite(edge,input[0],input[1],input[2],input[3],input[4],input[5],input[6],input[7]);
+	    }else if(!strcmp(line,"bezier\n")){	 
+	    	if(nread = getline(&line, &len, fp) == -1){
+                printf("ERR: need numbers\n");
+                exit(1);
+            }
+            char * seg;
+            double input[8];
+	    	int i;
+	    	for(i = 0; i < 8; i++){
+	    		seg = strsep(&line," ");
+    	  		input[i] = atoi(seg);
+	    	}
+	    	edge = bezier(edge,input[0],input[1],input[2],input[3],input[4],input[5],input[6],input[7]);
 	    }else if(!strcmp(line,"apply\n")){
+	    //	if(result.row !=){
+		//    	result = edge;
+		//    }else{
 
+		//    }
+	    //	struct Matrix edge;
+		//	edge.row = 4;
 	    }else if(!strcmp(line,"display\n")){
 			
 	    	/*
@@ -120,8 +167,9 @@ int main(int argc, char *argv[]){
 
     }
 
-
-	mx_export(edge);
+    result.row = 4;
+    result = mx_addc(result,edge);
+	mx_export(result);
 	mx_free(edge);
 
     free(line);
