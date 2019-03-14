@@ -1,0 +1,200 @@
+parametrix equation
+	define curves
+
+Parametric equations define curves as systems of equations in term
+of a single independent variable
+
+x = f(t)
+y = f(t)
+
+Parametric line
+(x0,y0) -> (x1,y1)
+x = f(t)
+y = g(t)
+               (x1,y1)
+             /  t = 1
+            /
+           /  t = 0.5
+(x0,t0)   /
+       t = 0
+
+Parametric Circle
+(Cx,Cy),f
+x = f(t)
+y = g(t)
+
+f(t) = cos(2PI * t) + Cx
+g(t) = sin(2PI * t) + Cy
+
+
+f(x) = ax^3 + bx^2 + cx + d:
+f'(x) = 3ax^2 + 2bx + c
+	--slopes of tangent lines
+	--rate of change
+	
+splines
+--subset of curves
+--designed so that 2 splines can be connected seamlessly
+--we will only work with cubics
+--we will only work with cubics
+--we will work with HERMITE
+  and BEZIER curves
+
+Hermite Curves
+--givens
+	p0,p1,end points
+	r0,r1,rate of change
+
+	f(t) = at^3 + bt^2 + ct + d
+	f'(t) = 3at^2 + 2bt + c
+	f(0) = d = p0
+	f'(0) = c = r0
+	f(1) = a + b + c + d = p1
+	f'(1) = 3a + 2b + c = r1
+
+
+[0 0 0 1][a]   [	d	]   [p0]
+[1 1 1 1][b] = [a+ b + c + d	] = [p1]
+[0 0 1 0][c] = [	c	]   [r0]
+[3 2 1 0][d] = [3a + 2b + c	]   [r1]
+ 
+H         C            G             G
+``````````````````````````````````````````````````````````````````````````````````````
+
+H^-1
+[ 2 -2  1  1]
+[-3  3 -2 -1]
+[ 0  0  1  0]
+[ 1  0  0  0] 
+
+
+
+Bezier Curve
+-defined by n+1 points where n is the degree of the curve
+-linear
+	pt = (1-t)p0 + tp1
+
+Goal
+t: 0 -> 1
+x= axt^3 + bxt^2 + cxt + dx
+y= ayt^3 + byt^2 + cyt + dy
+
+Quadratic
+Qt = (1-t)Q0 + tQ1
+Q0t = (1-t)P0 + tP1 
+Q1t = (1-t)P1 + tP2
+
+Cubic
+Rt = (1-t)R0 + tR1
+R0 = (1-t)^2*P0 + 2t(1-t)P1 + t^2*P2
+R1 = (1-t)^2*P1 + 2t(1-t_*P2 + t^2*P3
+
+Rt = (1-t)^3*P0 + 3t(1-t)^2*P1 + 3t^2 * (1-t)P2 + t^3*P3 
+   = (-P0 + 3P1 - 3P2 + P3)t^3 + (3P0 - 6P1 + 3P2)t^2 + (-3P0 + 3P1)t + P0
+
+Goal
+at^3 + bt^2 + ct +d 
+
+[-1  3 -3  1][p0]   [a]
+[ 3 -6  3  0][p1] = [b]
+[-3  3  0  0][p2]   [c]
+[ 1  0  0  0][p3]   [d]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

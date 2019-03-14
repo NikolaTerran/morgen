@@ -1,0 +1,12 @@
+3-D shapes
+- To Generate 3-D Shapes, we need to make the Defining points and then
+  connect them
+- We will make boxes, spheres and tori
+
+Box
+-Defining Points: 8 vertices
+given: 1 corner, w, h,and d
+
+Sphere
+Defining Points: point on the surface
+-given center and radius
