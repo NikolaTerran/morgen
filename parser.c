@@ -20,10 +20,10 @@ int main(int argc, char *argv[]){
   
     //Matrix conf//////////////////////////////
     struct Matrix edge;
-    edge = mx_init(4,1);
+	edge = mx_init(4,0);
 	//edge.row = 4;
 	struct Matrix trans;
-	struct Matrix result;
+	//struct Matrix result;
 
     ///////////////////////////////////////////
 
@@ -39,12 +39,10 @@ int main(int argc, char *argv[]){
     }
 
 
-    int line_n = 1;
+
     //Operations//////////////////////////////
     //all input changed to int////////////////
     while((nread = getline(&line, &len, fp)) != -1){
-	printf("line number:%d\n",line_n);
-	line_n++; 
         if(!strcmp(line,"line\n")){
             if(nread = getline(&line, &len, fp) == -1){
                 printf("ERR: need numbers\n");
@@ -138,6 +136,10 @@ int main(int argc, char *argv[]){
     	  		input[i] = atoi(seg);
 	    	}
 	    	edge = bezier(edge,input[0],input[1],input[2],input[3],input[4],input[5],input[6],input[7]);
+
+	    }else if(!strcmp(line,"yrev\n")){
+	    	edge = mx_yrev(edge);
+
 	    }else if(!strcmp(line,"apply\n")){
 	    //	if(result.row !=){
 		//    	result = edge;

@@ -280,7 +280,16 @@ struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
 	return id;
 }
 
-
+//only applies for standard 4 row matrix
+struct Matrix mx_yrev(struct Matrix mx){
+	int row = 1;
+	int i = 0;
+	while(i < mx.col){
+		mx = mx_set(mx,row,i,500 - mx_get(mx,row,i));
+		i++;
+	}
+	return mx;
+}
 
 //never use point matrix for this
 void mx_export(struct Matrix mx){
@@ -299,7 +308,6 @@ void mx_export(struct Matrix mx){
 		rgb[2] = 0;
 
 	while(mx.col >= 1){
-	printf("lol\n");
 		/*
 		drawLine(array,0,0,500,0,rgb);
 		drawLine(array,0,0,500,500,rgb);

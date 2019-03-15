@@ -39,7 +39,7 @@ struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double re
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 void mx_export(struct Matrix mx);
-
+struct Matrix mx_yrev(struct Matrix mx);
 
 /////////////////transformation///////////////////////
 struct Matrix mx_dilation(struct Matrix mx, double x,double y, double z);
