@@ -317,10 +317,27 @@ void mx_export(struct Matrix mx){
 			mx = mx_rmc(mx);
 			mx = mx_rmc(mx);
 		}else{
-			drawLine(array, round(mx_get(mx,0,0)) + round(mx_get(mx,2,0)/2),
-						    round(mx_get(mx,1,0)) - round(mx_get(mx,2,0)/4),
-						    round(mx_get(mx,0,1)) + round(mx_get(mx,2,1)/2),
-						    round(mx_get(mx,1,1)) - round(mx_get(mx,2,1)/4), rgb);
+			drawLine(array, round(mx_get(mx,0,0))
+					
+					 + round(mx_get(mx,2,0)/2)
+				
+							,
+						    round(mx_get(mx,1,0))
+					
+					 - round(mx_get(mx,2,0)/4)
+				
+						    ,
+						    round(mx_get(mx,0,1))
+					
+					 + round(mx_get(mx,2,1)/2)
+				
+						    ,
+						    round(mx_get(mx,1,1))
+					
+					 - round(mx_get(mx,2,1)/4)
+				
+						    ,
+						     rgb);
 			mx = mx_rmc(mx);
 			mx = mx_rmc(mx);
 		}
