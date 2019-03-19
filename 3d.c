@@ -10,9 +10,9 @@
 struct Matrix sphere(struct Matrix mx, double x, double y, double z, double r){
 	double t = 0;
 	struct Matrix trans = mx_init(4,1);
-	trans = mx_set(mx,0,0,x);
-	trans = mx_set(mx,1,0,y);
-	trans = mx_set(mx,2,0,z);
+	trans = mx_set(mx,0,0,0);
+	trans = mx_set(mx,1,0,0);
+	trans = mx_set(mx,2,0,0);
 	trans = mx_set(mx,3,0,1);
 	//t += t_step * (2 * M_PI);
 	while(t <= (2 * M_PI) + td_step){
@@ -21,5 +21,7 @@ struct Matrix sphere(struct Matrix mx, double x, double y, double z, double r){
 		t += td_step;
 		printf("t: %f\n",t);
 	}
+	trans = mx_transform(trans,x,y,z);
+	mx = mx_addc(mx,trans);
 	return mx;
 }

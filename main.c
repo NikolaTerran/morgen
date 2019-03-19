@@ -35,40 +35,7 @@ rotatex = mx_rotate(edge,0,0.1);
 rotatex = mx_mult(rotatex,edge);
 result = mx_addc(edge,rotatex);
 
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-rotatex = mx_rotate(edge,0,0.1);
-edge = mx_mult(rotatex,edge);
-result = mx_addc(result,edge);
-
-
+edge = sphere(edge,250,250,0,100);
 
 
 
