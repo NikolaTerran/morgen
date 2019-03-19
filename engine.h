@@ -7,9 +7,11 @@
 #include <math.h>
 
 ///////////////////tweak////////////////////////////
-#define INIT_VALUE 0;  //init value of matrices
+#define INIT_VALUE 0   //init value of matrices
 #define t_step 0.02    //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
+#define td_step 1   //drawing distance of 3d obj
+#define td_axis 1      //axis of rotation of 3d obj
 
 ///////////////////line/////////////////////////////
 int drawLine(int array[][500][3], int x1, int y1, int x2, int y2, int color[]);
@@ -53,6 +55,9 @@ struct Matrix mx_rotate(struct Matrix, int axis, double radian);
 struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
 struct Matrix circle(struct Matrix mx, double x, double y, double z, double r);
 struct Matrix hermite(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
+
+////////////////////3d///////////////////////////////
+struct Matrix sphere(struct Matrix mx, double x, double y, double z, double r);
 
 ////////////////////general//////////////////////////
 void initialize(int array[][500][3], int color[]);
