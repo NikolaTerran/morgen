@@ -1,0 +1,24 @@
+A vector has a direction and magnitude
+Magnitude of a vector is 
+	||A|| = sqrt(x^2 + y ^ 2 + z ^ 2);
+
+^		
+A = <  x/||A|| , y/||A|| , z/||A|| >
+
+
+Finding A vector between 2 points
+
+PQ = Q - P = <Qx - Px, Qy - Py , Qz - Pz>
+QP = p - Q
+
+
+dot product
+
+A * B = AxbX + AyBy + AzBz   SCALAR
+      = ||A|| ||b|| cos(theta)
+      If A and B are normalized
+      = cos(theta)
+      
+Cross product
+
+A x B = <AyBz - AzBy, AzBx - AxBz, AxBy - AyBx> 
