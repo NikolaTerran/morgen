@@ -28,4 +28,4 @@ run:
 	./a.out
 
 clean:
-	rm a.out parser image.ppm
+	rm a.out parser *.ppm *.png
