@@ -13,7 +13,9 @@ struct Matrix mx_dilation(struct Matrix mx, double x, double y, double z){
 	id = mx_set(id,1,1,y);
 	id = mx_set(id,2,2,z);
 	
-	return id;
+	mx = mx_mult(id,mx);
+	
+	return mx;
 }
 
 struct Matrix mx_transform(struct Matrix mx, double x, double y, double z){
@@ -50,7 +52,10 @@ struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
 		id = mx_set(id,0,1,-sin(radian));
 		id = mx_set(id,1,1,cos(radian));
 	}
-	return id;
+	//mx_print(id);
+	mx = mx_mult(id,mx);
+	
+	return mx;
 }
 
 //only applies for standard 4 row matrix

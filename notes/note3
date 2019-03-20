@@ -1,0 +1,14 @@
+Using polygons as the basic building blocks of our images will allow us to create more realistic images notably
+1) we can fill in surfaces to create solids
+2) we can calculate what direction a surface is facing
+
+edge Matrix
+
+[p0p1,p1p2,p2p0...]
+ e0    e1   e2
+
+polygon matrix
+[p0p1p2,p2p3p4]
+ t0       t1
+ 
+ 

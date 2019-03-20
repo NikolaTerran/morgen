@@ -22,11 +22,13 @@ ok = mx_transform(edge,50,50,0);
 edge = mx_mult(ok,edge);
 */
 
-mx_print(edge);
+edge = mx_rotate(edge,1,0.5);
+
+//mx_print(edge);
 
 
 printf("done!\n");
-mx_export(edge);
+mx_export(edge,0);
 
 
 }

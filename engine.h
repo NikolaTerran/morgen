@@ -10,7 +10,7 @@
 #define INIT_VALUE 0   //init value of matrices
 #define t_step 0.02    //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
-#define td_step 1   //drawing distance of 3d obj
+#define td_step 0.5   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj
 
 ///////////////////line/////////////////////////////
@@ -40,14 +40,14 @@ struct Matrix mx_rmc(struct Matrix mx);
 struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
-void mx_export(struct Matrix mx);
-struct Matrix mx_yrev(struct Matrix mx);
+void mx_export(struct Matrix mx, int arg);
+
 
 /////////////////transformation///////////////////////
 struct Matrix mx_dilation(struct Matrix mx, double x,double y, double z);
 struct Matrix mx_transform(struct Matrix mx, double x, double y, double z);
 struct Matrix mx_rotate(struct Matrix, int axis, double radian);
-
+struct Matrix mx_yrev(struct Matrix mx);
 
 
 /////////////////////curve////////////////////////////

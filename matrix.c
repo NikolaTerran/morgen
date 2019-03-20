@@ -169,6 +169,7 @@ struct Matrix mx_qac(struct Matrix mx, double arr[], int size){
 	return my;
 }
 
+//buggy
 void mx_free(struct Matrix mx){
 	/*
 	free(mx.grid);
@@ -202,7 +203,7 @@ struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double re
 	arr[3] = red;
 	arr[4] = green;
 	arr[5] = blue;
-	arr[6] = 0;
+	arr[6] = 1;
 	mx = mx_qac(mx, arr, 7);
 	return mx;
 }
@@ -221,7 +222,8 @@ struct Matrix mx_rmc(struct Matrix mx){
 }
 
 //never use point matrix for this
-void mx_export(struct Matrix mx){
+//if arg == 1 --> psudo 3d enabled
+void mx_export(struct Matrix mx, int arg){
 	int fd, i, j , k;
 	int array[500][500][3];
 	int rgb[3];
@@ -235,42 +237,80 @@ void mx_export(struct Matrix mx){
 		rgb[0] = 0;
 		rgb[1] = 0;
 		rgb[2] = 0;
-
-	while(mx.col >= 1){
-		/*
-		drawLine(array,0,0,500,0,rgb);
-		drawLine(array,0,0,500,500,rgb);
-		*/
-		if((int)mx_get(mx,3,0) == 0 && (int)mx_get(mx,3,1)){
-			drawLine(array, (int)mx_get(mx,0,0), (int)mx_get(mx,1,0), (int)mx_get(mx,0,1), (int)mx_get(mx,1,1), rgb);
-			mx = mx_rmc(mx);
-			mx = mx_rmc(mx);
-		}else{
-			drawLine(array, round(mx_get(mx,0,0))
+	if(arg == 1){
+		while(mx.col >= 1){
+			/*
+			drawLine(array,0,0,500,0,rgb);
+			drawLine(array,0,0,500,500,rgb);
+			*/
+			if((int)mx_get(mx,3,0) == 0 && (int)mx_get(mx,3,1)){
+				drawLine(array, (int)mx_get(mx,0,0), (int)mx_get(mx,1,0), (int)mx_get(mx,0,1), (int)mx_get(mx,1,1), rgb);
+				mx = mx_rmc(mx);
+				mx = mx_rmc(mx);
+			}else{
+				drawLine(array, round(mx_get(mx,0,0))
+						
+						 + round(mx_get(mx,2,0)/2)
 					
-					 + round(mx_get(mx,2,0)/2)
-				
-							,
-						    round(mx_get(mx,1,0))
+								,
+								round(mx_get(mx,1,0))
+						
+						 - round(mx_get(mx,2,0)/4)
 					
-					 - round(mx_get(mx,2,0)/4)
-				
-						    ,
-						    round(mx_get(mx,0,1))
+								,
+								round(mx_get(mx,0,1))
+						
+						 + round(mx_get(mx,2,1)/2)
 					
-					 + round(mx_get(mx,2,1)/2)
-				
-						    ,
-						    round(mx_get(mx,1,1))
+								,
+								round(mx_get(mx,1,1))
+						
+						 - round(mx_get(mx,2,1)/4)
 					
-					 - round(mx_get(mx,2,1)/4)
-				
-						    ,
-						     rgb);
-			mx = mx_rmc(mx);
-			mx = mx_rmc(mx);
-		}
+								,
+								 rgb);
+				mx = mx_rmc(mx);
+				mx = mx_rmc(mx);
+			}
 		
+		}
+	}else{
+			while(mx.col >= 1){
+			/*
+			drawLine(array,0,0,500,0,rgb);
+			drawLine(array,0,0,500,500,rgb);
+			*/
+			if((int)mx_get(mx,3,0) == 0 && (int)mx_get(mx,3,1)){
+				drawLine(array, (int)mx_get(mx,0,0), (int)mx_get(mx,1,0), (int)mx_get(mx,0,1), (int)mx_get(mx,1,1), rgb);
+				mx = mx_rmc(mx);
+				mx = mx_rmc(mx);
+			}else{
+				drawLine(array, round(mx_get(mx,0,0))
+						
+						// + round(mx_get(mx,2,0)/2)
+					
+								,
+								round(mx_get(mx,1,0))
+						
+						// - round(mx_get(mx,2,0)/4)
+					
+								,
+								round(mx_get(mx,0,1))
+						
+						// + round(mx_get(mx,2,1)/2)
+					
+								,
+								round(mx_get(mx,1,1))
+						
+						// - round(mx_get(mx,2,1)/4)
+					
+								,
+								 rgb);
+				mx = mx_rmc(mx);
+				mx = mx_rmc(mx);
+			}
+		
+		}
 	}
 	
 	push(array,fd);

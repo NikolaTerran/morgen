@@ -174,7 +174,7 @@ int main(int argc, char *argv[]){
 
     //result.row = 4;
     //result = mx_addc(result,edge);
-	mx_export(edge);
+	mx_export(edge,0);
 	mx_free(edge);
 
     free(line);
