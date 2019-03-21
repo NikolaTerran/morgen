@@ -8,7 +8,7 @@
 
 ///////////////////tweak////////////////////////////
 #define INIT_VALUE 0   //init value of matrices
-#define t_step 0.02    //drawing distance of curves
+#define t_step 0.1    //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
 #define td_step 0.5   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj
@@ -39,8 +39,10 @@ struct Matrix mx_qac(struct Matrix mx, double arr[],int size);
 struct Matrix mx_rmc(struct Matrix mx);
 struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
-struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
+
 void mx_export(struct Matrix mx, int arg);
+
+struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 
 
 /////////////////transformation///////////////////////
@@ -57,7 +59,10 @@ struct Matrix circle(struct Matrix mx, double x, double y, double z, double r);
 struct Matrix hermite(struct Matrix mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
 
 ////////////////////3d///////////////////////////////
-struct Matrix sphere(struct Matrix mx, double x, double y, double z, double r);
+struct Matrix add_sphere(struct Matrix mx, double x, double y, double z, double r);
+struct Matrix add_torus(struct Matrix mx, double x, double y, double z, double r, double d, int axis);
+struct Matrix add_box(struct Matrix mx, double x1, double y1, double z1,
+										double h, double l, double w);
 
 ////////////////////general//////////////////////////
 void initialize(int array[][500][3], int color[]);
