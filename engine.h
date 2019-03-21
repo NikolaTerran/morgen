@@ -8,7 +8,7 @@
 
 ///////////////////tweak////////////////////////////
 #define INIT_VALUE 0   //init value of matrices
-#define t_step 0.1    //drawing distance of curves
+#define t_step 0.05   //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
 #define td_step 0.5   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj

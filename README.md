@@ -1,3 +1,4 @@
+# I'm going to revamp this GE from ground up but u have to be patient with me here
 # E.D.G.E. --> ED(I couldn't figure out a cool acronym) Graphics Engine
 
 ## 1.5 Patch Note:
