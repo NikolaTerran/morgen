@@ -1,3 +1,7 @@
+# !!!!!IMPORTANT NOTICE!!!!!!!
+# THE CODE FOR 3D HOMEWORK IS IN RELEASE 1.5, PLEASE DOWNLOAD THE SOURCE CODE FROM
+# RELEASE TAB
+# CURRENT CODE IS A WORKING PROGRESS FOR THE NEXT ASSIGNMENT
 # I'm going to revamp this GE from ground up but u have to be patient with me here
 # E.D.G.E. --> ED(I couldn't figure out a cool acronym) Graphics Engine
 
