@@ -18,7 +18,7 @@
 #define X_MAX 500
 #define Y_MIN -500
 #define Y_MAX 500
-#define ARR_INIT_VAL 255255255
+#define ARR_INIT_VAL 000000255
 
 
 struct Array{
