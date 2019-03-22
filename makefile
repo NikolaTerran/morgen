@@ -1,6 +1,6 @@
-all: main.o 3d.o matrix.o parser.o line.o util.o curve.o random.o trans.o engine.h
-	gcc main.o 3d.o matrix.o line.o util.o random.o curve.o trans.o -lm
-	gcc -o parser 3d.o matrix.o line.o util.o random.o parser.o curve.o trans.o -lm
+all: main.o 3d.o matrix.o parser.o line.o util.o curve.o random.o trans.o engine.h array.o
+	gcc main.o 3d.o matrix.o line.o util.o random.o curve.o trans.o array.o -lm
+	gcc -o parser 3d.o matrix.o line.o util.o random.o parser.o curve.o trans.o array.o -lm
 	rm *.o
 
 main.o: main.c engine.h
@@ -29,6 +29,9 @@ curve.o: curve.c engine.h
 	
 trans.o: trans.c engine.h
 	gcc -c trans.c
+
+array.o: array.c engine.h
+	gcc -c array.c
 	
 run:
 	./a.out

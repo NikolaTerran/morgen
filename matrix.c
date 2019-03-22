@@ -225,7 +225,9 @@ struct Matrix mx_rmc(struct Matrix mx){
 //if arg == 1 --> psudo 3d enabled
 void mx_export(struct Matrix mx, int arg){
 	int fd, i, j , k;
-	int array[500][500][3];
+	int y_lim = Y_MAX - Y_MIN;
+	int x_lim = X_MAX - X_MIN;
+	int array[y_lim][x_lim][3];
 	int rgb[3];
 	rgb[0] = 255;
 	rgb[1] = 255;

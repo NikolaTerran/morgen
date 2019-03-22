@@ -13,10 +13,33 @@
 #define td_step 0.5   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj
 
+///////////////////array////////////////////////////
+#define X_MIN -500
+#define X_MAX 500
+#define Y_MIN -500
+#define Y_MAX 500
+#define ARR_INIT_VAL 255255255
+
+
+struct Array{
+	int * list;
+};
+
+struct Array arr_init(struct Array arr);
+void arr_push(struct Array arr, char * filename);
+
+///////////////////poly////////////////////////////
+
 ///////////////////line/////////////////////////////
 int drawLine(int array[][500][3], int x1, int y1, int x2, int y2, int color[]);
 void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int color[], double m);
 
+///////////////////point////////////////////////////
+struct Point{
+	double x;
+	double y;
+	double z;
+};
 
 /////////////////////matrix//////////////////////////
 
@@ -65,8 +88,8 @@ struct Matrix add_box(struct Matrix mx, double x1, double y1, double z1,
 										double h, double l, double w);
 
 ////////////////////general//////////////////////////
-void initialize(int array[][500][3], int color[]);
-void push(int array[][500][3],int file);
+void initialize(int array[][X_MAX - X_MIN][3], int color[]);
+void push(int array[][X_MAX - X_MIN][3],int file);
 int* sys_random(int size);
 void db(char * say,double a);
 
