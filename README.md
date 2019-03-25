@@ -1,8 +1,8 @@
 # !!!!!IMPORTANT NOTICE!!!!!!!
 # THE CODE FOR 3D HOMEWORK IS IN RELEASE 1.5, PLEASE DOWNLOAD THE SOURCE CODE FROM RELEASE TAB
-# CURRENT CODE IS A WORKING PROGRESS FOR THE NEXT ASSIGNMENT
-# I'm going to revamp this GE from ground up but u have to be patient with me here
-# E.D.G.E. --> ED(I couldn't figure out a cool acronym) Graphics Engine
+# CURRENT CODE IS A WORKING PROGRESS FOR THE FUTURE ASSIGNMENT
+# I'm going to revamp this GE from scratch, it will take a long time but u have to be patient with me here
+# M.O.R.G.E.N. --> Matrix ORiented Graphics ENgine
 
 ## 1.5 Patch Note:
 ### 1. Added ```draw_box(), draw_torus(), draw_sphere()``` functions in 3d.c
