@@ -1,6 +1,6 @@
 # !!!!!IMPORTANT NOTICE!!!!!!!
 # THE CODE FOR 3D HOMEWORK IS IN RELEASE 1.5, PLEASE DOWNLOAD THE SOURCE CODE FROM RELEASE TAB
-# CURRENT CODE IS A WORKING PROGRESS FOR THE NEXT ASSIGNMENT
+# CURRENT CODE IS A WORKING PROGRESS FOR THE FUTURE ASSIGNMENT
 # I'm going to revamp this GE from scratch, it will take a long time but u have to be patient with me here
 # M.O.R.G.E.N. --> Matrix ORiented Graphics ENgine
 
