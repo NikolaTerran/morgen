@@ -1,0 +1,20 @@
+all: main.o array.o engine.h point.o matrix.o
+	nvcc -o output matrix.o point.o main.o array.o -lm
+
+main.o: main.cu engine.h
+	nvcc -c main.cu
+
+array.o: array.cu engine.h
+	nvcc -c array.cu
+
+matrix.o: matrix.cu engine.h
+	nvcc -c matrix.cu
+
+point.o: point.cu engine.h
+	nvcc -c point.cu
+
+clean:
+	rm *.o *.ppm output a.out *.png
+
+run:
+	./output
