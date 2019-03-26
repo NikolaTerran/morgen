@@ -4,8 +4,8 @@ __global__ void add(int *a, int *b, int *c){
 	c[blockIdx.x] = a[blockIdx.x] + b[blockIdx.x];
 }
 
-__global__ void gp_drawline(int *x, int *y, int *x1, int *y2){
-	c[blockIdx.x] = a[blockIdx.x] + b[blockIdx.x];
+__global__ void gp_drawline(int *x, int *y, int *x1, int *y1, int ** x2, int ** y2){
+
 }
 
 void random_ints(int* x, int size)
@@ -16,72 +16,89 @@ void random_ints(int* x, int size)
 	}
 }
 
-void drawLine(struct Array arr, struct Matrix mx, int r, int g, int b){
+void drawLine(struct Array arr, struct Matrix mx, int color[3]){
 	int octants;
+	int * x;
+	int * y;
+	int * x1;
+	int * y1;
 	
-	if(x2 == x1 && y2 == y1){
-				array[y1][x1][0] = color[0];
+	
+
+	int **x2;
+	int **y2;				//host copies of a,b,c
+	int **d_x2;
+	int **d_y2;         //device copies of a,b,c
+	
+	int size = N * sizeof(int);
+
+	cudaMalloc((void **)&d_a,size);
+	cudaMalloc((void **)&d_b,size);
+
+	cudaMalloc((void **)&d_c,size);
+	if(mx == x1 && y2 == y1){
+				arr. = color[0];
 				array[y1][x1][1] = color[1];
 				array[y1][x1][2] = color[2];
 	}else{
-				//{double m = 1;}
-			double m = ((double)y1 - (double)y2) / ((double)x2 - (double)x1);
-			//db("m",m);
-			
-				if(y2 <= y1){
-					if(x2 >= x1){
-						if( m <= 1 ){
-							 octants = 1;
-						}else{
-							 octants = 2;
-						}
+			//{double m = 1;}
+		double m = ((double)y1 - (double)y2) / ((double)x2 - (double)x1);
+		//db("m",m);
+		
+			if(y2 <= y1){
+				if(x2 >= x1){
+					if( m <= 1 ){
+						 octants = 1;
 					}else{
-						if( m <= -1 ){
-							 octants = 3;
-						}else{
-							 octants = 4;
-						}
+						 octants = 2;
 					}
 				}else{
-				   if(x2 < x1){
-						if( m <= 1 ){
-							 octants = 5;
-						}else{
-							 octants = 6;
-						}
+					if( m <= -1 ){
+						 octants = 3;
 					}else{
-						if( m <= -1 ){
-							 octants = 7;
-						}else{
-							 octants = 8;
-						}
+						 octants = 4;
 					}
 				}
-				
-				//db("octants",(double)octants);
-				
-				array[y1][x1][0] = color[0];
-				array[y1][x1][1] = color[1];
-				array[y1][x1][2] = color[2];
-				//db("lol",(double)octants);
-				switch(octants){
-						case 1: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 - 1,octants,color,m);
-						break;
-						case 2: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 - 1,octants,color,m);
-						break;
-						case 3: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);
-						break;
-						case 4: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);//left up
-						break;
-						case 5: line_helper(array,x2,y2,x1,y1,x2 + 1,y2 - 1,1,color,m);//left down
-						break;
-						case 6: line_helper(array,x2,y2,x1,y1,x2 + 1,y2 - 1,2,color,m);//down left
-						break;
-						case 7: line_helper(array,x2,y2,x1,y1,x2 - 1,y2 - 1,3,color,m);//down right
-						break;
-						case 8: line_helper(array,x2,y2,x1,y1,x2 - 1,y2 - 1,4,color,m);// right down
-						break;
-						}
+			}else{
+			   if(x2 < x1){
+					if( m <= 1 ){
+						 octants = 5;
+					}else{
+						 octants = 6;
+					}
+				}else{
+					if( m <= -1 ){
+						 octants = 7;
+					}else{
+						 octants = 8;
+					}
+				}
+			}
+			
+			//db("octants",(double)octants);
+			
+			array[y1][x1][0] = color[0];
+			array[y1][x1][1] = color[1];
+			array[y1][x1][2] = color[2];
+			//db("lol",(double)octants);
+		switch(octants){
+				case 1: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 - 1,octants,color,m);
+				break;
+				case 2: line_helper(array,x1,y1,x2,y2,x1 + 1,y1 - 1,octants,color,m);
+				break;
+				case 3: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);
+				break;
+				case 4: line_helper(array,x1,y1,x2,y2,x1 - 1,y1 - 1,octants,color,m);//left up
+				break;
+				case 5: line_helper(array,x2,y2,x1,y1,x2 + 1,y2 - 1,1,color,m);//left down
+				break;
+				case 6: line_helper(array,x2,y2,x1,y1,x2 + 1,y2 - 1,2,color,m);//down left
+				break;
+				case 7: line_helper(array,x2,y2,x1,y1,x2 - 1,y2 - 1,3,color,m);//down right
+				break;
+				case 8: line_helper(array,x2,y2,x1,y1,x2 - 1,y2 - 1,4,color,m);// right down
+				break;
+		}
 	}
 }
 

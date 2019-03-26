@@ -3,6 +3,7 @@
 //using cuda to initiate canvas array
 
 __global__ void gp_array_list_init(int *list, int val){
+
 	list[blockIdx.x] = val;
 	//printf("list[%d]:%d\n",blockIdx.x,list[blockIdx.x]);
 }

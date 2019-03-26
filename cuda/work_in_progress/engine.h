@@ -19,9 +19,9 @@
 #define Y_MIN -500
 #define Y_MAX 500
 
-#define ARR_R 0
+#define ARR_R 255
 #define ARR_G 255
-#define ARR_B 0
+#define ARR_B 255
 
 struct Array{
 	int * r;
@@ -59,7 +59,7 @@ struct Matrix{
 void mx_print(struct Matrix m1);
 void mx_printf(struct Matrix mx);
 struct Matrix mx_iden(struct Matrix m1, int ba);
-struct Matrix mx_init(int row, int col);
+struct Matrix mx_init(struct Matrix mx, int row, int col);
 double mx_get(struct Matrix mx, int row, int col);
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val);
 struct Matrix mx_mult(struct Matrix m1, struct Matrix m2);
@@ -67,13 +67,13 @@ void mx_free(struct Matrix mx);
 struct Matrix mx_addc(struct Matrix m1, struct Matrix m2);
 struct Matrix mx_qac(struct Matrix mx, double arr[],int size);
 struct Matrix mx_rmc(struct Matrix mx);
-struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue);
+struct Matrix mx_addp(struct Matrix mx, int x, int y, int z);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 
-void mx_export(struct Matrix mx, int arg);
+void mx_export(struct Matrix mx, struct Array arr);
 
-struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
-
+struct Matrix mx_adde(struct Matrix mx, int x, int y, int z, int x1, int y1, int z1);
+int * mx_rowtoint( struct Matrix mx, int * ptr,int row);
 
 /////////////////transformation///////////////////////
 struct Matrix mx_dilation(struct Matrix mx, double x,double y, double z);
