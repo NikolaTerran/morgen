@@ -4,7 +4,7 @@
 //basic matrix manipulation//
 /////////////////////////////
 
-void mx_print(struct Matrix mx){
+void ed_print(struct Edge mx){
 	int i,j;
 	for(i = 0; i < mx.row; i++){
 		printf("[  ");
@@ -15,16 +15,24 @@ void mx_print(struct Matrix mx){
 	}
 }
 
-int * mx_rowtoint( struct Matrix mx, int * ptr,int row){
-	ptr = (int *)malloc(mx.col * sizeof(int));
-	int i;
-	for(i = 0; i < mx.col; i++){
-		ptr[i] = mx_get(mx,row,i);
+int * ed_toint( struct Edge mx, int * ptr,int row,int select){
+	ptr = (int *)malloc(mx.num_edge * sizeof(int));
+	int i,j;
+	if(select == 0){
+		i = 0;
+		j = i;
+	}else{
+		i = 1;
+		j = i;
+	}
+	for(i; i < mx.col; i += 2){
+		ptr[j] = ed_get(mx,row,i);
+		j++;
 	}
 	return ptr;
 }
 
-double mx_get(struct Matrix mx, int row, int col){
+double ed_get(struct Edge mx, int row, int col){
 	int i, j;
 	for(i = 0; i <= mx.row; i++){
 		for(j = 0; j <= mx.col; j++){
@@ -35,9 +43,10 @@ double mx_get(struct Matrix mx, int row, int col){
 	}
 }
 
-struct Matrix mx_init(struct Matrix mx, int row, int col){
+struct Edge ed_init(struct Edge mx, int row, int col){
 	mx.row = row;
 	mx.col = col;
+	//mx.num_edge = 0;
 
 	mx.grid = (double *)malloc(row * col * sizeof(double));
 
@@ -53,7 +62,7 @@ struct Matrix mx_init(struct Matrix mx, int row, int col){
 	return mx;
 }
 
-struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
+struct Edge ed_set(struct Edge mx, int row, int col, double val){
 	if(row >= mx.row || col >= mx.col){
     	printf("ERROR: mx_set, target row or column doesn't exist, return original Matrix\n");
     	return mx;
@@ -69,24 +78,22 @@ struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
 	return mx;
 }
 
-struct Matrix mx_addc(struct Matrix m1, struct Matrix m2){
-	struct Matrix m3;
+struct Edge ed_addc(struct Edge m1, struct Edge m2){
+	struct Edge m3;
 	if(m1.row != m2.row){
 		printf("ERROR: mx_addc, two matrices have different numbers of rows, return an empty matrix\n");
 		return m3;
 	}else{
-	
 		int column = m1.col + m2.col;
-		m3 = mx_init(m3,m1.row,column);
+		m3 = ed_init(m3,m1.row,column);
 		int i, j;
 		for(i = 0; i < m3.row; i++){
 			for(j = 0; j < m3.col; j++){
-			
 				if(j < m1.col){
-					m3 = mx_set(m3,i,j,m1.grid[i * m1.col + j]);
+					m3 = ed_set(m3,i,j,m1.grid[i * m1.col + j]);
 				}else{
-					m3 = mx_set(m3,i,j,m2.grid[i * m2.col + j - m1.col]);
-				}	
+					m3 = ed_set(m3,i,j,m2.grid[i * m2.col + j - m1.col]);
+				}
 			}
 			j = 0;
 		}
@@ -94,26 +101,28 @@ struct Matrix mx_addc(struct Matrix m1, struct Matrix m2){
 	}
 }
 
-struct Matrix mx_addp(struct Matrix mx, int x, int y, int z){
-	struct Matrix m1;
-	m1 = mx_init(m1,4,1);
-	m1 = mx_set(m1,0,0,x);
-	m1 = mx_set(m1,1,0,y);
-	m1 = mx_set(m1,2,0,z);
-	m1 = mx_set(m1,3,0,1);
+struct Edge ed_addp(struct Edge mx, int x, int y, int z){
+	struct Edge m1;
+	m1 = ed_init(m1,4,1);
+	m1 = ed_set(m1,0,0,x);
+	m1 = ed_set(m1,1,0,y);
+	m1 = ed_set(m1,2,0,z);
+	m1 = ed_set(m1,3,0,1);
 
-	mx = mx_addc(mx,m1);
-
-	return mx;
-}
-
-struct Matrix mx_adde(struct Matrix mx, int x, int y, int z, int x1, int y1, int z1){
-	mx = mx_addp(mx, x,y,z);
-	mx = mx_addp(mx, x1,y1,z1);
+	mx = ed_addc(mx,m1);
 
 	return mx;
 }
 
-void mx_export(struct Matrix mx, struct Array arr){
-	
+struct Edge ed_adde(struct Edge mx, int x, int y, int z, int x1, int y1, int z1){
+	mx = ed_addp(mx, x,y,z);
+	mx = ed_addp(mx, x1,y1,z1);
+	mx.num_edge = mx.col / 2;
+
+	return mx;
 }
+
+void ed_export(struct Edge mx, struct Array arr){
+
+}
+

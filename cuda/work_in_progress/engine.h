@@ -14,10 +14,10 @@
 #define td_axis 1      //axis of rotation of 3d obj
 
 ///////////////////array////////////////////////////
-#define X_MIN -500
-#define X_MAX 500
-#define Y_MIN -500
-#define Y_MAX 500
+#define X_MIN -250
+#define X_MAX 250
+#define Y_MIN -250
+#define Y_MAX 250
 
 #define ARR_R 255
 #define ARR_G 255
@@ -32,6 +32,7 @@ struct Array{
 struct Array array_init(struct Array arr);
 void array_print(struct Array arr);
 void array_push(struct Array arr, char * filename);
+struct Array arr_set(struct Array arr,int x, int y, int color[3]);
 
 ///////////////////poly////////////////////////////
 
@@ -39,6 +40,7 @@ void array_push(struct Array arr, char * filename);
 int drawLine(int array[][500][3], int x1, int y1, int x2, int y2, int color[]);
 void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int color[], double m);
 
+struct Array DL(struct Array arr, int x1, int y1, int x2, int y2, int color[3]);
 ///////////////////point////////////////////////////
 struct Point{
 	double x;
@@ -48,32 +50,33 @@ struct Point{
 };
 
 struct Point point_init(struct Point pt,double x, double y, double z);
-/////////////////////matrix//////////////////////////
+/////////////////////edge matrix//////////////////////////
 
-struct Matrix{
+struct Edge{
 	double * grid;
 	int row;
 	int col;
+	int num_edge;
 };
 
-void mx_print(struct Matrix m1);
-void mx_printf(struct Matrix mx);
-struct Matrix mx_iden(struct Matrix m1, int ba);
-struct Matrix mx_init(struct Matrix mx, int row, int col);
-double mx_get(struct Matrix mx, int row, int col);
-struct Matrix mx_set(struct Matrix mx, int row, int col, double val);
-struct Matrix mx_mult(struct Matrix m1, struct Matrix m2);
-void mx_free(struct Matrix mx);
-struct Matrix mx_addc(struct Matrix m1, struct Matrix m2);
-struct Matrix mx_qac(struct Matrix mx, double arr[],int size);
-struct Matrix mx_rmc(struct Matrix mx);
-struct Matrix mx_addp(struct Matrix mx, int x, int y, int z);
+void ed_print(struct Edge m1);
+void ed_printf(struct Edge mx);
+struct Edge ed_iden(struct Edge m1, int ba);
+struct Edge ed_init(struct Edge mx, int row, int col);
+double ed_get(struct Edge mx, int row, int col);
+struct Edge ed_set(struct Edge mx, int row, int col, double val);
+struct Edge ed_mult(struct Edge m1, struct Matrix m2);
+void mx_free(struct Edge mx);
+struct Edge ed_addc(struct Edge m1, struct Edge m2);
+struct Edge ed_qac(struct Edge mx, double arr[],int size);
+struct Edge ed_rmc(struct Edge mx);
+struct Edge ed_addp(struct Edge mx, int x, int y, int z);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 
-void mx_export(struct Matrix mx, struct Array arr);
+void ed_export(struct Edge mx, struct Array arr);
 
-struct Matrix mx_adde(struct Matrix mx, int x, int y, int z, int x1, int y1, int z1);
-int * mx_rowtoint( struct Matrix mx, int * ptr,int row);
+struct Edge ed_adde(struct Edge mx, int x, int y, int z, int x1, int y1, int z1);
+int * ed_toint( struct Edge mx, int * ptr,int row,int select);
 
 /////////////////transformation///////////////////////
 struct Matrix mx_dilation(struct Matrix mx, double x,double y, double z);

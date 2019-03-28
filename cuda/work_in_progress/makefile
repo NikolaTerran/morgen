@@ -1,5 +1,5 @@
-all: main.o array.o engine.h point.o matrix.o
-	nvcc -o output matrix.o point.o main.o array.o -lm
+all: main.o array.o engine.h point.o matrix.o line.o
+	nvcc -o output matrix.o point.o main.o array.o line.o -lm
 
 main.o: main.cu engine.h
 	nvcc -c main.cu
@@ -12,6 +12,9 @@ matrix.o: matrix.cu engine.h
 
 point.o: point.cu engine.h
 	nvcc -c point.cu
+
+line.o: line.cu engine.h
+	nvcc -c line.cu
 
 clean:
 	rm *.o *.ppm output a.out *.png

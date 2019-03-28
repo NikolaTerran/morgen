@@ -1,21 +1,57 @@
 #include "engine.h"
 
 int main(void){
-	struct Array arr_1;
-	arr_1 = array_init(arr_1);
+	struct Array arr1;
+	arr1 = array_init(arr1);
 	
-
-	struct Matrix edge;
-	edge = mx_init(edge,4,0);
-	edge = mx_adde(edge,250,250,0,400,400,0);
+/*
+	struct Edge edge;
+	edge = ed_init(edge,4,0);
+	edge = ed_adde(edge,50,50,0,400,400,0);
+	edge = ed_adde(edge,100,100,0,450,450,0);
+	edge = ed_adde(edge,150,150,0,500,500,0);
 
 	int * i;
-	i = mx_rowtoint(edge,i,0);
+	i = ed_toint(edge,i,0,0);
 
 	int j;
-	for(j = 0; j < edge.col; j++){
+	for(j = 0; j < edge.num_edge; j++){
 		printf("i:%d\n",i[j]);
 	}
-	array_push(arr_1,"image.ppm");
+
+	printf("mx.num_edge:%d\n",edge.num_edge);
+	*/
+	int color[3];
+	color[0] = 0;
+	color[1] = 0;
+    color[2] = 0;
+/*
+    arr1 = DL(arr1,0,0,249,0,color);
+    arr1 = DL(arr1,0,0,-250,0,color);
+    arr1 = DL(arr1,0,0,0,250,color);
+    arr1 = DL(arr1,0,0,0,-249,color);
+*/
+
+//    arr1 = DL(arr1,0,0,249,250,color);
+    arr1 = DL(arr1,0,0,249,-249,color);
+//    arr1 = DL(arr1,0,0,-250,250,color);
+//    arr1 = DL(arr1,0,0,-250,-249,color);
+
+/*
+    arr1 = DL(arr1,-250,0,249,250,color);
+    arr1 = DL(arr1,-250,0,249,-249,color);
+    arr1 = DL(arr1,0,250,-250,-249,color);
+    arr1 = DL(arr1,0,250,249,-249,color);
+    arr1 = DL(arr1,249,0,-250,250,color);
+    arr1 = DL(arr1,249,0,-250,-249,color);
+    arr1 = DL(arr1,0,-249,-250,250,color);
+    arr1 = DL(arr1,0,-249,249,250,color);
+*/
+	//arr_1 = arr_set(arr_1,50,50,color);
+	//arr_1 = arr_set(arr_1,-50,50,color);
+	//arr_1 = arr_set(arr_1,-50,-49,color);
+	//arr_1 = arr_set(arr_1,50,-49,color);
+
+	array_push(arr1,"image.ppm");
 	return 0;
 }
