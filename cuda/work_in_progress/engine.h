@@ -19,9 +19,9 @@
 #define Y_MIN -250
 #define Y_MAX 250
 
-#define ARR_R 255
-#define ARR_G 255
-#define ARR_B 255
+#define ARR_R 0
+#define ARR_G 0
+#define ARR_B 0
 
 struct Array{
 	int * r;
@@ -37,9 +37,7 @@ struct Array arr_set(struct Array arr,int x, int y, int color[3]);
 ///////////////////poly////////////////////////////
 
 ///////////////////line/////////////////////////////
-int drawLine(int array[][500][3], int x1, int y1, int x2, int y2, int color[]);
-void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int color[], double m);
-
+struct Array drawLine(struct Array arr, struct Edge ed, int color[3]);
 struct Array DL(struct Array arr, int x1, int y1, int x2, int y2, int color[3]);
 ///////////////////point////////////////////////////
 struct Point{
@@ -66,7 +64,7 @@ struct Edge ed_init(struct Edge mx, int row, int col);
 double ed_get(struct Edge mx, int row, int col);
 struct Edge ed_set(struct Edge mx, int row, int col, double val);
 struct Edge ed_mult(struct Edge m1, struct Matrix m2);
-void mx_free(struct Edge mx);
+void ed_free(struct Edge mx);
 struct Edge ed_addc(struct Edge m1, struct Edge m2);
 struct Edge ed_qac(struct Edge mx, double arr[],int size);
 struct Edge ed_rmc(struct Edge mx);

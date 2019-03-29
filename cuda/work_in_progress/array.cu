@@ -42,12 +42,10 @@ struct Array array_init(struct Array arr){
 struct Array arr_set(struct Array arr,int x, int y, int color[3]){
 	int x_lim = X_MAX - X_MIN;
 	int y_lim = Y_MAX - Y_MIN;
-	
-	int y1;
-	//negate Y
 
 	if(y > Y_MAX || y <= Y_MIN || x >= X_MAX || x < X_MIN){
 		printf("Err: in arr, coordinate has exceded dimension\n");
+		printf("Err: x->%d y->%d\n",x,y);
 		printf("Note: actual X_MAX is %d and Y_MIN is %d\n",X_MAX - 1, Y_MIN + 1);
 	}else{
 			y = 0 - y;

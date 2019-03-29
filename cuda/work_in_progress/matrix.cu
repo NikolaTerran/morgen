@@ -16,17 +16,22 @@ void ed_print(struct Edge mx){
 }
 
 int * ed_toint( struct Edge mx, int * ptr,int row,int select){
-	ptr = (int *)malloc(mx.num_edge * sizeof(int));
+	if(mx.col == 0){
+		printf("Err: ed_toint, edge matrix has 0 column\n");
+		exit(1);
+	}
+	ptr = (int *)malloc(mx.col / 2 * sizeof(int));
 	int i,j;
 	if(select == 0){
 		i = 0;
-		j = i;
+		j = 0;
 	}else{
 		i = 1;
-		j = i;
+		j = 0;
 	}
 	for(i; i < mx.col; i += 2){
 		ptr[j] = ed_get(mx,row,i);
+		//printf("lala:%d\n",ptr[j]);
 		j++;
 	}
 	return ptr;
