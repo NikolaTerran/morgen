@@ -27,7 +27,7 @@ struct Array array_init(struct Array arr){
 	gp_array_list_init<<<block,1>>>(gp_arr_r,ARR_R);
 	gp_array_list_init<<<block,1>>>(gp_arr_g,ARR_G);
 	gp_array_list_init<<<block,1>>>(gp_arr_b,ARR_B);
-	
+
 	cudaMemcpy(arr.r, gp_arr_r, size, cudaMemcpyDeviceToHost);
 	cudaMemcpy(arr.g, gp_arr_g, size, cudaMemcpyDeviceToHost);
 	cudaMemcpy(arr.b, gp_arr_b, size, cudaMemcpyDeviceToHost);
@@ -41,7 +41,6 @@ struct Array array_init(struct Array arr){
 
 struct Array arr_set(struct Array arr,int x, int y, int color[3]){
 	int x_lim = X_MAX - X_MIN;
-	int y_lim = Y_MAX - Y_MIN;
 
 	if(y > Y_MAX || y <= Y_MIN || x >= X_MAX || x < X_MIN){
 		printf("Err: in arr, coordinate has exceded dimension\n");

@@ -3,6 +3,9 @@
 /////////////////////////////
 //basic matrix manipulation//
 /////////////////////////////
+struct Edge ed_mult(struct Edge ed1, struct Edge ed2){
+	return ed2;
+}
 
 void ed_print(struct Edge mx){
 	int i,j;
@@ -13,6 +16,21 @@ void ed_print(struct Edge mx){
 		}
 		printf("]\n");
 	}
+}
+
+double * ed_todouble(struct Edge ed, double * ptr,int row){
+	if(ed.col == 0){
+		printf("Err: ed_todouble, edge matrix has 0 column\n");
+		exit(1);
+	}
+	int i;
+	for(i; i < ed.col; i++){
+		ptr[i] = (int)ed_get(ed,row,i);
+		//printf("lala:%d\n",ptr[j]);
+		i++;
+	}
+
+	return ptr;
 }
 
 int * ed_toint( struct Edge mx, int * ptr,int row,int select){
@@ -30,11 +48,15 @@ int * ed_toint( struct Edge mx, int * ptr,int row,int select){
 		j = 0;
 	}
 	for(i; i < mx.col; i += 2){
-		ptr[j] = ed_get(mx,row,i);
+		ptr[j] = (int)ed_get(mx,row,i);
 		//printf("lala:%d\n",ptr[j]);
 		j++;
 	}
 	return ptr;
+}
+
+void ed_free(struct Edge mx){
+	free(mx.grid);
 }
 
 double ed_get(struct Edge mx, int row, int col){
