@@ -1,5 +1,5 @@
 #include "engine.h"
-
+/*
 __global__ void gp_pxassign(int *d_r, int *d_g, int *d_b, int d_x, int d_y,int r, int g, int b){
 	if(d_y > Y_MAX ||
 	   d_y <= Y_MIN ||

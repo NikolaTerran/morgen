@@ -1,6 +1,6 @@
 #include "engine.h"
 
-
+/*
 __global__ void gp_add_edge(double * d_grid, 
 	    				    double * h_grid,
 						    double *x, double *y, double z,
@@ -87,6 +87,7 @@ struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y
 }
 */
 
+/*
 // The stupid way to do the bezier
 struct Edge add_bezier(struct Edge mx, double x1, double y1, double x2, double y2, 
 									   double x3, double y3, double x4, double y4){
@@ -187,6 +188,7 @@ struct Edge add_bezier(struct Edge mx, double x1, double y1, double x2, double y
 }
 //*/
 
+/*
 struct Edge add_hermite(struct Edge mx, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4){
 	double t = t_step;
 	double xx = x1;
@@ -201,3 +203,4 @@ struct Edge add_hermite(struct Edge mx, double x1, double y1, double x2, double 
 	}
 	return mx;
 }
+*/

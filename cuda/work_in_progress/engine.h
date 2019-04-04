@@ -26,18 +26,19 @@
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
 {
-   if (code != cudaSuccess) 
-   {
+   if (code != cudaSuccess){
       fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
       if (abort) exit(code);
    }
 }
 
 struct Array{
-	int * r;
-	int * g;
-	int * b;
+	int * d_r;
+	int * d_g;
+	int * d_b;
 };
+
+__global__ void gp_array_set(int * d_r,int * d_g,int * d_b, int *x, int *y, int r, int g, int b);
 
 struct Array array_init(struct Array arr);
 void array_print(struct Array arr);
@@ -51,11 +52,14 @@ struct Array drawLine(struct Array arr, struct Edge ed, int color[3]);
 struct Array DL(struct Array arr, int x1, int y1, int x2, int y2, int color[3]);
 struct Array cp_drawLine(struct Array arr, struct Edge ed, int color[3]);
 ///////////////////point////////////////////////////
-struct Point{
-	double x;
-	double y;
-	double z;
-	double cons;
+struct Matrix{
+	double *d_x;
+	double *d_y;
+	double *d_z;
+	double *d_c;
+	double *d_v;
+
+	int col;
 };
 
 struct Point point_init(struct Point pt,double x, double y, double z);

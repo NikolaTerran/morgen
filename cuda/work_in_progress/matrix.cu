@@ -3,6 +3,22 @@
 /////////////////////////////
 //basic matrix manipulation//
 /////////////////////////////
+
+__global__ void g_mx_init(struct Matrix mx, int col){
+	int index = blockDim.x * blockIdx.x + threadIdx.x;
+}
+
+struct Matrix mx_init(struct Matrix mx, int col){
+	mx.col = col;
+	int size = col * sizeof(double);
+	cudaMalloc((void**)&mx.d_x,size);
+	cudaMalloc((void**)&mx.d_y,size);
+	cudaMalloc((void**)&mx.d_z,size);
+	cudaMalloc((void**)&mx.d_c,size);
+	return mx;
+}
+
+/*
 struct Edge ed_mult(struct Edge ed1, struct Edge ed2){
 	return ed2;
 }
@@ -153,3 +169,4 @@ void ed_export(struct Edge mx, struct Array arr){
 
 }
 
+*/
