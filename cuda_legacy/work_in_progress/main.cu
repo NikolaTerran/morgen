@@ -33,13 +33,13 @@ int main(void){
 	
 	int *dx;
 	int *dy;
-/*	
+	
 	cudaMalloc((void **)&dx,3 * sizeof(int));
         cudaMalloc((void**)& dy,3 * sizeof(int));
 
 	cudaMemcpy(dx,x_1,3 * sizeof(int),cudaMemcpyHostToDevice);
 	cudaMemcpy(dy,y_1,3 * sizeof(int),cudaMemcpyHostToDevice);
-*/
+
 	gp_array_set<<<1,3>>>(arr1.d_r,arr1.d_g,arr1.d_b,dx,dy,255,0,0);
 
 /*

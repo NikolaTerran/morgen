@@ -1,0 +1,7 @@
+relative coordinate system
+
+we can move the origin/modify the coordinate system for each object in our image
+transformations will be applied to the current c.s. immediately
+shapes will be immediately modified by the current c.s. and then drawn to the screen
+
+- add_torus -> mult. by current c.s. -> drawn
