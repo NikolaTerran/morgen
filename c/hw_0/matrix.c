@@ -6,12 +6,26 @@
 
 
 void mx_print(struct Matrix mx){
-	
+	int i,j;
+	for(i = 0; i < mx.row; i++){
+		printf("[  ");
+		for(j = 0; j < mx.col; j++){
+			printf("%0.2f  ",mx.grid[i * mx.col + j]);
+		}
+		printf("]\n");
+	}
 }
 
 //mx_print but will free the mx instance
 void mx_printf(struct Matrix mx){
-
+	int i,j;
+	for(i = 0; i < mx.row; i++){
+		printf("[  ");
+		for(j = 0; j < mx.col; j++){
+			printf("%0.2f  ",mx.grid[i * mx.col + j]);
+		}
+		printf("]\n");
+	}
 	//mx_free(mx);
 }
 
@@ -20,51 +34,52 @@ struct Matrix mx_init(int row, int col){
 	mx.row = row;
 	mx.col = col;
 
-	mx.x = malloc (col * sizeof(double));
-	mx.y = malloc (col * sizeof(double));
-	mx.z = malloc (col * sizeof(double));
-	mx.one = malloc (col * sizeof(double));
+	mx.grid = (double*) calloc (row * col, sizeof(double));
 
-	int i;
-	for(i = 0; i < col; j++){
-		mx.x[i] = INIT_VALUE; 
-		mx.y[i] = INIT_VALUE; 
-		mx.z[i] = INIT_VALUE; 
-		mx.one[i] = 1; 
+	int i, j;
+	double ini = INIT_VALUE;
+	i = row;
+	j = col;
+	for(i = 0; i < row; i++){
+		for(j = 0; j < col; j++){
+			mx.grid[i * col + j] = ini;
+		}
 	}
-
 	return mx;
 }
 
 double mx_get(struct Matrix mx, int row, int col){
-	if(row == 1){
-		return mx.x[col - 1];
-	}else if(row == 2){
-		return mx.y[col - 1];
-	}else if(row == 3){
-		return mx.z[col - 1];
-	//}else if(row == 4){
-	
-	}else{
-		printf("Err: mx_get, invalid row_num, returning 0\n");
-		return 0;
+	int i, j;
+	for(i = 0; i <= mx.row; i++){
+		for(j = 0; j <= mx.col; j++){
+			if(i == row && j == col){
+				return mx.grid[i * mx.col + col];
+			}
+		}
 	}
 }
 
-struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
-	if(row == 1){
-		mx.x[col - 1] = val;
-	}else if(row == 2){
-		mx.y[col - 1] = val;
-	}else if(row == 3){
-		mx.z[col - 1] = val;
-	//}else if(row == 4){
+struct Matrix mx_set(struct Matrix mx, int row, int col, double val){/*
+	int f = fork();
+	if(!f){*/
 	
-	}else{
-		printf("Err: mx_row, invalid row_num, returning original matrix\n");
-		return mx;
-	}
-	
+    if(row >= mx.row || col >= mx.col){
+    	printf("ERROR: mx_set, target row or column doesn't exist, return original Matrix\n");
+    	return mx;
+    }
+		int i, j;/*
+		if( row > mx.row || col > mx.row || row < 0 || col < 0){
+			printf("invalid matrix assignment\n");
+			exit(0);
+		}*/
+		for(i = 0; i <= row; i++){
+			for(j = 0; j <= col; j++){	
+				if(j == col && i == row){
+					mx.grid[i * mx.col + j] = val;
+				}
+			}
+		}
+	//}
 	return mx;
 }
 

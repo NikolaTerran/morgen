@@ -7,7 +7,7 @@
 #include <math.h>
 
 ///////////////////tweak////////////////////////////
-#define INIT_VALUE 0   //init value of EVERYTHING other than Array
+#define INIT_VALUE 0   //init value of matrices
 #define t_step 0.05   //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
 #define td_step 0.5   //drawing distance of 3d obj
@@ -47,21 +47,11 @@ struct Point{
 };
 
 /////////////////////matrix//////////////////////////
-              
-              /////////////////////////////////////////
-              ////mx functions use math row and col////
-              /////////////////////////////////////////
 
 struct Matrix{
-	double * x;
-	double * y;
-	double * z;
-	double * one;
-	
-	
+	double * grid;
 	int row;
 	int col;
-	
 };
 
 void mx_print(struct Matrix m1);
