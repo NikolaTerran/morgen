@@ -14,18 +14,23 @@
 #define td_axis 1      //axis of rotation of 3d obj
 
 ///////////////////array////////////////////////////
-#define X_MIN -500
-#define X_MAX 500
-#define Y_MIN -500
-#define Y_MAX 500
-#define ARR_INIT_VAL 000000255
+#define X_MIN -250
+#define X_MAX 250
+#define Y_MIN -250
+#define Y_MAX 250
+#define ARR_INIT_R 255
+#define ARR_INIT_G 255
+#define ARR_INIT_B 255
 
 
 struct Array{
-	int * list;
+	int * r;
+	int * g;
+	int * b;
 };
 
 struct Array arr_init(struct Array arr);
+struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]);
 void arr_push(struct Array arr, char * filename);
 
 ///////////////////poly////////////////////////////
