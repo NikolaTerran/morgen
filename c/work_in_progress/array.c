@@ -23,10 +23,20 @@ struct Array arr_init(struct Array arr){
 }
 
 
+//global thread index, this will probably ruin everything in the future
+int thread_index=-1;
+
 void * arr_set_helper(void *arguments){ 
 	struct Array *my_arr = arguments;
 
-	printf("In funtion \nthread id = %d\n", pthread_self()); 
+	pthread_mutex_t mutex1;
+	
+	pthread_mutex_lock( &mutex1 );
+	thread_index++;
+	pthread_mutex_unlock(&mutex1); 
+
+	printf("index:%d\n",thread_index);
+	//printf("In funtion \nthread id = %d\n", pthread_self()); 
 
 	my_arr->r[0] = 133;
 	pthread_exit((void*)my_arr);
@@ -68,12 +78,11 @@ struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]){
 	int i = 0;
 
 	struct Argument{    	
-    	struct Array list;
+    	int * r;
+    	int * g;
+    	int * b;
     	int index;
 	};
-		
-	struct Argument arg;
-	arg.list = arr;
 	
 	
     pthread_t tid[THREAD]; 
