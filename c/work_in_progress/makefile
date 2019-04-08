@@ -3,8 +3,8 @@
 #	gcc -o parser 3d.o matrix.o line.o util.o random.o parser.o curve.o trans.o array.o -lm
 #	rm *.o
 
-all: engine.h main.o array.o
-	gcc main.o array.o -lm
+all: engine.h main.o array.o line.o
+	gcc main.o array.o line.o -lm -lpthread
 
 main.o: main.c engine.h
 	gcc -c main.c

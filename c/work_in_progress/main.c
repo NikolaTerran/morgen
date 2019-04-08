@@ -3,6 +3,12 @@
 int main(){
 printf("Please read README.md first\n");
 
+////////////////////////////////
+	int y_lim = Y_MAX - Y_MIN;
+	int x_lim = X_MAX - X_MIN;
+	key_t key = ftok("shm",65); 
+	int shmid = shmget(key,sizeof(int) * x_lim * y_lim ,0666|IPC_CREAT); 
+////////////////////////////////
 
 struct Array arr;
 arr = arr_init(arr);
@@ -28,6 +34,8 @@ color[1] = 0;
 color[2] = 0;
 
 arr = arr_set(arr,i,j,4,color);
+
+printf("hi\n");
 
 arr_push(arr,"hi.ppm");
 

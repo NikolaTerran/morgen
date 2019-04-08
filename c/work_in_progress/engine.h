@@ -5,6 +5,9 @@
 #include <fcntl.h>
 #include <time.h>
 #include <math.h>
+#include <sys/ipc.h> 
+#include <sys/shm.h> 
+#include <pthread.h>
 
 ///////////////////tweak////////////////////////////
 #define INIT_VALUE 0   //init value of EVERYTHING other than Array
@@ -12,6 +15,7 @@
 #define ERR_MARGIN 1   //error margin of circles
 #define td_step 0.5   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj
+#define THREAD 4      //parallel programming
 
 ///////////////////array////////////////////////////
 #define X_MIN -250
