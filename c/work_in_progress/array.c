@@ -3,18 +3,12 @@
 struct Array arr_init(struct Array arr){
 	int y_lim = Y_MAX - Y_MIN;
 	int x_lim = X_MAX - X_MIN;
-	
-
-	// arr.r = (int*) shmat(shmid,(void*)0,0); 
-	// arr.g = (int*) shmat(shmid,(void*)0,0); 
-	// arr.b = (int*) shmat(shmid,(void*)0,0); 
 
 	arr.r = malloc(sizeof(int) * x_lim * y_lim);
 	arr.g = malloc(sizeof(int) * x_lim * y_lim);
 	arr.b = malloc(sizeof(int) * x_lim * y_lim);
 
-	int i, j;
-	
+	int i, j;	
 
     for(i = 0; i < y_lim; i++) {
         for (j = 0; j < x_lim; j++) {
@@ -28,38 +22,69 @@ struct Array arr_init(struct Array arr){
     return arr;
 }
 
-void * arr_set_helper(void *i){ 
-	printf("hi\n");
-//	i = 3;
-    // int *myid = (int *)vargp; 
-    // static int s = 0; 
-    // ++s; ++g; 
-    // printf("Thread ID: %d, Static: %d, Global: %d\n", *myid, ++s, ++g); 
+
+void * arr_set_helper(void *arguments){ 
+	struct Array *my_arr = arguments;
+
+	printf("In funtion \nthread id = %d\n", pthread_self()); 
+
+	my_arr->r[0] = 133;
+	pthread_exit((void*)my_arr);
+/*
+    	while(index < THREAD){
+		index = i;
+		i ++;
+		if(fork() != 0){
+			while(y[index] <= Y_MAX || y[index] > Y_MIN || x[index] < X_MAX || x[index] >= X_MIN){
+		            y[index] = 0 - y[index];
+		            //printf("%d\n",color[0]);
+		            arr.r[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX] = color[0];
+		            arr.g[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX] = color[1];
+		            arr.b[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX] = color[2];
+		            printf("arr.r:%d\n",arr.r[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX]);
+		            printf("arr.g:%d\n",arr.g[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX]);
+		            prin	tf("arr.b:%d\n",arr.b[(y[index] + Y_MAX) * x_lim + x[index] + X_MAX]);
+		            index += THREAD;
+		            if(index >= res){
+		            	exit(0);
+		            }
+			}
+		}
+	}
+    */
 } 
 
+/*random snipit
+	filling in polygons by drawing successive horizontal or vertial lines
+	* find bottom, top && middle vertices
+	* y:by -> ty;
+	* y += 1
+*/
 
 struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]){
 	int index;
 	int x_lim = X_MAX - X_MIN;
 	
 	int i = 0;
+
+	struct Argument{    	
+    	struct Array list;
+    	int index;
+	};
+		
+	struct Argument arg;
+	arg.list = arr;
 	
-	// arr.r = (int*) shmat(shmid,(void*)0,0); 
-	// arr.g = (int*) shmat(shmid,(void*)0,0); 
-	// arr.b = (int*) shmat(shmid,(void*)0,0); 
+	
+    pthread_t tid[THREAD]; 
+ 
+    // create threads 
+    for(i = 0; i < THREAD; i++){
+        pthread_create(&tid[i], NULL, arr_set_helper, (void *)&arr);
+    }
+    //pthread_join(tid,arr.r); 
 
-
-    pthread_t tid; 
-  
-    // Let us create three threads 
-    for (i = 0; i < 3; i++){
-        pthread_create(&tid, NULL, arr_set_helper, &i);
-    } 
-    
-  
-    pthread_exit(NULL); 
-
-    printf("i:%d\n",i);
+    printf("arr.r:%d\n",arr.r[0]);
 /*
 	while(index < THREAD){
 		index = i;
