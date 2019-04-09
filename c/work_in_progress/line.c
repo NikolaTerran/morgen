@@ -164,25 +164,35 @@
 
 // }
 
-// struct Array cp_drawLine(struct Array arr, struct Edge ed, int color[3]){
-// 	int * x;
-// 	int * y;
-// 	int * x1;
-// 	int * y1;
+int * global_x;
+int * global_y;
 
-// 	x = ed_toint(ed,x,0,0);
-// 	y = ed_toint(ed,y,1,0);
-// 	x1 = ed_toint(ed,x1,0,1);
-// 	y1 = ed_toint(ed,x1,1,1);
+int * global_xx;
+int * global_yy;
 
-//     int i;
-// 	for(i = 0; i < ed.col/2; i++){
-// 	// 	printf("x: %d  y: %d  x1: %d  y1: %d\n",x[i],y[i],x1[i],y1[i]);
-// 	 	arr = DL(arr,x[i],y[i],x1[i],y1[i],color);
-// 	}
+void * drawLine_helper(void * arg){
 
-//     return arr;
-// }
+}
+
+void drawLine(struct Matrix mx, int color[3]){
+ 	int x[mx.edge_num];
+ 	int y[mx.edge_num];
+ 	int x1[mx.edge_num];
+ 	int y1[mx.edge_num];
+
+ 	x = mx_toint(mx,x,0,0);
+ 	y = mx_toint(mx,y,1,0);
+ 	x1 = mx_toint(mx,x1,0,1);
+ 	y1 = mx_toint(mx,x1,1,1);
+
+    int i;
+ 	for(i = 0; i < ed.col/2; i++){
+     	printf("x: %d  y: %d  x1: %d  y1: %d\n",x[i],y[i],x1[i],y1[i]);
+ 	 	arr = DL(arr,x[i],y[i],x1[i],y1[i],color);
+ 	}
+
+     return arr;
+}
 
 // struct Array DLMA(
 //     struct Array arr,

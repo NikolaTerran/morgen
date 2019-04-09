@@ -72,8 +72,12 @@ struct Matrix{
 
 void mx_print(struct Matrix m1);
 void mx_printf(struct Matrix mx);
-struct Matrix mx_iden(struct Matrix m1, int ba);
+struct Matrix mx_iden(struct Matrix m1, int ba);\
+
 struct Matrix mx_init(struct Matrix mx, int col);
+struct Matrix mx_init_e(struct Matrix mx, int col);
+
+int * mx_toint(struct Matrix mx, int result[], int row, int odd_even);
 double mx_get(struct Matrix mx, int row, int col);
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val);
 struct Matrix mx_mult(struct Matrix m1, struct Matrix m2);
@@ -86,7 +90,7 @@ struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double re
 
 void mx_export(struct Matrix mx, int arg);
 
-struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
+struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 
 
 /////////////////transformation///////////////////////
