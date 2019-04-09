@@ -58,8 +58,14 @@ struct Matrix{
 	double * z;
 	double * one;
 	
-	
-	int row;
+	double * edge_id;
+	int edge_num;
+
+	char type;
+		//type 'a' = point
+		//type 'b' = edge
+		//type 'c' = polygon
+
 	int col;
 	
 };
@@ -67,7 +73,7 @@ struct Matrix{
 void mx_print(struct Matrix m1);
 void mx_printf(struct Matrix mx);
 struct Matrix mx_iden(struct Matrix m1, int ba);
-struct Matrix mx_init(int row, int col);
+struct Matrix mx_init(struct Matrix mx, int col);
 double mx_get(struct Matrix mx, int row, int col);
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val);
 struct Matrix mx_mult(struct Matrix m1, struct Matrix m2);
