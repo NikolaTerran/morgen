@@ -25,6 +25,9 @@
 	x1: Mx -> Tx; x1 += (Tx - Mx)/(Ty - My)
 	
 	z_buffering
+	maintain a 2d array of z-values
+	that corresponds to our 2d array of pixels (screen)
+	when we plot pixels, check the new z-value against what is currently in the z-buffer
 */
 
 int * mx_toint(struct Matrix mx, int result[], int row, int odd_even){
