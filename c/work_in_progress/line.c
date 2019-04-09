@@ -16,7 +16,6 @@
 // 		d_b[arr_index] = b;
 // 	}
 // }
-
 // __global__ void gp_DLMA(int *d_r, int *d_g, int *d_b, 
 // 						int x , int y, int dx, int dy, 
 // 						int check, char axis, 
@@ -24,13 +23,10 @@
 //     int dx2 = dx * 2;
 //     int dy2 = dy * 2;
 //     int dy2Mindx2 = dy2 - dx2;
- 
 //     int Error = dy2 - dx;
-
 //  	__syncthreads();
 //     gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-//  	__syncthreads();
-    
+//  	__syncthreads(); 
 //     if(axis == 'x'){
 // 	    while (dx--){
 // 	        if (Error > 0){
@@ -160,38 +156,110 @@
 // }
 
 
-// void drawLine(struct Matrix mx, int color[3]){
-
-// }
-
 int * global_x;
 int * global_y;
 
 int * global_xx;
 int * global_yy;
+int global_index;
+
+int global_res;
 
 void * drawLine_helper(void * arg){
+	int index = (int *)arg;
+	while(true){
+        if(index >= global_res){
+        	break;
+        }
+        
+        int dx = global_x[index + 1] - global_x[index];
+        int dy = global_y[index + 1] - global_y[index];   
+        // if the X axis is the major axis
+     	if(abs(dx) >= abs(dy)){
+         // if x2 < x1, flip the points to have fewer special cases
+      	   if (dx < 0){
+             dx *= -1; dy *= -1;
+             int t = x1;
+             x1 = x2; x2 = t;
 
+             t = y1;
+             y1 = y2;
+             y2 = t;
+           }
+ 
+         // determine special cases
+         if(dy > 0){
+             arr = DLMA(arr, x1,y1, dx, dy, 0,'x', color);
+         }
+         else if (dy < 0){
+          	arr = DLMA(arr, x1,y1, dx, -dy, 1,'x', color);
+         }
+         else{
+             arr = DLSA(arr,x1,y1,dx,'x', color);
+         }
+     }
+     // else the Y axis is the major axis
+     else
+     {
+         // if y2 < y1, flip the points to have fewer special cases
+         if (dy < 0)
+         {
+             dx *= -1;
+             dy *= -1;
+             int t = x1;
+             x1 = x2;
+             x2 = t;
+
+             t = y1;
+             y1 = y2;
+             y2 = t;
+         }
+ 
+         // get the address of the pixel at (x1,y1)
+ 
+         // determine special cases
+         if (dx > 0){
+          	  arr = DLMA(arr, x1,y1, dy, dx, 0,'y', color);
+         }else if (dx < 0){
+         	  arr = DLMA(arr, x1,y1, dy, -dx, 1,'y', color);
+         }else{
+               arr = DLSA(arr,x1,y1, dy,'y', color);
+         }
+     }
+
+
+        
+        
+        
+	}
+	pthread_exit(NULL);
 }
 
 void drawLine(struct Matrix mx, int color[3]){
- 	int x[mx.edge_num];
- 	int y[mx.edge_num];
- 	int x1[mx.edge_num];
- 	int y1[mx.edge_num];
-
- 	x = mx_toint(mx,x,0,0);
- 	y = mx_toint(mx,y,1,0);
- 	x1 = mx_toint(mx,x1,0,1);
- 	y1 = mx_toint(mx,x1,1,1);
+ 	if(mx.type != 'b'){
+ 		printf("Error: drawLine, only edge matrix was supported, force exit.\n");
+ 		exit(1);
+ 	}
+ 	
+    pthread_t thread_id[THREAD]; 
+ 	int index[THREAD];
+ 	
+	global_x = malloc(mx.col * sizeof(int));
+	global_y = malloc(mx.col * sizeof(int));
+	
+ 	global_x = mx_toint(mx,global_x,1);
+ 	global_y = mx_toint(mx,global_y,2);
+	
+	global_res = mx.edge_num;
 
     int i;
- 	for(i = 0; i < ed.col/2; i++){
-     	printf("x: %d  y: %d  x1: %d  y1: %d\n",x[i],y[i],x1[i],y1[i]);
- 	 	arr = DL(arr,x[i],y[i],x1[i],y1[i],color);
- 	}
-
-     return arr;
+ 	for(i = 0; i < THREAD; i++){
+    	index[i] = i;
+        pthread_create(&thread_id[i], NULL, drawLine_helper, (void *)index[i]);
+    }
+    for(i = 0; i < THREAD; i++){
+    	pthread_join(thread_id[i], NULL);
+	}
 }
 
 // struct Array DLMA(

@@ -70,13 +70,7 @@ void canvas_set(int *x,int *y,int res,int color[]){
  	// global_x = realloc(res * sizeof(int));
  	// global_y = realloc(res * sizeof(int));
  	global_res = res;
- 	 for(i = 0; i < res; i++){
- 	 	//printf("global_y: %d\n",global_y[i]);
- 	 }
 
- 	 for(i = 0; i < THREAD; i++){
- 	 	//printf("y: %d\n",y[i]);
- 	 }
 
  	global_color[0] = color[0];
  	global_color[1] = color[1];

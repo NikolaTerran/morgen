@@ -16,11 +16,19 @@ canvas_init();
 struct Matrix edge;
 edge = mx_init_e(edge,0);
 edge = mx_addedge(edge,0,0,0,100,100,0);
-mx_print(edge);
 
+int color[3];
+color[0] = 255;
+color[1] = 0;
+color[2] = 0;
+
+drawLine(edge,color);
+
+
+//mx_export(edge,"ok.ppm");
 
 printf("hi\n");
-canvas_push("hi.ppm");
+//canvas_push("hi.ppm");
 
 return 0;
 

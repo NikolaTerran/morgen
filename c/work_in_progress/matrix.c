@@ -30,8 +30,11 @@
 	when we plot pixels, check the new z-value against what is currently in the z-buffer
 */
 
-int * mx_toint(struct Matrix mx, int result[], int row, int odd_even){
-	
+int * mx_toint(struct Matrix mx, int *result, int row){
+	int i;
+	for(i = 0;i < mx.col;i++){
+		result[i] = mx_get(mx, row, i + 1);
+	}
 	return result;	
 }
 
@@ -107,8 +110,8 @@ struct Matrix mx_init_e(struct Matrix mx, int col){
 
 //actual math input
 double mx_get(struct Matrix mx, int row, int col){
- 	if(row == 0){
- 		printf("Error: mx_set array start with 1\n");
+ 	if(row == 0 || col == 0){
+ 		printf("Error: mx_get array start with 1\n");
  	}else if(row == 1){
  		return mx.x[col - 1];
  	}else if(row == 2){
@@ -124,7 +127,7 @@ double mx_get(struct Matrix mx, int row, int col){
  }
 
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
- 	if(row == 0){
+ 	if(row == 0 || col == 0){
  		printf("Error: mx_set array start with 1\n");
  	}else if(row == 1){
  		mx.x[col - 1] = val;

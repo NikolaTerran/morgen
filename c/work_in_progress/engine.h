@@ -33,18 +33,8 @@
 void canvas_init();
 void canvas_push(char * filename);
 void canvas_set(int *x,int *y,int res,int color[]);
-///////////////////poly////////////////////////////
+///////////////////poly/////////////////////////////
 
-///////////////////line/////////////////////////////
-int drawLine(int array[][500][3], int x1, int y1, int x2, int y2, int color[]);
-void line_helper(int array[][500][3], int x1, int y1, int x2, int y2, int x3, int y3, int octants, int color[], double m);
-
-///////////////////point////////////////////////////
-struct Point{
-	double x;
-	double y;
-	double z;
-};
 
 /////////////////////matrix//////////////////////////
               
@@ -77,7 +67,8 @@ struct Matrix mx_iden(struct Matrix m1, int ba);\
 struct Matrix mx_init(struct Matrix mx, int col);
 struct Matrix mx_init_e(struct Matrix mx, int col);
 
-int * mx_toint(struct Matrix mx, int result[], int row, int odd_even);
+int * mx_toint(struct Matrix mx, int *result, int row);
+
 double mx_get(struct Matrix mx, int row, int col);
 struct Matrix mx_set(struct Matrix mx, int row, int col, double val);
 struct Matrix mx_mult(struct Matrix m1, struct Matrix m2);
@@ -88,7 +79,7 @@ struct Matrix mx_rmc(struct Matrix mx);
 struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 
-void mx_export(struct Matrix mx, int arg);
+void mx_export(struct Matrix mx, char * filename);
 
 struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 
@@ -119,4 +110,5 @@ int* sys_random(int size);
 void db(char * say,double a);
 
 
-
+///////////////////line/////////////////////////////
+void drawLine(struct Matrix mx, int color[3]);
