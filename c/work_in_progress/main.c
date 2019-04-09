@@ -10,8 +10,10 @@ printf("Please read README.md first\n");
 	int shmid = shmget(key,sizeof(int) * x_lim * y_lim ,0666|IPC_CREAT); 
 ////////////////////////////////
 
-struct Array arr;
-arr = arr_init(arr);
+// struct Array arr;
+// arr = arr_init(arr);
+
+canvas_init();
 
 int * i;
 int * j;
@@ -33,11 +35,12 @@ color[0] = 255;
 color[1] = 0;
 color[2] = 0;
 
-arr = arr_set(arr,i,j,4,color);
+canvas_set(color);
+//arr = arr_set(arr,i,j,4,color);
 
 printf("hi\n");
 
-arr_push(arr,"hi.ppm");
+canvas_push("hi.ppm");
 
 return 0;
 

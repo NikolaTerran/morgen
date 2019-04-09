@@ -3,8 +3,8 @@
 #	gcc -o parser 3d.o matrix.o line.o util.o random.o parser.o curve.o trans.o array.o -lm
 #	rm *.o
 
-all: engine.h main.o array.o line.o
-	gcc main.o array.o line.o -lm -lpthread
+all: engine.h main.o canvas.o line.o
+	gcc main.o canvas.o line.o -lm -lpthread
 
 main.o: main.c engine.h
 	gcc -c main.c
@@ -33,8 +33,8 @@ line.o: line.c engine.h
 #trans.o: trans.c engine.h
 #	gcc -c trans.c
 
-array.o: array.c engine.h
-	gcc -c array.c
+canvas.o: canvas.c engine.h
+	gcc -c canvas.c
 	
 run:
 	./a.out

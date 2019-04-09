@@ -17,7 +17,7 @@
 #define td_axis 1      //axis of rotation of 3d obj
 #define THREAD 4      //parallel programming
 
-///////////////////array////////////////////////////
+///////////////////canvas////////////////////////////
 #define X_MIN -250
 #define X_MAX 250
 #define Y_MIN -250
@@ -26,17 +26,13 @@
 #define ARR_INIT_G 255
 #define ARR_INIT_B 255
 
+// struct Array arr_init(struct Array arr);
+// struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]);
+// void arr_push(struct Array arr, char * filename);
 
-struct Array{
-	int * r;
-	int * g;
-	int * b;
-};
-
-struct Array arr_init(struct Array arr);
-struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]);
-void arr_push(struct Array arr, char * filename);
-
+void canvas_init();
+void canvas_push(char * filename);
+void canvas_set(int color[]);
 ///////////////////poly////////////////////////////
 
 ///////////////////line/////////////////////////////
