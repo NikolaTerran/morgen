@@ -1,239 +1,148 @@
 #include "engine.h"
 
-// __global__ void gp_pxassign(int *d_r, int *d_g, int *d_b, int d_x, int d_y,int r, int g, int b){
-// 	if(d_y > Y_MAX ||
-// 	   d_y <= Y_MIN ||
-// 	   d_x >= X_MAX ||
-// 	   d_x < X_MIN){
-// 		printf("Err: in arr, coordinate has exceded dimension\n");
-// 		printf("Err: x->%d y->%d\n",d_x,d_y);
-// 		printf("Note: actual X_MAX is %d and Y_MIN is %d\n",X_MAX - 1, Y_MIN + 1);
-// 	}else{
-// 		int arr_index = (d_y + Y_MAX) * (X_MAX - X_MIN) + d_x + X_MAX;
-// 		d_y = 0 - d_y;
-// 		d_r[arr_index] = r;
-// 		d_g[arr_index] = g;
-// 		d_b[arr_index] = b;
-// 	}
-// }
-// __global__ void gp_DLMA(int *d_r, int *d_g, int *d_b, 
-// 						int x , int y, int dx, int dy, 
-// 						int check, char axis, 
-// 						int r, int g, int b){
-//     int dx2 = dx * 2;
-//     int dy2 = dy * 2;
-//     int dy2Mindx2 = dy2 - dx2;
-//     int Error = dy2 - dx;
-//  	__syncthreads();
-//     gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-//  	__syncthreads(); 
-//     if(axis == 'x'){
-// 	    while (dx--){
-// 	        if (Error > 0){
-// 	            x++;
-// 			    if(check == 0){
-// 			        y++;
-// 			    }else{
-// 				    y--;
-// 			    }
-// 	            Error += dy2Mindx2;
-// 	        }else{
-// 	            x++;
-// 	            Error += dy2;
-// 	        }
-// 	 		__syncthreads();
-// 	        gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-// 	        __syncthreads();
-// 	    }
-// 	}else{
-// 	    while (dx--){
-// 	        if (Error > 0){
-// 				if(check == 0){
-// 		            x++;
-// 		        }else{
-// 		        	x--;
-// 		        }
-// 		        y++;
-// 		        Error += dy2Mindx2;
-// 		    }else{
-// 	            y++;
-// 	            Error += dy2;
-// 	        }
-// 	 		__syncthreads();
-// 	        gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-// 	        __syncthreads();
-// 	    }
-// 	}
-// }	
-
-// __global__ void gp_DLSA(int *d_r,int *d_g, int *d_b,
-// 						int x, int y, int dx, char axis, 
-// 						int r, int g, int b){
-// 	__syncthreads();
-//     gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-//     __syncthreads();
-
-//     if(axis == 'x'){
-// 	    while (dx--){
-// 	    	x++;
-//         	__syncthreads();
-// 		    gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-// 		    __syncthreads();
-//     	}
-//     }else{
-// 	    while (dx--){
-// 	    	y++;
-//         	__syncthreads();
-//     		gp_pxassign<<<1,1>>>(d_r,d_g,d_b,x,y,r,g,b);
-//     		__syncthreads();
-//     	}
-//     }
-// }
-
-// __global__ void gp_drawline(int *d_r, int *d_g, int *d_b, 
-// 							int *d_x, int *d_y, 
-// 							int *d_x1, int *d_y1, int red, int green, int blue){
-//     int index = blockIdx.x; //* blockDim.x + threadIdx.x;
-//     int dx = d_x1[index] - d_x[index];
-//     int dy = d_y1[index] - d_y[index];
-
-//     int check;
-//     int axis;
-
-//     if (abs(dx) >= abs(dy)){
-//     	axis = 'x';
-//     	if(dx < 0){
-//             dx *= -1;
-//             dy *= -1;
-//             int t = d_x[index];
-//             d_x[index] = d_x1[index];
-//             d_x1[index] = t;
-
-//             t = d_y[index];
-//             d_y[index] = d_y1[index];
-//             d_y1[index] = t;
-//         }
-//         if(dy > 0){
-//         	__syncthreads();
-//         	gp_DLMA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dx,dy,0,'x',red,green,blue);
-//         	__syncthreads();
-//        	}else if(dy < 0){
-//        		__syncthreads();
-//        		gp_DLMA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dx,-dy,1,'x',red,green,blue);
-//        		__syncthreads();
-//        	}else{
-//             __syncthreads();
-//        		gp_DLSA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dx,'x',red,green,blue);
-//        		__syncthreads();
-//         }
-    
-//     }else{
-//         if (dy < 0){
-//             dx *= -1;
-//             dy *= -1;
-//             int t = d_x[index];
-//             d_x[index] = d_x1[index];
-//             d_x1[index] = t;
-
-// 			t = d_y[index];
-//             d_y[index] = d_y1[index];
-//             d_y1[index] = t;
-//         }
-//         if (dx > 0){
-//          	__syncthreads();
-//         	gp_DLMA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dy,dx,0,'y',red,green,blue);
-//         	__syncthreads();
-//         }else if (dx < 0){
-//         	__syncthreads();
-//         	gp_DLMA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dy,-dx,1,'y',red,green,blue);
-//         	__syncthreads();
-//         }else{
-//             __syncthreads();
-//        		gp_DLSA<<<1,1>>>(d_r,d_g,d_b,d_x[index],d_y[index],dy,'y',red,green,blue);
-//        		__syncthreads();
-//         }
-//     }
-// }
-
-
 int * global_x;
 int * global_y;
 
 int * global_xx;
 int * global_yy;
 int global_index;
-
 int global_res;
+int global_color[3];
+//int global_major_axis_counter;
+
+void DLMA(int index,int dx,int dy,int axis,int check){
+    // calculate some constants
+		int dx2 = dx * 2;
+		int dy2 = dy * 2;
+		int dy2Mindx2 = dy2 - dx2;
+ 
+ 	int index2 = index + 1;
+    // calculate the starting error value
+    int Error = dy2 - dx;
+    // draw the first pixel
+ 	canvas_set_s(global_x[index], global_y[index], global_color);
+    // loop across the major axis
+    //0 is x, else is y
+    if(axis == 0){
+	    while (dx--){
+	        // move on major axis and minor axis
+	        if (Error > 0){
+	            global_x[index]++;
+			    if(check == 0){
+			        global_y[index]++;
+			    }else{
+					global_y[index]--;
+			    }
+	            Error += dy2Mindx2;
+	        }
+	        // move on major axis only
+	        else{
+	            global_x[index]++;
+	            Error += dy2;
+	        }
+	        // draw the next pixel
+	        canvas_set_s(global_x[index], global_y[index], global_color);
+	    }
+	}else{
+	    while(dx--){
+	        // move on major axis and minor axis
+	        if (Error > 0){
+				if(check == 0){
+		            global_x[index]++;
+		        }else{
+		        	global_x[index]--;
+		        }
+		            global_y[index]++;
+		            Error += dy2Mindx2;
+		        }
+	        // move on major axis only
+	        else{
+	            global_y[index]++;
+	            Error += dy2;
+	        }	 
+	        // draw the next pixel
+	        canvas_set_s(global_x[index], global_y[index], global_color);
+	    }
+	}
+}
+
+void DLSA(int index,int dx,int axis){
+    // draw the first pixel
+ 	canvas_set_s(global_x[index], global_y[index], global_color);
+    // loop across the major axis and draw the rest of the pixels
+    if(axis == 0){
+	    while (dx--){
+	    	global_x[index]++;
+        	canvas_set_s(global_x[index], global_y[index], global_color);
+    	}
+    }else{
+	    while (dx--){
+	    	global_y[index]++;
+        	canvas_set_s(global_x[index], global_y[index], global_color);
+    	}
+    }
+}
 
 void * drawLine_helper(void * arg){
-	int index = (int *)arg;
-	while(true){
+	int index = (void *) arg;
+	int index2 = index + 1;
+
+	//for(i = 0; i < mx.col; i+=2){
+		// printf("index:%d\n",index);
+  //   	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[index],global_y[index],global_x[index+1],global_y[index+1]);
+    //}
+
+	while(1){
         if(index >= global_res){
         	break;
         }
-        
-        int dx = global_x[index + 1] - global_x[index];
-        int dy = global_y[index + 1] - global_y[index];   
+        int dx = global_x[index2] - global_x[index];
+        int dy = global_y[index2] - global_y[index];   
         // if the X axis is the major axis
      	if(abs(dx) >= abs(dy)){
          // if x2 < x1, flip the points to have fewer special cases
       	   if (dx < 0){
              dx *= -1; dy *= -1;
-             int t = x1;
-             x1 = x2; x2 = t;
-
-             t = y1;
-             y1 = y2;
-             y2 = t;
+             int t = global_x[index];
+             global_x[index] = global_x[index2]; global_x[index2] = t;
+             t = global_y[index];
+             global_y[index] = global_y[index2]; global_y[index2] = t;
            }
- 
          // determine special cases
          if(dy > 0){
-             arr = DLMA(arr, x1,y1, dx, dy, 0,'x', color);
-         }
-         else if (dy < 0){
-          	arr = DLMA(arr, x1,y1, dx, -dy, 1,'x', color);
-         }
-         else{
-             arr = DLSA(arr,x1,y1,dx,'x', color);
+             DLMA(index,dx,dy,0,0);
+         }else if (dy < 0){
+          	 DLMA(index,dx,-dy,0,1);
+         }else{
+             DLSA(index,dx,0);
          }
      }
      // else the Y axis is the major axis
-     else
-     {
+     else{
          // if y2 < y1, flip the points to have fewer special cases
-         if (dy < 0)
-         {
+         if (dy < 0){
              dx *= -1;
              dy *= -1;
-             int t = x1;
-             x1 = x2;
-             x2 = t;
-
-             t = y1;
-             y1 = y2;
-             y2 = t;
+             int t = global_x[index];
+             global_x[index] = global_x[index2]; global_x[index2] = t;
+             t = global_y[index];
+             global_y[index] = global_y[index2]; global_y[index2] = t;
          }
- 
-         // get the address of the pixel at (x1,y1)
- 
          // determine special cases
          if (dx > 0){
-          	  arr = DLMA(arr, x1,y1, dy, dx, 0,'y', color);
+          	  DLMA(index,dy,dx,1,0);
          }else if (dx < 0){
-         	  arr = DLMA(arr, x1,y1, dy, -dx, 1,'y', color);
+         	  DLMA(index,dy,-dx,1,1);
          }else{
-               arr = DLSA(arr,x1,y1, dy,'y', color);
+              DLSA(index,dy,1);
          }
-     }
-
-
-        
-        
-        
+     }    
+        index += 2 * THREAD;
+        index2 += 2 * THREAD;   
 	}
 	pthread_exit(NULL);
 }
+
 
 void drawLine(struct Matrix mx, int color[3]){
  	if(mx.type != 'b'){
@@ -243,23 +152,36 @@ void drawLine(struct Matrix mx, int color[3]){
  	
     pthread_t thread_id[THREAD]; 
  	int index[THREAD];
- 	
+
 	global_x = malloc(mx.col * sizeof(int));
 	global_y = malloc(mx.col * sizeof(int));
 	
  	global_x = mx_toint(mx,global_x,1);
  	global_y = mx_toint(mx,global_y,2);
 	
-	global_res = mx.edge_num;
+ 	global_color[0] = color[0];
+ 	global_color[1] = color[1];
+ 	global_color[2] = color[2];
+
+	global_res = 2 * mx.edge_num;
 
     int i;
+
+    // for(i = 0; i < mx.col; i+=2){
+    // 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
+    // }
+    
  	for(i = 0; i < THREAD; i++){
-    	index[i] = i;
-        pthread_create(&thread_id[i], NULL, drawLine_helper, (void *)index[i]);
+    	index[i] = i * 2;
+        pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
     }
     for(i = 0; i < THREAD; i++){
     	pthread_join(thread_id[i], NULL);
 	}
+	
+
+	free(global_x);
+	free(global_y);
 }
 
 // struct Array DLMA(

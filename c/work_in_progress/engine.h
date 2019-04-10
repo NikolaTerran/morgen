@@ -19,8 +19,8 @@
 
 ///////////////////canvas////////////////////////////
 #define X_MIN -250
-#define X_MAX 250
-#define Y_MIN -250
+#define X_MAX 251
+#define Y_MIN -251
 #define Y_MAX 250
 #define ARR_INIT_R 255
 #define ARR_INIT_G 255
@@ -32,7 +32,8 @@
 
 void canvas_init();
 void canvas_push(char * filename);
-void canvas_set(int *x,int *y,int res,int color[]);
+void canvas_set_p(int *x,int *y,int res,int color[]);
+void canvas_set_s(int x, int y, int color[]);
 ///////////////////poly/////////////////////////////
 
 

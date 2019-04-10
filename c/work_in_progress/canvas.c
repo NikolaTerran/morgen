@@ -59,7 +59,32 @@ void * canvas_set_helper(void * arg){
 	pthread_exit(NULL);
 }
 
-void canvas_set(int *x,int *y,int res,int color[]){
+void canvas_set_s(int x, int y, int color[]){
+	if(y > Y_MAX || y <= Y_MIN || x >= X_MAX || x < X_MIN){
+		printf("Error: canvas_set_s outof bound\n");
+		printf("Bound: y <= Y_MAX || y > Y_MIN || x < X_MAX  || x >= X_MIN\n");
+		if(y > Y_MAX){
+			printf("DEBUG: y is suppose to be <= %d but is %d\n",Y_MAX,y);
+		}
+		if(y <= Y_MIN){
+			printf("DEBUG: y is suppose to be > %d but is %d\n",Y_MIN,y);
+		}
+		if(x >= X_MAX){
+			printf("DEBUG: x is suppose to be < %d but is %d\n",X_MAX,x);
+		}
+		if(x < X_MIN){
+			printf("DEBUG: x is suppose to be >= %d but is %d\n",X_MIN,x);
+		}
+		//exit(1);
+	}else{
+    int local_y =  0 - y;
+    global_r[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[0];
+    global_g[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[1];
+    global_b[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[2];
+}
+}
+
+void canvas_set_p(int *x,int *y,int res,int color[]){
 
     pthread_t thread_id[THREAD]; 
  	int index[THREAD];
