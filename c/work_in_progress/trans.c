@@ -5,55 +5,80 @@
 
 //create a transformation matrix 4 x 4
 struct Matrix mx_dilation(struct Matrix mx, double x, double y, double z){
-	struct Matrix id = mx_iden(mx,1);
-	
-	int i = 0;
-	
-	id = mx_set(id,0,0,x);
-	id = mx_set(id,1,1,y);
-	id = mx_set(id,2,2,z);
-	
-	mx = mx_mult(id,mx);
-	
+		
+	int i;
+	for(i = 0; i < mx.col;i++){
+		mx.x[i] *= x;
+		mx.y[i] *= y;
+		mx.z[i] *= z;
+	}
+
 	return mx;
 }
 
 struct Matrix mx_transform(struct Matrix mx, double x, double y, double z){
-	struct Matrix id = mx_iden(mx,1);
 
 	int i = 0;
 
-	id = mx_set(id,0,3,x);
-	id = mx_set(id,1,3,y);
-	id = mx_set(id,2,3,z);
-	
-	mx = mx_mult(id,mx);
-	
+	for(i = 0; i < mx.col; i++){
+		mx.x[i] += x;
+		mx.y[i] += y;
+		mx.z[i] += z;
+	}
+
 	return mx;
 }
 
-//axis == x,y
+//axis == x,y,z
 struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
-	struct Matrix id;
-	id = mx_iden(mx,1);
+	int i;
 	if(axis == 0){
-		id = mx_set(id,1,1,cos(radian));
-		id = mx_set(id,1,2,-sin(radian));
-		id = mx_set(id,2,1,sin(radian));
-		id = mx_set(id,2,2,cos(radian));
+		// id = mx_set(id,1,1,cos(radian));
+		// id = mx_set(id,1,2,-sin(radian));
+		// id = mx_set(id,2,1,sin(radian));
+		// id = mx_set(id,2,2,cos(radian));
+		for(i = 0; i < mx.col;i++){
+			t = mx.y[i];
+			mx.y[i] = mx.y[i] * cos(radian) + mx.z[i] * -sin(radian);
+			mx.z[i] = t * sin(radian) + mx.z[i] * cos(radian);
+		}
+
+		// [1][0][0][0]
+		// [0][cos(radian)][-sin(radian)][0]
+		// [0][sin(radian)][cos(radian)][0]
+		// [0][0][0][1]
+
+
 	}else if(axis == 1){
-		id = mx_set(id,0,0,cos(radian));
-		id = mx_set(id,0,2,sin(radian));
-		id = mx_set(id,2,0,-sin(radian));
-		id = mx_set(id,2,2,cos(radian));
+		for(i = 0; i < mx.col; i++){
+			t = mx.x[i];
+			mx.x[i] = mx.x[i] * cos(radian) + mx.z[i] * sin(radian);
+			mx.z[i] = t * -sin(radian) + mx.z[i] * cos(radian);
+		}
+		// id = mx_set(id,0,0,cos(radian));
+		// id = mx_set(id,0,2,sin(radian));
+		// id = mx_set(id,2,0,-sin(radian));
+		// id = mx_set(id,2,2,cos(radian));
+		//[cos(radian)][][sin(radian)][]
+		//[][1][][]
+		//[-sin(radian)][][cos(radian)][]
+		//[][][][1]
+
 	}else{
-		id = mx_set(id,0,0,cos(radian));
-		id = mx_set(id,1,0,sin(radian));
-		id = mx_set(id,0,1,-sin(radian));
-		id = mx_set(id,1,1,cos(radian));
+		for(i = 0; i < mx.col; i++){
+			t = mx.x[i];
+			mx.x[i] = mx.x[i] * cos(radian) + mx.y[i] * -sin(radian);
+			mx.y[i] = t * sin(radian) + mx.y[i] * cos(radian);
+		}
+		// id = mx_set(id,0,0,cos(radian));
+		// id = mx_set(id,1,0,sin(radian));
+		// id = mx_set(id,0,1,-sin(radian));
+		// id = mx_set(id,1,1,cos(radian));
+		//[cos(radian)][-sin(radian)][][]
+		//[sin(radian)][cos(radian)][][]
+		//[][][1][]
+		//[][][][1]
 	}
-	//mx_print(id);
-	mx = mx_mult(id,mx);
 	
 	return mx;
 }

@@ -62,23 +62,66 @@ struct Matrix add_torus(struct Matrix mx, double x, double y, double z, double r
 	return mx;
 }
 
-struct Matrix add_box(struct Matrix mx, double x1, double y1, double z1,
-										double h, double l, double w){
-	mx = addedge(mx,x1    , y1    , z1    , x1 + w, y1    , z1    );
-	mx = addedge(mx,x1    , y1    , z1    , x1    , y1 + h, z1    );
-	mx = addedge(mx,x1    , y1    , z1    , x1    , y1    , z1 + l);
-	mx = addedge(mx,x1    , y1    , z1 + l, x1 + w, y1    , z1 + l);
-	mx = addedge(mx,x1    , y1    , z1 + l, x1    , y1 + h, z1 + l);
-	mx = addedge(mx,x1 + w, y1    , z1 + l, x1 + w, y1    , z1	  );
-	mx = addedge(mx,x1 + w, y1    , z1    , x1 + w, y1 + h, z1    );
-	mx = addedge(mx,x1    , y1 + h, z1    , x1 + w, y1 + h, z1    );
-	mx = addedge(mx,x1    , y1 + h, z1 + l, x1    , y1 + h, z1    );
-	mx = addedge(mx,x1    , y1 + h, z1 + l, x1 + w, y1 + h, z1 + l);
-	mx = addedge(mx,x1 + w, y1 + h, z1 + l, x1 + w, y1    , z1 + l);
-	mx = addedge(mx,x1 + w, y1 + h, z1 + l, x1 + w, y1 + h, z1    );
+struct Matrix mx_addpoly(struct Matrix mx, double x1, double y1, double z1,
+										   double x2, double y2, double z2,
+										   double x3, double y3, double z3,
+										   double v1, double v2, double v3){
+	mx.x = realloc(mx.x,(mx.col + 3) * sizeof(double));
+	mx.y = realloc(mx.y,(mx.col + 3) * sizeof(double));
+	mx.z = realloc(mx.z,(mx.col + 3) * sizeof(double));
+	mx.v = realloc(mx.v,(mx.col + 3) * sizeof(double));
+
+	//mx.col += 3;
+	mx.x[mx.col] = x1;
+	mx.x[mx.col + 1] = x2;
+	mx.x[mx.col + 2] = x3; 
+
+	mx.y[mx.col] = y1;
+	mx.y[mx.col + 1] = y2;
+	mx.y[mx.col + 2] = y3;
+
+	mx.z[mx.col] = y1;
+	mx.z[mx.col + 1] = y2;
+	mx.z[mx.col + 2] = y3;
+
+	mx.v[mx.col] = v1;
+	mx.v[mx.col + 1] = v2;
+	mx.v[mx.col + 2] = v3;
+
+	mx.col += 3;
+}
+
+struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
+						   				  double h, double l, double d){
+	if(mx.type != 'c'){ 
+		printf("Error: mx_addbox, incomplatible matrix type\n");
+		printf("Note: expected matrix type \'c\', but received matrix type \'%c\'\n",mx.type);
+		exit(1);
+	}
+
+	int i;
+
+	mx = addpoly(mx,x1,y1,z1, 
+					x1,y1 + h,z1,
+					x1,y1,z1 + d,
+					);
+/*
+	mx = addpoly(mx,x1,y1,z1, 
+					x1,y1 + h,z1,
+					x1,y1,z1 + d,
+					);
+
+	mx = addpoly(mx,x1,y1,z1, 
+					x1,y1 + h,z1,
+					x1,y1,z1 + d,
+					);
+
+*/
+
+
+
 
 	return mx;
-
 }
 
 /* wait for the implementation of points

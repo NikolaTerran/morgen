@@ -10,6 +10,33 @@ int global_res;
 int global_color[3];
 //int global_major_axis_counter;
 
+
+struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f){
+	if(mx.type != 'b'){
+		printf("Err: mx_addedge, incompatible matrix type, force quitting the program\n");
+		exit(1);
+	}
+	
+	mx.edge_num += 1;
+	mx.col += 2;
+	
+	mx.x = realloc(mx.x,mx.col * sizeof(double));
+	mx.y = realloc(mx.y,mx.col * sizeof(double));
+	mx.z = realloc(mx.z,mx.col * sizeof(double));
+ 	mx.one = realloc(mx.one,mx.col * sizeof(double));
+ 	
+ 	mx.x[mx.col - 2] = a;
+ 	mx.y[mx.col - 2] = b;
+ 	mx.z[mx.col - 2] = c;
+ 	mx.one[mx.col - 2] = 1;
+ 	mx.x[mx.col - 1] = d;
+ 	mx.y[mx.col - 1] = e;
+ 	mx.z[mx.col - 1] = f;
+ 	mx.one[mx.col - 1] = 1;
+ 	
+ 	return mx;
+}
+
 void DLMA(int index,int dx,int dy,int axis,int check){
     // calculate some constants
 		int dx2 = dx * 2;

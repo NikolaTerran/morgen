@@ -38,6 +38,23 @@ int * mx_toint(struct Matrix mx, int *result, int row){
 	return result;	
 }
 
+/*
+struct Matrix mx_mult(struct Matrix m1, struct Matrix m2){
+	if(m2.type != 'b'){
+		int i;
+		for(i; i < m2.col;i++){
+			m2.x[i] = 
+			m2.y[i] = 
+			m2.z[i] = 
+		}
+		
+	}else{
+		printf("Error: mx_mult, matrix type not supported\n");
+		exit(1);
+	}
+}
+*/
+
 void mx_print(struct Matrix mx){
 	int i;
 	for(i = 0; i < mx.col; i++){
@@ -240,31 +257,14 @@ struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
 
 //defaut edge Matrix
 
+void mx_export(struct Matrix mx, int color[]){
+	if(mx.type == 'a'){
 
-struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f){
-	if(mx.type != 'b'){
-		printf("Err: mx_addedge, incompatible matrix type, force quitting the program\n");
-		exit(1);
+	}else if(mx.type == 'b'){
+		drawLine(mx,color);
+	}else if(mx.type == 'c'){
+		drawLine(mx,color);
 	}
-	
-	mx.edge_num += 1;
-	mx.col += 2;
-	
-	mx.x = realloc(mx.x,mx.col * sizeof(double));
-	mx.y = realloc(mx.y,mx.col * sizeof(double));
-	mx.z = realloc(mx.z,mx.col * sizeof(double));
- 	mx.one = realloc(mx.one,mx.col * sizeof(double));
- 	
- 	mx.x[mx.col - 2] = a;
- 	mx.y[mx.col - 2] = b;
- 	mx.z[mx.col - 2] = c;
- 	mx.one[mx.col - 2] = 1;
- 	mx.x[mx.col - 1] = d;
- 	mx.y[mx.col - 1] = e;
- 	mx.z[mx.col - 1] = f;
- 	mx.one[mx.col - 1] = 1;
- 	
- 	return mx;
 }
 
 // struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue){

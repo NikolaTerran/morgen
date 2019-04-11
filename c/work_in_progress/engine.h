@@ -17,6 +17,8 @@
 #define td_axis 1      //axis of rotation of 3d obj
 #define THREAD 4      //parallel programming
 
+#define ray_step 1  //step for ray tracing
+
 ///////////////////canvas////////////////////////////
 #define X_MIN -250
 #define X_MAX 251
@@ -37,6 +39,38 @@ void canvas_set_s(int x, int y, int color[]);
 ///////////////////poly/////////////////////////////
 
 
+///////////////////ray//////////////////////////////
+struct Ray{
+	double * l_x;
+	double * l_y;
+	double * l_z;
+	double * l_dx;
+	double * l_dy;
+	double * l_dz;
+
+	double * s_x;
+	double * s_y;
+	double * s_z;
+	double * s_dx;
+	double * s_dy;
+	double * s_dz;
+
+	double * f_x;
+	double * f_y;
+	double * f_z;
+	double * f_dx;
+	double * f_dy;
+	double * f_dz;
+
+	double * r;
+	double * g;
+	double * b;
+
+	double * cx;
+	double * cy;
+};
+
+struct Ray ray_init(struct Ray ray);
 /////////////////////matrix//////////////////////////
               
               /////////////////////////////////////////
@@ -47,8 +81,9 @@ struct Matrix{
 	double * x;
 	double * y;
 	double * z;
+	double * v;
+
 	double * one;
-	
 	double * edge_id;
 	int edge_num;
 
