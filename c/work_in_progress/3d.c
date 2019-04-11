@@ -15,67 +15,69 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		trans  = mx_init(trans,0);
 		result = mx_init(result,0);
 
-
-
 		trans = mx_addcircle(mx, 0 , 0 , 0 , r);
 		result = mx_addmatrix(trans,result);
 		
-		//t += t_step * (2 * M_PI);
 		while(t <= (2 * M_PI)){
-			
 			trans = mx_rotate(trans,td_axis,t);
+			result = mx_addmatrix(trans,result);	
 
-			result = mx_addmatrix(trans,result);
-			printf("trans_size: %d  +  result_size: %d\n",trans.col,result.col);
 			t += td_step;
-		//	printf("t: %f\n",t);
-		}
 
-		//result = mx_transform(result,x,y,z);
+		}
+		result = mx_transform(result,x,y,z);
 		mx = mx_addmatrix(result,mx);
-		//mx_print(trans);
-		//trans = mx_transform(trans,x,y,z);
-		//mx = mx_addc(mx,trans);
 		return mx;
 	}else{
 		printf("Error: mx_addsphere, matrix type not supported\n");
 	}
 }
-/*
+
 struct Matrix draw_poly(struct Matrix mx){
 	return mx;
 }
 
-struct Matrix add_torus(struct Matrix mx, double x, double y, double z, double r, double d, int axis){
-	double t = 0;
-	struct Matrix trans;
-	struct Matrix result;
-	result = mx_init(4,0);
-	//t += t_step * (2 * M_PI);
-	double a = 0;
-	double b = 0;
-	double c = 0;
+struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double r, double d){
+	if(mx.type = 'a'){
+		double t = 0;
+		struct Matrix trans;
+		struct Matrix result;
+		result = mx_init(result,0);
+		trans = mx_init(trans,0);
+		double a = 0;
+		double b = 0;
+		double c = 0;
 
-	if(axis == 0){
-		b = d;
-	}else if(axis == 1){
-		a = d;
-	}else{
-		c = d;
-	}
-	while(t <= (2 * M_PI) + td_step){
-		trans = circle(mx, a , b , c , r);
-		trans = mx_rotate(trans,axis,t);
-		result = mx_addc(result,trans);
-		t += td_step;
-	//	printf("t: %f\n",t);
-	}
-	result = mx_transform(result,x,y,z);
-	mx = mx_addc(mx,result);
+		/*
+		if(axis == 0){
+			b = d;
+		}else if(axis == 1){
+			a = d;
+		}else{
+			c = d;
+		}
+		*/
+		
+		trans = mx_addcircle(mx, x + d, y , z , r);
+		result = mx_addmatrix(trans,result);
+		t += t_step * (2 * M_PI);
+		
+		while(t <= (2 * M_PI)){
+			
+			trans = mx_rotate(trans,td_axis,t);
+			result = mx_addmatrix(trans,result);
+			t += td_step;
+			printf("t:%f\n\n",t);
+		//	printf("t: %f\n",t);
+		}
+		result = mx_transform(result,x,y,z);
+		mx = mx_addmatrix(result,mx);
 
-	return mx;
+		return mx;
+	}
 }
 
+/*
 struct Matrix mx_addpoly(struct Matrix mx, double x1, double y1, double z1,
 										   double x2, double y2, double z2,
 										   double x3, double y3, double z3,

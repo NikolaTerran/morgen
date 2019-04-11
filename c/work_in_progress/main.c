@@ -23,6 +23,10 @@ color[1] = 0;
 color[2] = 0;
 
 point = mx_addsphere(point,0,0,0,100);
+point = mx_addtorus(point,0,0,0,50,100);
+point = mx_rotate(point,0,0.5);
+
+printf("point.col: %d\n",point.col);
 /*
 edge = mx_addbezier(edge,0,0,50,50,-50,-50,100,100);
 edge = mx_addbezier(edge,0,0,50,50,-50,-50,-100,100);
