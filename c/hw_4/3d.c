@@ -7,41 +7,27 @@
 	[-sin@ @     ]   [@        ]
 */
 
-struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, double r){
-	if(mx.type == 'a'){
-		double t = 0;
-		struct Matrix trans;
-		struct Matrix result;
-		trans  = mx_init(trans,0);
-		result = mx_init(result,0);
-
-
-
-		trans = mx_addcircle(mx, 0 , 0 , 0 , r);
-		result = mx_addmatrix(trans,result);
-		
-		//t += t_step * (2 * M_PI);
-		while(t <= (2 * M_PI)){
-			
-			trans = mx_rotate(trans,td_axis,t);
-
-			result = mx_addmatrix(trans,result);
-			printf("trans_size: %d  +  result_size: %d\n",trans.col,result.col);
-			t += td_step;
-		//	printf("t: %f\n",t);
-		}
-
-		//result = mx_transform(result,x,y,z);
-		mx = mx_addmatrix(result,mx);
-		//mx_print(trans);
-		//trans = mx_transform(trans,x,y,z);
-		//mx = mx_addc(mx,trans);
-		return mx;
-	}else{
-		printf("Error: mx_addsphere, matrix type not supported\n");
+struct Matrix add_sphere(struct Matrix mx, double x, double y, double z, double r){
+	double t = 0;
+	struct Matrix trans;
+	struct Matrix result;
+	result = mx_init(4,0);
+	//t += t_step * (2 * M_PI);
+	while(t <= (2 * M_PI) + td_step){
+		trans = circle(mx, 0 , 0 , 0 , r);
+		trans = mx_rotate(trans,td_axis,t);
+		result = mx_addc(result,trans);
+		t += td_step;
+	//	printf("t: %f\n",t);
 	}
+	result = mx_transform(result,x,y,z);
+	mx = mx_addc(mx,result);
+	//mx_print(trans);
+	//trans = mx_transform(trans,x,y,z);
+	//mx = mx_addc(mx,trans);
+	return mx;
 }
-/*
+
 struct Matrix draw_poly(struct Matrix mx){
 	return mx;
 }
@@ -134,7 +120,7 @@ struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
 
 
 
-/*
+
 	return mx;
 }
 

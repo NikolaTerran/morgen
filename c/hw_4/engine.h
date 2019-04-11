@@ -14,7 +14,7 @@
 #define t_step 0.01   //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
 #define td_step 0.5   //drawing distance of 3d obj
-#define td_axis 1      //axis of rotation of 3d obj         //0 == x // 1 == y // 2 == z//
+#define td_axis 1      //axis of rotation of 3d obj
 #define THREAD 4      //parallel programming
 
 #define ray_step 1  //step for ray tracing
@@ -36,8 +36,8 @@ void canvas_init();
 void canvas_push(char * filename);
 void canvas_set_p(int *x,int *y,int res,int color[]);
 void canvas_set_s(int x, int y, int color[]);
-///////////////////3d///////////////////////////////
-struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, double r);
+///////////////////poly/////////////////////////////
+
 
 ///////////////////ray//////////////////////////////
 struct Ray{
@@ -83,7 +83,7 @@ struct Matrix{
 	double * z;
 	double * v;
 
-	//double * one;
+	double * one;
 	double * edge_id;
 	int edge_num;
 
@@ -125,7 +125,7 @@ struct Matrix mx_dilate(struct Matrix mx, double x,double y, double z);
 struct Matrix mx_transform(struct Matrix mx, double x, double y, double z);
 struct Matrix mx_rotate(struct Matrix, int axis, double radian);
 struct Matrix mx_yrev(struct Matrix mx);
-struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst);
+
 
 /////////////////////curve////////////////////////////
 
@@ -148,7 +148,3 @@ void db(char * say,double a);
 
 ///////////////////line/////////////////////////////
 void drawLine(struct Matrix mx, int color[3]);
-
-//////////////////point/////////////////////////////
-void drawPoint(struct Matrix mx, int color[3]);
-struct Matrix mx_addpoint(struct Matrix mx, double x, double y, double z);

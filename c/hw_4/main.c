@@ -13,17 +13,16 @@ printf("Please also read the commit message\n");
 
 canvas_init();
 
-struct Matrix point;
-point = mx_init(point,0);
+struct Matrix edge;
+edge = mx_init_e(edge,0);
 
 
 int color[3];
-color[0] = 0;
+color[0] = 255;
 color[1] = 0;
 color[2] = 0;
 
-point = mx_addsphere(point,0,0,0,100);
-/*
+edge = mx_addcircle(edge,0,0,0,100);
 edge = mx_addbezier(edge,0,0,50,50,-50,-50,100,100);
 edge = mx_addbezier(edge,0,0,50,50,-50,-50,-100,100);
 edge = mx_addbezier(edge,0,0,50,50,-50,-50,100,-100);
@@ -34,8 +33,7 @@ edge = mx_addhermite(edge,0,0,50,50,-50,-50,-200,200);
 edge = mx_addhermite(edge,0,0,50,50,-50,-50,200,-200);
 edge = mx_addhermite(edge,0,0,50,50,-50,-50,-200,-200);
 drawLine(edge,color);
-*/
-drawPoint(point,color);
+
 
 //mx_export(edge,"ok.ppm");
 

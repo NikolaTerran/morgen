@@ -70,7 +70,7 @@ void mx_print(struct Matrix mx){
 	}
 	printf("\n");
 	for(i = 0; i < mx.col; i++){
-		//printf("[%f] ",mx.one[i]);
+		printf("[%f] ",mx.one[i]);
 	}
 	printf("\n");
 }
@@ -90,14 +90,14 @@ struct Matrix mx_init(struct Matrix mx, int col){
 	mx.x = malloc (col * sizeof(double));
 	mx.y = malloc (col * sizeof(double));
 	mx.z = malloc (col * sizeof(double));
-	//mx.one = malloc (col * sizeof(double));
+	mx.one = malloc (col * sizeof(double));
 
 	int i;
 	for(i = 0; i < col; i++){
 		mx.x[i] = INIT_VALUE; 
 		mx.y[i] = INIT_VALUE; 
 		mx.z[i] = INIT_VALUE; 
-		//mx.one[i] = 1; 
+		mx.one[i] = 1; 
 	}
 
 	return mx;
@@ -112,42 +112,19 @@ struct Matrix mx_init_e(struct Matrix mx, int col){
 	mx.x = malloc (col * sizeof(double));
 	mx.y = malloc (col * sizeof(double));
 	mx.z = malloc (col * sizeof(double));
-	//mx.one = malloc (col * sizeof(double));
+	mx.one = malloc (col * sizeof(double));
 
 	int i;
 	for(i = 0; i < col; i++){
 		mx.x[i] = INIT_VALUE; 
 		mx.y[i] = INIT_VALUE; 
 		mx.z[i] = INIT_VALUE; 
-		//mx.one[i] = 1; 
+		mx.one[i] = 1; 
 	}
 
 	return mx;
 }
 
-struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst){
-	if(src.type == 'a' && dst.type == 'a'){
-		int lim = dst.col + src.col;
-		int size = lim * sizeof(double);
-		dst.x = realloc(dst.x, size);
-		dst.y = realloc(dst.x, size);
-		dst.z = realloc(dst.x, size);
-		int i;
-		int j = 0;
-		for(i = dst.col; i < lim; i++){
-			printf("sizeof i: %d\n",i);
-			dst.x[i] = src.x[j];
-			dst.y[i] = src.y[j];
-			dst.z[i] = src.z[j];
-			j++;
-		}
-		dst.col = lim;
-		return dst;
-	}else{
-		printf("Error: mx_addmatrix, inconsistent matrix type or matrix type not supported\n");
-
-	}
-}
 //actual math input
 double mx_get(struct Matrix mx, int row, int col){
  	if(row == 0 || col == 0){
@@ -159,7 +136,7 @@ double mx_get(struct Matrix mx, int row, int col){
  	}else if(row == 3){
  		return mx.z[col - 1];
  	}else if(row == 4){
-		//return mx.one[col - 1];
+		return mx.one[col - 1];
  	}else{
  		printf("Err: mx_get, invalid row_num, returning 0\n");
  		return 0;
@@ -177,22 +154,12 @@ struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
  		mx.z[col - 1] = val;
  	}else if(row == 4){
 		printf("Warning: mx_set, modifying constant row\n");
-		//mx.one[col - 1] = val;	
+		mx.one[col - 1] = val;	
  	}else{
  		printf("Err: mx_row, invalid row_num, returning original matrix\n");
  		return mx;
  	}
  	return mx;
- }
-
- void mx_free(struct Matrix mx){
- 	if(mx.type == 'a'){
- 		if(mx.col != 0){
- 			free(mx.x);
- 			free(mx.y);
- 			free(mx.z);
- 		}
- 	}
  }
 
 // struct Matrix mx_mult(struct Matrix m1, struct Matrix m2){

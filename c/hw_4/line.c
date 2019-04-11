@@ -23,16 +23,16 @@ struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double 
 	mx.x = realloc(mx.x,mx.col * sizeof(double));
 	mx.y = realloc(mx.y,mx.col * sizeof(double));
 	mx.z = realloc(mx.z,mx.col * sizeof(double));
- 	//mx.one = realloc(mx.one,mx.col * sizeof(double));
+ 	mx.one = realloc(mx.one,mx.col * sizeof(double));
  	
  	mx.x[mx.col - 2] = a;
  	mx.y[mx.col - 2] = b;
  	mx.z[mx.col - 2] = c;
- 	//mx.one[mx.col - 2] = 1;
+ 	mx.one[mx.col - 2] = 1;
  	mx.x[mx.col - 1] = d;
  	mx.y[mx.col - 1] = e;
  	mx.z[mx.col - 1] = f;
- 	//mx.one[mx.col - 1] = 1;
+ 	mx.one[mx.col - 1] = 1;
  	
  	return mx;
 }
@@ -210,8 +210,6 @@ void drawLine(struct Matrix mx, int color[3]){
 	free(global_x);
 	free(global_y);
 }
-
-
 
 // struct Array DLMA(
 //     struct Array arr,
