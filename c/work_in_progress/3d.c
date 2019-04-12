@@ -34,9 +34,123 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		mx_free(trans);
 
 		return mx;
+	}else if(mx.type == 'c'){
+		double t = 0;	
+		double step = M_PI * td_step;
+
+		struct Matrix trans;
+		struct Matrix trans1;
+		
+		struct Matrix result;
+		
+		trans  = mx_init(trans,0);
+		trans1 = mx_init(trans,0);
+		result = mx_init_p(result,0);
+
+		
+		trans = mx_addcircle(trans, 0 , 0 , 0 , r);
+		trans1 = mx_addcircle(trans1, 0 , 0 , 0 , r);
+		trans1 = mx_rotate(trans1,1,step);
+		
+		result = sphere_helper(trans,trans1,result);
+		t += step;
+		
+		while(t <  M_PI){
+			trans = mx_rotate(trans,td_axis,step);
+			trans1 = mx_rotate(trans1,1,step);
+			result = sphere_helper(trans,trans1,result);
+			t += step;
+		}
+		
+		result = mx_transform(result,x,y,z);
+		mx = mx_addmatrix(result,mx);
+		mx_free(result);
+		mx_free(trans);
+		mx_free(trans1);
+
+		return mx;
 	}else{
 		printf("Error: mx_addsphere, matrix type not supported\n");
 	}
+}
+
+struct Matrix sphere_helper(struct Matrix src, struct Matrix src2, struct Matrix dst){
+	lim = dst.col + (src.col - 2) * 2;
+	size = dst.col * sizeof(double);
+	int i, j;
+	j = 0;
+	i = dst.col;
+	
+	dst.x[i] = src.x[j];
+	dst.y[i] = src.y[j];
+	dst.z[i] = src.z[j];
+	
+	i++; j++;
+ 	
+ 	dst.x[i] = src.x[j];
+ 	dst.y[i] = src.y[j];
+ 	dst.z[i] = src.z[j];
+	
+	i++;
+	 	
+	dst.x[i] = src2.x[j];
+	dst.y[i] = src2.y[j];
+	dst.z[i] = src2.z[j];
+	
+	i++;
+	
+	for(i; i < lim - 1; i++){
+	 	dst.x[i] = src.x[j];
+	 	dst.y[i] = src.y[j];
+	 	dst.z[i] = src.z[j];
+
+	 	i++;
+	 	
+	 	dst.x[i] = src2.x[j];
+	 	dst.y[i] = src2.y[j];
+	 	dst.z[i] = src2.z[j];
+	 	
+	 	i++; j++;
+	 	
+	 	dst.x[i] = src.x[j];
+	 	dst.y[i] = src.y[j];
+	 	dst.z[i] = src.z[j];
+	 	
+	 	i++;	
+	 	
+	 	dst.x[i] = src.x[j];
+	 	dst.y[i] = src.y[j];
+	 	dst.z[i] = src.z[j];
+
+		i++;
+		
+	 	dst.x[i] = src2.x[j];
+	 	dst.y[i] = src2.y[j];
+	 	dst.z[i] = src2.z[j];
+	 	
+	 	i++; j--;
+	 	
+	 	dst.x[i] = src2.x[j];
+	 	dst.y[i] = src2.y[j];
+	 	dst.z[i] = src2.z[j];
+	 	
+	 	j++;	 	
+	}
+	i++;
+		dst.x[i] = src.x[j];
+	 	dst.y[i] = src.y[j];
+	 	dst.z[i] = src.z[j];
+	 	i++;
+		dst.x[i] = src2.x[j];
+	 	dst.y[i] = src2.y[j];
+	 	dst.z[i] = src2.z[j];
+	 	i++;j++;
+			dst.x[i] = src2.x[j];
+	 	dst.y[i] = src2.y[j];
+	 	dst.z[i] = src2.z[j];
+	 	
+	 	return dst;
+	
 }
 
 struct Matrix draw_poly(struct Matrix mx){

@@ -105,6 +105,28 @@ struct Matrix mx_init_e(struct Matrix mx, int col){
 	return mx;
 }
 
+struct Matrix mx_init_p(struct Matrix mx, int col){
+	mx.col = col;
+	mx.type = 'b';
+	mx.edge_num = 0;
+
+	mx.x = malloc (col * sizeof(double));
+	mx.y = malloc (col * sizeof(double));
+	mx.z = malloc (col * sizeof(double));
+	mx.v = malloc (col * sizeof(double));
+
+	int i;
+	for(i = 0; i < col; i++){
+		mx.x[i] = INIT_VALUE; 
+		mx.y[i] = INIT_VALUE; 
+		mx.z[i] = INIT_VALUE; 
+		mx.v[i] = INIT_VALUE;
+		//mx.one[i] = 1; 
+	}
+
+	return mx;
+}
+
 struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst){
 	if(src.type == 'a' && dst.type == 'a'){
 		int lim = dst.col + src.col;
@@ -206,7 +228,7 @@ void mx_export(struct Matrix mx, int color[]){
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
-		drawLine(mx,color);
+		drawPoint(mx,color);
 	}
 }
 

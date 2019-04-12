@@ -98,6 +98,7 @@ struct Matrix{
 	
 };
 
+struct Matrix mx_init_p(struct Matrix mx, int col);
 void mx_print(struct Matrix m1);
 void mx_printf(struct Matrix mx);
 struct Matrix mx_iden(struct Matrix m1, int ba);\
