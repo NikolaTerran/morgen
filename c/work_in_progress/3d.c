@@ -133,11 +133,20 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 	}else if(mx.type == 'c'){
 		double t = 0;	
 		double step = M_PI * td_step;
-
-		struct Matrix trans;
-		struct Matrix trans1;
 		
 		struct Matrix result;
+		
+		double t = 0;
+		double xx = r * cos(t);
+		double yy = r * sin(t);
+		//t += t_step * (2 * M_PI);
+		while(t <=  M_PI + t_step){
+			xx = r * cos(t) + x;
+			yy = r * sin(t) + y;
+			mx = mx_addpoint(mx,xx,yy,z);
+			t = t + t_step * (2 * M_PI);
+		}
+		
 
 
 		return mx;
@@ -145,6 +154,11 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		printf("Error: mx_addsphere, matrix type not supported\n");
 	}
 }
+
+struct Matrix mx_addpoly(struct Matrix mx){
+
+}
+
 
 struct Matrix draw_poly(struct Matrix mx){
 	return mx;
