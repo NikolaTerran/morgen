@@ -23,8 +23,10 @@ color[1] = 0;
 color[2] = 0;
 
 struct Matrix poly;
+poly = mx_init_p(poly,0);
+
 poly = mx_addsphere(poly,0,0,0,100);
-mx_export(poly,color);
+//mx_export(poly,color);
 /*
 point = mx_addsphere(point,0,0,0,100);
 point = mx_addtorus(point,0,0,0,50,200);

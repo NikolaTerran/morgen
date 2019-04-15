@@ -32,6 +32,19 @@ struct Matrix mx_addcircle(struct Matrix mx, double x, double y, double z, doubl
 			t = t + t_step * (2 * M_PI);
 		}
 		return mx;
+	}else if(mx.type == 'c'){
+		double t = 0;
+		double xx = r * cos(t) + x;
+		double yy = r * sin(t) + y;
+		//t += t_step * (2 * M_PI);
+		while(t <=  M_PI + t_step){
+			xx = r * cos(t) + x;
+			yy = r * sin(t) + y;
+			mx = mx_addpoint(mx,xx,yy,z);
+
+			t = t + t_step * (2 * M_PI);
+		}
+		return mx;
 	}else{
 		printf("Error: mx_addcircle, matrix type note supported\n");
 		exit(1);

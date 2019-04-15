@@ -107,7 +107,7 @@ struct Matrix mx_init_e(struct Matrix mx, int col){
 
 struct Matrix mx_init_p(struct Matrix mx, int col){
 	mx.col = col;
-	mx.type = 'b';
+	mx.type = 'c';
 	mx.edge_num = 0;
 
 	mx.x = malloc (col * sizeof(double));
@@ -148,11 +148,33 @@ struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst){
 		
 		dst.col = lim;
 		return dst;
+	}else if(src.type == 'c' && dst.type == 'c'){
+		int lim = dst.col + src.col;
+		int size = lim * sizeof(double);
+		
+		dst.x = (double *)realloc(dst.x, size);
+		dst.y = (double *)realloc(dst.y, size);
+		dst.z = (double *)realloc(dst.z, size);
+		
+		int i;
+		int j = 0;
+		
+		for(i = dst.col; i < lim; i++){
+			dst.x[i] = src.x[j];
+			dst.y[i] = src.y[j];
+			dst.z[i] = src.z[j];
+			j++;
+		}
+		
+		dst.col = lim;
+		return dst;
+
 	}else{
 		printf("Error: mx_addmatrix, inconsistent matrix type or matrix type not supported\n");
-
 	}
 }
+
+
 //actual math input
 double mx_get(struct Matrix mx, int row, int col){
  	if(row == 0 || col == 0){

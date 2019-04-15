@@ -12,10 +12,10 @@ void drawPoint(struct Matrix mx, int color[3]){
 }
 
 struct Matrix mx_addpoint(struct Matrix mx, double x, double y, double z){
-	if(mx.type != 'a'){
+	/*if(mx.type != 'a'){
 		printf("Err: mx_addpoint, incompatible matrix type, force quitting the program\n");
 		exit(1);
-	}
+	}*/
 	
 	//mx.edge_num += 1;
 	mx.col ++;
