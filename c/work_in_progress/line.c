@@ -12,10 +12,10 @@ int global_color[3];
 
 
 struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f){
-	if(mx.type != 'b'){
+	/*if(mx.type != 'b'){
 		printf("Err: mx_addedge, incompatible matrix type, force quitting the program\n");
 		exit(1);
-	}
+	}*/
 	
 	mx.edge_num += 1;
 	mx.col += 2;
@@ -172,10 +172,10 @@ void * drawLine_helper(void * arg){
 
 
 void drawLine(struct Matrix mx, int color[3]){
- 	if(mx.type != 'b'){
+ 	/*if(mx.type != 'b'){
  		printf("Error: drawLine, only edge matrix was supported, force exit.\n");
  		exit(1);
- 	}
+ 	}*/
  	
     pthread_t thread_id[THREAD]; 
  	int index[THREAD];

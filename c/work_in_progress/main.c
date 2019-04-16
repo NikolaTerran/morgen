@@ -26,7 +26,9 @@ struct Matrix poly;
 poly = mx_init_p(poly,0);
 
 poly = mx_addsphere(poly,0,0,0,100);
-//mx_export(poly,color);
+poly = mx_rotate(poly,0,1);
+mx_export(poly,color);
+
 /*
 point = mx_addsphere(point,0,0,0,100);
 point = mx_addtorus(point,0,0,0,50,200);
@@ -41,6 +43,7 @@ edge = mx_rotate(edge,1,M_PI/4);
 mx_export(point,color);
 mx_export(edge,color);
 */
+
 //mx_export(edge,"ok.ppm");
 
 printf("hi\n");

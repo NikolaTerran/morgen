@@ -131,23 +131,98 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 		return mx;
 	}else if(mx.type == 'c'){
-		double t = 0;	
+		double t = M_PI / 2;	
 		double step = M_PI * td_step;
 		
+		struct Matrix trans;
+		struct Matrix trans1;	
 		struct Matrix result;
 		
-		double t = 0;
+		trans = mx_init(trans,0);
+		trans1 = mx_init(trans1,0);
+		result = mx_init_p(result,0);
+
 		double xx = r * cos(t);
 		double yy = r * sin(t);
 		//t += t_step * (2 * M_PI);
-		while(t <=  M_PI + t_step){
-			xx = r * cos(t) + x;
-			yy = r * sin(t) + y;
-			mx = mx_addpoint(mx,xx,yy,z);
-			t = t + t_step * (2 * M_PI);
-		}
 		
+		
+		while(t <= 3 * M_PI / 2 + t_step){
+			xx = r * cos(t);
+			yy = r * sin(t);
+			trans = mx_addpoint(trans,xx,yy,0);
+			trans1 = mx_addpoint(trans1,xx,yy,0);
+			t = t + t_step * ( M_PI);
+			printf("");		
+		}
 
+		trans1 = mx_rotate(trans1,td_axis,td_step);
+		int i;		
+		
+		int color[3];
+		color[0] = 255;
+		color[1] = 0;
+		color[2] = 0;		
+	
+		for(t = 0; t < 2 *M_PI ; t += td_step){
+			int lim = result.col + trans.col * 2 - 2 ;
+			printf("result.col: %d\n",result.col);
+			result.x = realloc(result.x,lim * sizeof(double));
+			result.y = realloc(result.y,lim * sizeof(double));
+			result.z = realloc(result.z,lim * sizeof(double));
+		
+			int i,j;
+			i = result.col;			
+			j = 0;
+			result.x[i] = trans.x[j];
+			result.y[i] = trans.y[j];
+			result.z[i] = trans.z[j];
+
+			i++; j++;
+				
+			//result.x[i] = 1231;
+			//printf("r.x:%f\n",result.x[i]);
+			
+			
+			while(i < lim - 1){
+				result.x[i] = trans.x[j];
+								
+				result.y[i] = trans.y[j];
+				result.z[i] = trans.z[j];				
+					
+				result.x[i + 1] = trans1.x[j];
+					
+				result.y[i + 1] = trans1.y[j];
+				result.z[i + 1] = trans1.z[j];
+			
+				//printf("r.x:%f\n",result.x[i]);
+				i += 2; j++;			
+			}
+			
+			result.x[lim - 1] = trans.x[trans.col - 1];
+			result.y[lim - 1] = trans.y[trans.col - 1];
+			result.z[lim - 1] = trans.z[trans.col - 1];
+			
+			
+			trans = mx_rotate(trans,td_axis,td_step);
+			trans1 = mx_rotate(trans1,td_axis,td_step);
+			//mx_export(trans,color);
+			//mx_export(trans1,color);		
+			result.col = lim;
+		}
+	//	mx_print(result);
+/*
+		int ok;
+		for(ok = 0; ok < trans.col; ok++){
+			result.x[ok] = trans.x[ok];			
+			printf("result.x: %f\n",result.x[ok]);
+
+		}
+*/
+		//mx_export(result,color);
+		mx = mx_addmatrix(result,mx);
+		//mx_export(trans,color);
+		//mx_export(trans1,color);		
 
 		return mx;
 	}else{
