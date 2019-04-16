@@ -251,7 +251,7 @@ void mx_export(struct Matrix mx, int color[]){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
 		//drawLine(mx,color);
-		drawPoint(mx,color);	
+		drawLine(mx,color);	
 	}
 }
 

@@ -25,8 +25,8 @@ color[2] = 0;
 struct Matrix poly;
 poly = mx_init_p(poly,0);
 
-poly = mx_addsphere(poly,0,0,0,100);
-poly = mx_rotate(poly,0,1);
+poly = mx_addsphere(poly,0,0,0,200);
+poly = mx_rotate(poly,0,0.5);
 mx_export(poly,color);
 
 /*

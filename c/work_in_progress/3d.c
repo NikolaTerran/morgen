@@ -7,101 +7,14 @@
 	[-sin@ @     ]   [@        ]
 */
 
-struct Matrix sphere_helper(struct Matrix src, struct Matrix src2, struct Matrix dst){
-		//mx_print(src);
+/* lighting
 
-		int lim = dst.col + (src.col - 2) * 2;
-
-		printf("lim:%d\n",lim);
-		dst.x = (int *)realloc(dst.x,lim);
-		dst.y = (int *)realloc(dst.y,lim);
-		dst.z = (int *)realloc(dst.z,lim);
-		
-		
-		
-		int i = dst.col;
-		int j = 0;
-		
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];
-		
-		i++; j++;
-		
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];			
-		
-		i++;
-		
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];
-		
-		i++;
-		
-		for(i; i < lim; i++){
-
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];
-		
-		i++; 
-		
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];			
-		
-		i++; j++;
-		
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];
-			
-		i++;
-
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];
-		
-		i++;
-		
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];
-		
-		i++; j--;
-		
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];
-
-		j++;
-		}
-		
-		dst.x[i] = src.x[j];
-		dst.y[i] = src.y[j];
-		dst.z[i] = src.z[j];
-		
-		i++;
-		
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];
-		
-		i++; j++;
-
-		dst.x[i] = src2.x[j];
-		dst.y[i] = src2.y[j];
-		dst.z[i] = src2.z[j];		
-		
-		printf("i:%d\n , lim:%d\n",i,lim);
-		dst.col = lim;
-		mx_print(dst);
-	 	return dst;	
-}
-
-
+* in realistic images, object color is based on:
+	0) the color and position of light sources
+	1) the reflective properties of the object
+	2)
+	
+*/
 
 struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, double r){
 	if(mx.type == 'a'){
@@ -152,8 +65,7 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			yy = r * sin(t);
 			trans = mx_addpoint(trans,xx,yy,0);
 			trans1 = mx_addpoint(trans1,xx,yy,0);
-			t = t + t_step * ( M_PI);
-			printf("");		
+			t = t + t_step * ( M_PI);	
 		}
 
 		trans1 = mx_rotate(trans1,td_axis,td_step);
@@ -166,7 +78,7 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 	
 		for(t = 0; t < 2 *M_PI ; t += td_step){
 			int lim = result.col + trans.col * 2 - 2 ;
-			printf("result.col: %d\n",result.col);
+
 			result.x = realloc(result.x,lim * sizeof(double));
 			result.y = realloc(result.y,lim * sizeof(double));
 			result.z = realloc(result.z,lim * sizeof(double));
@@ -180,8 +92,6 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 			i++; j++;
 				
-			//result.x[i] = 1231;
-			//printf("r.x:%f\n",result.x[i]);
 			
 			
 			while(i < lim - 1){
@@ -195,7 +105,6 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 				result.y[i + 1] = trans1.y[j];
 				result.z[i + 1] = trans1.z[j];
 			
-				//printf("r.x:%f\n",result.x[i]);
 				i += 2; j++;			
 			}
 			
@@ -206,23 +115,11 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			
 			trans = mx_rotate(trans,td_axis,td_step);
 			trans1 = mx_rotate(trans1,td_axis,td_step);
-			//mx_export(trans,color);
-			//mx_export(trans1,color);		
+	
 			result.col = lim;
 		}
-	//	mx_print(result);
-/*
-		int ok;
-		for(ok = 0; ok < trans.col; ok++){
-			result.x[ok] = trans.x[ok];			
-			printf("result.x: %f\n",result.x[ok]);
 
-		}
-*/
-		//mx_export(result,color);
 		mx = mx_addmatrix(result,mx);
-		//mx_export(trans,color);
-		//mx_export(trans1,color);		
 
 		return mx;
 	}else{

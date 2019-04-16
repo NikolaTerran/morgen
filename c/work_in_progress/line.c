@@ -110,6 +110,31 @@ void DLSA(int index,int dx,int axis){
     }
 }
 
+void poly_lines(struct Matrix mx){
+	int i = 0;
+	int j = 0;
+	while(i < mx.col){
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++; i++;
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++; 
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++; i++;
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++;
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++; i -= 2;
+		global_x[j] = mx.x[i];
+		global_y[j] = mx.y[i];
+		j++; i++;
+	}
+}
+
 void * drawLine_helper(void * arg){
 	int index = (void *) arg;
 	int index2 = index + 1;
@@ -172,43 +197,81 @@ void * drawLine_helper(void * arg){
 
 
 void drawLine(struct Matrix mx, int color[3]){
- 	/*if(mx.type != 'b'){
- 		printf("Error: drawLine, only edge matrix was supported, force exit.\n");
- 		exit(1);
- 	}*/
+ 	if(mx.type == 'b'){
+
  	
-    pthread_t thread_id[THREAD]; 
- 	int index[THREAD];
+ 	
+			pthread_t thread_id[THREAD]; 
+		 	int index[THREAD];
 
-	global_x = malloc(mx.col * sizeof(int));
-	global_y = malloc(mx.col * sizeof(int));
+			global_x = malloc(mx.col * sizeof(int));
+			global_y = malloc(mx.col * sizeof(int));
+			
+		 	global_x = mx_toint(mx,global_x,1);
+		 	global_y = mx_toint(mx,global_y,2);
+			
+		 	global_color[0] = color[0];
+		 	global_color[1] = color[1];
+		 	global_color[2] = color[2];
+
+			global_res = 2 * mx.edge_num;
+
+			int i;
+
+			// for(i = 0; i < mx.col; i+=2){
+			// 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
+			// }
+			
+		 	for(i = 0; i < THREAD; i++){
+				index[i] = i * 2;
+				pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
+			}
+			for(i = 0; i < THREAD; i++){
+				pthread_join(thread_id[i], NULL);
+			}
+			
+
+			free(global_x);
+			free(global_y);
 	
- 	global_x = mx_toint(mx,global_x,1);
- 	global_y = mx_toint(mx,global_y,2);
-	
- 	global_color[0] = color[0];
- 	global_color[1] = color[1];
- 	global_color[2] = color[2];
+	}else if(mx.type == 'c'){
+			pthread_t thread_id[THREAD]; 
+		 	int index[THREAD];
 
-	global_res = 2 * mx.edge_num;
+			global_x = malloc(3 * mx.col * sizeof(int));
+			global_y = malloc(3 * mx.col * sizeof(int));
+			
+		 	//global_x = mx_toint(mx,global_x,1);
+		 	//global_y = mx_toint(mx,global_y,2);
+			poly_lines(mx);
+			
+		 	global_color[0] = color[0];
+		 	global_color[1] = color[1];
+		 	global_color[2] = color[2];
 
-    int i;
+			global_res = 6 * mx.col;
 
-    // for(i = 0; i < mx.col; i+=2){
-    // 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
-    // }
-    
- 	for(i = 0; i < THREAD; i++){
-    	index[i] = i * 2;
-        pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
-    }
-    for(i = 0; i < THREAD; i++){
-    	pthread_join(thread_id[i], NULL);
+			int i;
+
+			// for(i = 0; i < mx.col; i+=2){
+			// 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
+			// }
+			
+		 	for(i = 0; i < THREAD; i++){
+				index[i] = i * 2;
+				pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
+			}
+			for(i = 0; i < THREAD; i++){
+				pthread_join(thread_id[i], NULL);
+			}
+			
+
+			//free(global_x);
+			//free(global_y);
+	}else{
+	 		printf("Error: drawLine, only edge matrix was supported, force exit.\n");
+ 		exit(1);
 	}
-	
-
-	free(global_x);
-	free(global_y);
 }
 
 
