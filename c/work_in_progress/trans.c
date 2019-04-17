@@ -5,7 +5,7 @@
 
 //create a transformation matrix 4 x 4
 struct Matrix mx_dilate(struct Matrix mx, double x, double y, double z){
-		
+
 	int i;
 	for(i = 0; i < mx.col;i++){
 		mx.x[i] *= x;
@@ -80,7 +80,7 @@ struct Matrix mx_rotate(struct Matrix mx, int axis, double radian){
 		//[][][1][]
 		//[][][][1]
 	}
-	
+
 	return mx;
 }
 

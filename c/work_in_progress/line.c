@@ -16,15 +16,15 @@ struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double 
 		printf("Err: mx_addedge, incompatible matrix type, force quitting the program\n");
 		exit(1);
 	}*/
-	
+
 	mx.edge_num += 1;
 	mx.col += 2;
-	
+
 	mx.x = realloc(mx.x,mx.col * sizeof(double));
 	mx.y = realloc(mx.y,mx.col * sizeof(double));
 	mx.z = realloc(mx.z,mx.col * sizeof(double));
  	//mx.one = realloc(mx.one,mx.col * sizeof(double));
- 	
+
  	mx.x[mx.col - 2] = a;
  	mx.y[mx.col - 2] = b;
  	mx.z[mx.col - 2] = c;
@@ -33,7 +33,7 @@ struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double 
  	mx.y[mx.col - 1] = e;
  	mx.z[mx.col - 1] = f;
  	//mx.one[mx.col - 1] = 1;
- 	
+
  	return mx;
 }
 
@@ -42,7 +42,7 @@ void DLMA(int index,int dx,int dy,int axis,int check){
 		int dx2 = dx * 2;
 		int dy2 = dy * 2;
 		int dy2Mindx2 = dy2 - dx2;
- 
+
  	int index2 = index + 1;
     // calculate the starting error value
     int Error = dy2 - dx;
@@ -86,7 +86,7 @@ void DLMA(int index,int dx,int dy,int axis,int check){
 	        else{
 	            global_y[index]++;
 	            Error += dy2;
-	        }	 
+	        }
 	        // draw the next pixel
 	        canvas_set_s(global_x[index], global_y[index], global_color);
 	    }
@@ -114,25 +114,28 @@ void poly_lines(struct Matrix mx){
 	int i = 0;
 	int j = 0;
 	while(i < mx.col){
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
 		j++; i++;
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
-		j++; 
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
-		j++; i++;
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
 		j++;
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
-		j++; i -= 2;
-		global_x[j] = mx.x[i];
-		global_y[j] = mx.y[i];
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
 		j++; i++;
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
+		j++;
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
+		j++; i -= 2;
+		global_x[j] = round(mx.x[i]);
+		global_y[j] = round(mx.y[i]);
+		j++; i += 3;
 	}
+
+
+	//exit(0);
 }
 
 void * drawLine_helper(void * arg){
@@ -149,7 +152,7 @@ void * drawLine_helper(void * arg){
         	break;
         }
         int dx = global_x[index2] - global_x[index];
-        int dy = global_y[index2] - global_y[index];   
+        int dy = global_y[index2] - global_y[index];
         // if the X axis is the major axis
      	if(abs(dx) >= abs(dy)){
          // if x2 < x1, flip the points to have fewer special cases
@@ -188,9 +191,9 @@ void * drawLine_helper(void * arg){
          }else{
               DLSA(index,dy,1);
          }
-     }    
+     }
         index += 2 * THREAD;
-        index2 += 2 * THREAD;   
+        index2 += 2 * THREAD;
 	}
 	pthread_exit(NULL);
 }
@@ -199,17 +202,17 @@ void * drawLine_helper(void * arg){
 void drawLine(struct Matrix mx, int color[3]){
  	if(mx.type == 'b'){
 
- 	
- 	
-			pthread_t thread_id[THREAD]; 
+
+
+			pthread_t thread_id[THREAD];
 		 	int index[THREAD];
 
 			global_x = malloc(mx.col * sizeof(int));
 			global_y = malloc(mx.col * sizeof(int));
-			
+
 		 	global_x = mx_toint(mx,global_x,1);
 		 	global_y = mx_toint(mx,global_y,2);
-			
+
 		 	global_color[0] = color[0];
 		 	global_color[1] = color[1];
 		 	global_color[2] = color[2];
@@ -221,7 +224,7 @@ void drawLine(struct Matrix mx, int color[3]){
 			// for(i = 0; i < mx.col; i+=2){
 			// 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
 			// }
-			
+
 		 	for(i = 0; i < THREAD; i++){
 				index[i] = i * 2;
 				pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
@@ -229,34 +232,34 @@ void drawLine(struct Matrix mx, int color[3]){
 			for(i = 0; i < THREAD; i++){
 				pthread_join(thread_id[i], NULL);
 			}
-			
+
 
 			free(global_x);
 			free(global_y);
-	
+
 	}else if(mx.type == 'c'){
-			pthread_t thread_id[THREAD]; 
+			pthread_t thread_id[THREAD];
 		 	int index[THREAD];
 
 			global_x = malloc(3 * mx.col * sizeof(int));
 			global_y = malloc(3 * mx.col * sizeof(int));
-			
+
 		 	//global_x = mx_toint(mx,global_x,1);
 		 	//global_y = mx_toint(mx,global_y,2);
 			poly_lines(mx);
-			
+
 		 	global_color[0] = color[0];
 		 	global_color[1] = color[1];
 		 	global_color[2] = color[2];
 
-			global_res = 6 * mx.col;
+			global_res =  2 * mx.col;
 
 			int i;
 
 			// for(i = 0; i < mx.col; i+=2){
 			// 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
 			// }
-			
+
 		 	for(i = 0; i < THREAD; i++){
 				index[i] = i * 2;
 				pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
@@ -264,7 +267,7 @@ void drawLine(struct Matrix mx, int color[3]){
 			for(i = 0; i < THREAD; i++){
 				pthread_join(thread_id[i], NULL);
 			}
-			
+
 
 			//free(global_x);
 			//free(global_y);
@@ -289,13 +292,13 @@ void drawLine(struct Matrix mx, int color[3]){
 //     int dx2 = dx * 2;
 //     int dy2 = dy * 2;
 //     int dy2Mindx2 = dy2 - dx2;
- 
+
 //     // calculate the starting error value
 //     int Error = dy2 - dx;
- 
+
 //     // draw the first pixel
 //     arr = arr_set(arr,x,y,color);
- 
+
 //     // loop across the major axis
 //     if(axis == 'x'){
 // 	    while (dx--)
@@ -317,7 +320,7 @@ void drawLine(struct Matrix mx, int color[3]){
 // 	            x++;
 // 	            Error += dy2;
 // 	        }
-	 
+
 // 	        // draw the next pixel
 // 	        arr = arr_set(arr,x,y,color);
 // 	    }
@@ -338,7 +341,7 @@ void drawLine(struct Matrix mx, int color[3]){
 // 	            y++;
 // 	            Error += dy2;
 // 	        }
-	 
+
 // 	        // draw the next pixel
 // 	        arr = arr_set(arr,x,y,color);
 // 	    }
@@ -370,7 +373,7 @@ void drawLine(struct Matrix mx, int color[3]){
 
 //     return arr;
 // }
- 
+
 // // Draw an arbitrary line.  Assumes start and end point are within valid range
 // // pixels is a pointer to where the pixels you want to draw to start aka (0,0)
 // // pixelStride is the number of unsigned ints to get from one row of pixels to the next.
@@ -395,7 +398,7 @@ void drawLine(struct Matrix mx, int color[3]){
 //             y1 = y2;
 //             y2 = t;
 //         }
- 
+
 //         // determine special cases
 //         if(dy > 0){
 //             arr = DLMA(arr, x1,y1, dx, dy, 0,'x', color);
@@ -423,9 +426,9 @@ void drawLine(struct Matrix mx, int color[3]){
 //             y1 = y2;
 //             y2 = t;
 //         }
- 
+
 //         // get the address of the pixel at (x1,y1)
- 
+
 //         // determine special cases
 //         if (dx > 0){
 //          	  arr = DLMA(arr, x1,y1, dy, dx, 0,'y', color);
@@ -467,9 +470,9 @@ struct Array drawLine(struct Array arr, struct Edge ed, int color[3]){
 	int size = (X_MAX - X_MIN) * (Y_MAX - Y_MIN) * sizeof(int);
 
 
-    gp_drawline<<<edge_num,1>>>(d_r, d_g, d_b, 
-							    d_x, d_y, 
-							    d_x1, d_y1, 
+    gp_drawline<<<edge_num,1>>>(d_r, d_g, d_b,
+							    d_x, d_y,
+							    d_x1, d_y1,
 							    color[0],color[1],color[2]);
 
     return arr;

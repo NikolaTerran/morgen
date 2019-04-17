@@ -5,15 +5,15 @@
 #include <fcntl.h>
 #include <time.h>
 #include <math.h>
-#include <sys/ipc.h> 
-#include <sys/shm.h> 
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <pthread.h>
 
 ///////////////////tweak////////////////////////////
 #define INIT_VALUE 0   //init value of EVERYTHING other than Array
 #define t_step 0.05   //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
-#define td_step 0.1   //drawing distance of 3d obj = M_PI * td_step
+#define td_step 0.02   //drawing distance of 3d obj = M_PI * td_step
 #define td_axis 1      //axis of rotation of 3d obj         //0 == x // 1 == y // 2 == z//
 #define THREAD 4      //parallel programming
 
@@ -74,7 +74,7 @@ struct Ray{
 
 struct Ray ray_init(struct Ray ray);
 /////////////////////matrix//////////////////////////
-              
+
               /////////////////////////////////////////
               ////mx functions use math row and col////
               /////////////////////////////////////////
@@ -95,7 +95,7 @@ struct Matrix{
 		//type 'c' = polygon
 
 	int col;
-	
+
 };
 
 struct Matrix mx_init_p(struct Matrix mx, int col);

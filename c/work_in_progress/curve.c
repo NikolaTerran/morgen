@@ -1,6 +1,6 @@
 #include "engine.h"
 
-//array start with 1, because I hate math 
+//array start with 1, because I hate math
 //For bezier, p1 and p4 are endpoints. p2 and p3 are contral points
 struct Matrix mx_addcircle(struct Matrix mx, double x, double y, double z, double r){
 	if(mx.type =='b'){
@@ -63,7 +63,7 @@ struct Matrix bezier(struct Matrix mx, double x1, double y1, double x2, double y
 	mx_set(curve,3,2,-3);
 	mx_set(curve,3,3,3);
 
-	
+
 }
 */
 
@@ -103,5 +103,3 @@ struct Matrix mx_addhermite(struct Matrix mx, double x1, double y1, double x2, d
 
 	return mx;
 }
-
-

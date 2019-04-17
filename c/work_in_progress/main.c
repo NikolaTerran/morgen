@@ -26,7 +26,7 @@ struct Matrix poly;
 poly = mx_init_p(poly,0);
 
 poly = mx_addsphere(poly,0,0,0,200);
-poly = mx_rotate(poly,0,0.5);
+poly = mx_rotate(poly,0,M_PI /2);
 mx_export(poly,color);
 
 /*

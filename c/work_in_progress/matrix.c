@@ -5,7 +5,7 @@
 /////////////////////////////
 
 /*random snippet
-	
+
 	T
 	|\
 	| \
@@ -14,7 +14,7 @@
 	| /
 	|/
 	B
-	
+
 	y: By -> Ty
 	x0 is on BT
 	x1 is on BM or on MT
@@ -23,7 +23,7 @@
 	x0: Bx -> Tx; x0 += (Tx - Bx)/(Ty - By)
 	x1: Bx -> Mx; x1 += (Mx - Bx)/(My - By)
 	x1: Mx -> Tx; x1 += (Tx - Mx)/(Ty - My)
-	
+
 	z_buffering
 	maintain a 2d array of z-values
 	that corresponds to our 2d array of pixels (screen)
@@ -35,7 +35,7 @@ int * mx_toint(struct Matrix mx, int *result, int row){
 	for(i = 0;i < mx.col;i++){
 		result[i] = mx_get(mx, row, i + 1);
 	}
-	return result;	
+	return result;
 }
 
 
@@ -74,10 +74,10 @@ struct Matrix mx_init(struct Matrix mx, int col){
 
 	int i;
 	for(i = 0; i < col; i++){
-		mx.x[i] = INIT_VALUE; 
-		mx.y[i] = INIT_VALUE; 
-		mx.z[i] = INIT_VALUE; 
-		//mx.one[i] = 1; 
+		mx.x[i] = INIT_VALUE;
+		mx.y[i] = INIT_VALUE;
+		mx.z[i] = INIT_VALUE;
+		//mx.one[i] = 1;
 	}
 
 	return mx;
@@ -96,10 +96,10 @@ struct Matrix mx_init_e(struct Matrix mx, int col){
 
 	int i;
 	for(i = 0; i < col; i++){
-		mx.x[i] = INIT_VALUE; 
-		mx.y[i] = INIT_VALUE; 
-		mx.z[i] = INIT_VALUE; 
-		//mx.one[i] = 1; 
+		mx.x[i] = INIT_VALUE;
+		mx.y[i] = INIT_VALUE;
+		mx.z[i] = INIT_VALUE;
+		//mx.one[i] = 1;
 	}
 
 	return mx;
@@ -117,11 +117,11 @@ struct Matrix mx_init_p(struct Matrix mx, int col){
 
 	int i;
 	for(i = 0; i < col; i++){
-		mx.x[i] = INIT_VALUE; 
-		mx.y[i] = INIT_VALUE; 
-		mx.z[i] = INIT_VALUE; 
+		mx.x[i] = INIT_VALUE;
+		mx.y[i] = INIT_VALUE;
+		mx.z[i] = INIT_VALUE;
 		mx.v[i] = INIT_VALUE;
-		//mx.one[i] = 1; 
+		//mx.one[i] = 1;
 	}
 
 	return mx;
@@ -131,41 +131,41 @@ struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst){
 	if(src.type == 'a' && dst.type == 'a'){
 		int lim = dst.col + src.col;
 		int size = lim * sizeof(double);
-		
+
 		dst.x = (double *)realloc(dst.x, size);
 		dst.y = (double *)realloc(dst.y, size);
 		dst.z = (double *)realloc(dst.z, size);
-		
+
 		int i;
 		int j = 0;
-		
+
 		for(i = dst.col; i < lim; i++){
 			dst.x[i] = src.x[j];
 			dst.y[i] = src.y[j];
 			dst.z[i] = src.z[j];
 			j++;
 		}
-		
+
 		dst.col = lim;
 		return dst;
 	}else if(src.type == 'c' && dst.type == 'c'){
 		int lim = dst.col + src.col;
 		int size = lim * sizeof(double);
-		
+
 		dst.x = (double *)realloc(dst.x, size);
 		dst.y = (double *)realloc(dst.y, size);
 		dst.z = (double *)realloc(dst.z, size);
-		
+
 		int i;
 		int j = 0;
-		
+
 		for(i = dst.col; i < lim; i++){
 			dst.x[i] = src.x[j];
 			dst.y[i] = src.y[j];
 			dst.z[i] = src.z[j];
 			j++;
 		}
-		
+
 		dst.col = lim;
 		return dst;
 
@@ -204,7 +204,7 @@ struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
  		mx.z[col - 1] = val;
  	}else if(row == 4){
 		printf("Warning: mx_set, modifying constant row\n");
-		//mx.one[col - 1] = val;	
+		//mx.one[col - 1] = val;
  	}else{
  		printf("Err: mx_row, invalid row_num, returning original matrix\n");
  		return mx;
@@ -250,8 +250,7 @@ void mx_export(struct Matrix mx, int color[]){
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
-		//drawLine(mx,color);
-		drawLine(mx,color);	
+		drawLine(mx,color);
+		//drawPoint(mx,color);
 	}
 }
-
