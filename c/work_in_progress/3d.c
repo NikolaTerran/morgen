@@ -16,6 +16,7 @@
 
 */
 
+
 struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, double r){
 	if(mx.type == 'a'){
 		double t = 0;
@@ -70,13 +71,6 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 		trans1 = mx_rotate(trans1,td_axis,step);
 		int i;
-
-
-		int color[3];
-		color[0] = 255;
-		color[1] = 0;
-		color[2] = 0;
-
 
 
 		for(t = 0; t < 2 * M_PI ; t += td_step){
@@ -196,7 +190,7 @@ struct Matrix draw_poly(struct Matrix mx){
 }
 
 struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double r, double d){
-	if(mx.type = 'a'){
+	if(mx.type == 'a'){
 		double t = 0;
 		double step = M_PI * td_step;
 		struct Matrix trans;
@@ -214,7 +208,7 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 			trans = mx_rotate(trans,td_axis,step);
 			result = mx_addmatrix(trans,result);
 			t += step;
-		//	printf("t: %f\n",t);
+		//	printf("t: %printf("hi\n");f\n",t);
 		}
 
 		result = mx_transform(result,x,y,z);
@@ -226,7 +220,119 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 
 		return mx;
 	}else if(mx.type == 'c'){
-		
+					double t = M_PI / 2;
+					double step = M_PI * td_step;
+
+					struct Matrix trans;
+					struct Matrix trans1;
+					struct Matrix result;
+
+					trans = mx_init(trans,0);
+					trans1 = mx_init(trans1,0);
+					result = mx_init_p(result,0);
+
+					double xx;
+					double yy;
+					//t += t_step * (2 * M_PI);
+
+
+					while(t <=  2 * M_PI){
+						xx = r * cos(t) + d;
+						yy = r * sin(t);
+						trans = mx_addpoint(trans,xx,yy,0);
+						trans1 = mx_addpoint(trans1,xx,yy,0);
+						t = t + t_step * (M_PI);
+						printf("t:%f\n",t);
+					}
+
+					trans1 = mx_rotate(trans1,td_axis,step);
+					int i;
+
+					//mx_print(trans);
+					//mx_print(trans1);
+
+					trans1 = mx_rotate(trans1,0,0.5);
+					trans = mx_rotate(trans,0,0.5);
+
+					db_export(trans);
+					db_export(trans1);
+					return mx;
+
+
+
+
+					for(t = 0; t < 2 * M_PI ; t += td_step){
+						int lim = result.col + (trans.col - 2) * 6;
+
+						result.x = realloc(result.x,lim * sizeof(double));
+						result.y = realloc(result.y,lim * sizeof(double));
+						result.z = realloc(result.z,lim * sizeof(double));
+
+						int i,j;
+						i = result.col;
+						j = 0;
+
+						//printf("hi!\n");
+						/* first polygon */
+
+						while(i < lim){
+							result.x[i] = trans.x[j];
+							result.y[i] = trans.y[j];
+							result.z[i] = trans.z[j];
+
+							i++;
+
+							result.x[i] = trans1.x[j];
+							result.y[i] = trans1.y[j];
+							result.z[i] = trans1.z[j];
+
+							i++; j++;
+
+							result.x[i] = trans.x[j];
+							result.y[i] = trans.y[j];
+							result.z[i] = trans.z[j];
+
+							i++;
+
+							result.x[i] = trans.x[j];
+							result.y[i] = trans.y[j];
+							result.z[i] = trans.z[j];
+
+							i++;
+
+							result.x[i] = trans1.x[j];
+							result.y[i] = trans1.y[j];
+							result.z[i] = trans1.z[j];
+
+							i++; j--;
+
+							result.x[i] = trans1.x[j];
+							result.y[i] = trans1.y[j];
+							result.z[i] = trans1.z[j];
+
+							i++; j++;
+
+						}
+
+						trans = mx_rotate(trans,td_axis,step);
+						trans1 = mx_rotate(trans1,td_axis,step);
+
+
+						result.col = lim;
+
+
+						//mx_print(trans);
+					}
+				//printf("result.col:%d\n",result.col);
+			//mx_print(result);
+			//		mx_export(result,color);
+				//	printf("ok\n");
+					mx = mx_addmatrix(result,mx);
+
+					return mx;
+
+	}else{
+		printf("Error: mx_addtorus, matrix type not supported\n");
 
 	}
 }

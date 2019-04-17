@@ -116,7 +116,7 @@ void mx_free(struct Matrix mx);
 		//struct Matrix addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f, double red, double green, double blue);
 
 void mx_export(struct Matrix mx, int color[]);
-
+void db_export(struct Matrix mx);
 
 struct Matrix mx_copy(struct Matrix src, struct Matrix dst);
 
@@ -148,4 +148,3 @@ struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double 
 //////////////////point/////////////////////////////
 void drawPoint(struct Matrix mx, int color[3]);
 struct Matrix mx_addpoint(struct Matrix mx, double x, double y, double z);
-struct Matrix addpoint(struct Matrix mx, double a, double b, double c, double red, double green, double blue);

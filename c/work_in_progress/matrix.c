@@ -244,13 +244,30 @@ struct Matrix mx_copy(struct Matrix src, struct Matrix dst){
 	return dst;
 }
 
+
+
 void mx_export(struct Matrix mx, int color[]){
 	if(mx.type == 'a'){
 		drawPoint(mx,color);
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
+		//drawLine(mx,color);
+		drawPoint(mx,color);
+	}
+}
+
+void db_export(struct Matrix mx){
+	int color[3];
+	color[0] = 255;
+	color[1] = 0;
+	color[2] = 0;
+	if(mx.type == 'a'){
+		drawPoint(mx,color);
+	}else if(mx.type == 'b'){
 		drawLine(mx,color);
-		//drawPoint(mx,color);
+	}else if(mx.type == 'c'){
+		//drawLine(mx,color);
+		drawPoint(mx,color);
 	}
 }
