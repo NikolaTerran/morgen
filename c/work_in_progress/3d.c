@@ -220,7 +220,7 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 
 		return mx;
 	}else if(mx.type == 'c'){
-					double t = M_PI / 2;
+					double t = 0;
 					double step = M_PI * td_step;
 
 					struct Matrix trans;
@@ -236,30 +236,18 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 					//t += t_step * (2 * M_PI);
 
 
-					while(t <=  2 * M_PI){
+					while(t <= 2 * M_PI){
 						xx = r * cos(t) + d;
 						yy = r * sin(t);
 						trans = mx_addpoint(trans,xx,yy,0);
 						trans1 = mx_addpoint(trans1,xx,yy,0);
 						t = t + t_step * (M_PI);
-						printf("t:%f\n",t);
 					}
 
 					trans1 = mx_rotate(trans1,td_axis,step);
-					int i;
 
 					//mx_print(trans);
 					//mx_print(trans1);
-
-					trans1 = mx_rotate(trans1,0,0.5);
-					trans = mx_rotate(trans,0,0.5);
-
-					db_export(trans);
-					db_export(trans1);
-					return mx;
-
-
-
 
 					for(t = 0; t < 2 * M_PI ; t += td_step){
 						int lim = result.col + (trans.col - 2) * 6;
