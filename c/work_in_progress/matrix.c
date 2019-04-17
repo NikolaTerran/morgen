@@ -252,8 +252,8 @@ void mx_export(struct Matrix mx, int color[]){
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
-		//drawLine(mx,color);
-		drawPoint(mx,color);
+		drawLine(mx,color);
+		//drawPoint(mx,color);
 	}
 }
 
@@ -267,7 +267,7 @@ void db_export(struct Matrix mx){
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
-		//drawLine(mx,color);
-		drawPoint(mx,color);
+		drawLine(mx,color);
+		//drawPoint(mx,color);
 	}
 }

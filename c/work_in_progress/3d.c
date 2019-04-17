@@ -235,13 +235,13 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 					double yy;
 					//t += t_step * (2 * M_PI);
 
-
-					while(t <= 2 * M_PI){
+					double step1 = t_step * M_PI;
+					while(t <= 2 * M_PI + step1){
 						xx = r * cos(t) + d;
 						yy = r * sin(t);
 						trans = mx_addpoint(trans,xx,yy,0);
 						trans1 = mx_addpoint(trans1,xx,yy,0);
-						t = t + t_step * (M_PI);
+						t = t + step1;
 					}
 
 					trans1 = mx_rotate(trans1,td_axis,step);
@@ -306,8 +306,12 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 						trans1 = mx_rotate(trans1,td_axis,step);
 
 
+
 						result.col = lim;
 
+							result = mx_rotate(result,0,0.5);
+						db_export(result);
+						return mx;
 
 						//mx_print(trans);
 					}
