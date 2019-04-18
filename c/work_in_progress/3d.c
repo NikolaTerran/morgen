@@ -44,7 +44,8 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		mx_free(trans);
 
 		return mx;
-	}else if(mx.type == 'c'){
+	}
+	else if(mx.type == 'c'){
 		double t = M_PI / 2;
 		double step = M_PI * td_step;
 
@@ -80,6 +81,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			result.y = realloc(result.y,lim * sizeof(double));
 			result.z = realloc(result.z,lim * sizeof(double));
 
+			result.vx = realloc(result.v,lim * sizeof(double) / 3);
+			result.vy = realloc(result.v,lim * sizeof(double) / 3);
+			result.vz = realloc(result.v,lim * sizeof(double) / 3);
+
 			int i,j;
 			i = result.col;
 			j = 0;
@@ -105,6 +110,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			result.z[i] = trans1.z[j];
 
 			i++;
+
+			result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
+			result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
+			result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
 			/* end of first polygon */
 
 			while(i < lim - 3){
@@ -126,6 +135,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 				i++;
 
+				result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
+				result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
+				result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
+
 				result.x[i] = trans.x[j];
 				result.y[i] = trans.y[j];
 				result.z[i] = trans.z[j];
@@ -144,6 +157,9 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 				i++; j++;
 
+				result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
+				result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
+				result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
 			}
 
 			result.x[lim - 3] = trans.x[trans.col - 2];
@@ -158,6 +174,9 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			result.y[lim - 1] = trans.y[trans.col - 1];
 			result.z[lim - 1] = trans.z[trans.col - 1];
 
+			result.vx[lim / 3 - 3] = (result.x[lim / 3  - 3] - result.x[lim / 3  - 2]) * (result.x[lim / 3  - 1] - result.x[lim / 3  - 2]);
+			result.vy[lim / 3 - 3] = (result.y[lim / 3  - 3] - result.y[lim / 3  - 2]) * (result.y[lim / 3  - 1] - result.y[lim / 3  - 2]);
+			result.vz[lim / 3 - 3] = (result.z[lim / 3  - 3] - result.z[lim / 3  - 2]) * (result.z[lim / 3  - 1] - result.z[lim / 3  - 2]);
 
 			trans = mx_rotate(trans,td_axis,step);
 			trans1 = mx_rotate(trans1,td_axis,step);
@@ -175,10 +194,12 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		mx = mx_addmatrix(result,mx);
 
 		return mx;
-	}else{
+	}
+	else{
 		printf("Error: mx_addsphere, matrix type not supported\n");
 	}
 }
+
 
 struct Matrix mx_addpoly(struct Matrix mx){
 
@@ -219,7 +240,8 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 		mx_free(trans);
 
 		return mx;
-	}else if(mx.type == 'c'){
+	}
+	else if(mx.type == 'c'){
 					double t = 0;
 					double step = M_PI * td_step;
 
@@ -236,7 +258,7 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 					//t += t_step * (2 * M_PI);
 
 					double step1 = t_step * M_PI;
-					while(t <= 2 * M_PI + step1){
+					while(t <= 2 * M_PI +  2 * step1){
 						xx = r * cos(t) + d;
 						yy = r * sin(t);
 						trans = mx_addpoint(trans,xx,yy,0);
@@ -309,12 +331,14 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 
 						result.col = lim;
 
-							result = mx_rotate(result,0,0.5);
-						db_export(result);
-						return mx;
+						//result = mx_rotate(result,0,0.5);
+						//db_export(result);
+						//return mx;
 
 						//mx_print(trans);
 					}
+
+					result = mx_transform(x,y,z);
 				//printf("result.col:%d\n",result.col);
 			//mx_print(result);
 			//		mx_export(result,color);
@@ -323,7 +347,8 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 
 					return mx;
 
-	}else{
+	}
+	else{
 		printf("Error: mx_addtorus, matrix type not supported\n");
 
 	}

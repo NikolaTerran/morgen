@@ -54,20 +54,6 @@ poly = mx_addtorus(poly,0,0,0,50,100);
 //poly = mx_rotate(poly,0,M_PI /2);
 mx_export(poly,color);
 
-/*
-point = mx_addsphere(point,0,0,0,100);
-point = mx_addtorus(point,0,0,0,50,200);
-point = mx_rotate(point,0,0.5);
-
-struct Matrix edge;
-edge = mx_init_e(edge,0);
-edge = mx_addbox(edge,-100,-100,-100,200,200,200);
-edge = mx_rotate(edge,0,M_PI/4);
-edge = mx_rotate(edge,1,M_PI/4);
-
-mx_export(point,color);
-mx_export(edge,color);
-*/
 
 //mx_export(edge,"ok.ppm");
 

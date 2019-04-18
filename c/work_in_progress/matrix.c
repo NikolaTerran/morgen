@@ -113,14 +113,18 @@ struct Matrix mx_init_p(struct Matrix mx, int col){
 	mx.x = malloc (col * sizeof(double));
 	mx.y = malloc (col * sizeof(double));
 	mx.z = malloc (col * sizeof(double));
-	mx.v = malloc (col * sizeof(double));
+	mx.vx = malloc (col / 3 * sizeof(double));
+	mx.vy = malloc (col / 3 * sizeof(double));
+	mx.vz = malloc (col / 3 * sizeof(double));
 
 	int i;
 	for(i = 0; i < col; i++){
 		mx.x[i] = INIT_VALUE;
 		mx.y[i] = INIT_VALUE;
 		mx.z[i] = INIT_VALUE;
-		mx.v[i] = INIT_VALUE;
+		mx.vx[i] = INIT_VALUE;
+		mx.vy[i] = INIT_VALUE;
+		mx.vz[i] = INIT_VALUE;
 		//mx.one[i] = 1;
 	}
 
