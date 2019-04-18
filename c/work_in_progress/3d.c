@@ -71,22 +71,26 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		}
 
 		trans1 = mx_rotate(trans1,td_axis,step);
-		int i;
+		int i , j;
+		int a;
 
 
-		for(t = 0; t < 2 * M_PI ; t += td_step){
+		for(t = 0; t < M_PI * 2; t += step){
 			int lim = result.col + (trans.col - 2) * 6;
+			int vlim = result.col / 3 + (trans.col - 2) * 2;
+
 
 			result.x = realloc(result.x,lim * sizeof(double));
 			result.y = realloc(result.y,lim * sizeof(double));
 			result.z = realloc(result.z,lim * sizeof(double));
 
-			result.vx = realloc(result.v,lim * sizeof(double) / 3);
-			result.vy = realloc(result.v,lim * sizeof(double) / 3);
-			result.vz = realloc(result.v,lim * sizeof(double) / 3);
+			result.vx = realloc(result.vx,vlim * sizeof(double));
+			result.vy = realloc(result.vy,vlim * sizeof(double));
+			result.vz = realloc(result.vz,vlim * sizeof(double));
 
-			int i,j;
+
 			i = result.col;
+			a = i / 3;
 			j = 0;
 
 			//printf("hi!\n");
@@ -111,9 +115,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 			i++;
 
-			result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
-			result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
-			result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
+			 result.vx[a] = (result.x[i - 1] - result.x[i - 3]) * (result.x[i - 2] - result.x[i - 3]);
+			 result.vy[a] = (result.y[i - 1] - result.y[i - 3]) * (result.y[i - 2] - result.y[i - 3]);
+			 result.vz[a] = (result.z[i - 1] - result.z[i - 3]) * (result.z[i - 2] - result.z[i - 3]);
+			 a++;
 			/* end of first polygon */
 
 			while(i < lim - 3){
@@ -135,9 +140,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 				i++;
 
-				result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
-				result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
-				result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
+				result.vx[a] = (result.x[i - 1] - result.x[i - 3]) * (result.x[i - 2] - result.x[i - 3]);
+ 			 result.vy[a] = (result.y[i - 1] - result.y[i - 3]) * (result.y[i - 2] - result.y[i - 3]);
+ 			 result.vz[a] = (result.z[i - 1] - result.z[i - 3]) * (result.z[i - 2] - result.z[i - 3]);
+				 a++;
 
 				result.x[i] = trans.x[j];
 				result.y[i] = trans.y[j];
@@ -157,9 +163,11 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 
 				i++; j++;
 
-				result.vx[i - 3] = (result.x[i - 3] - result.x[i - 2]) * (result.x[i - 1] - result.x[i - 2]);
-				result.vy[i - 3] = (result.y[i - 3] - result.y[i - 2]) * (result.y[i - 1] - result.y[i - 2]);
-				result.vz[i - 3] = (result.z[i - 3] - result.z[i - 2]) * (result.z[i - 1] - result.z[i - 2]);
+				result.vx[a] = (result.x[i - 1] - result.x[i - 3]) * (result.x[i - 2] - result.x[i - 3]);
+ 			 result.vy[a] = (result.y[i - 1] - result.y[i - 3]) * (result.y[i - 2] - result.y[i - 3]);
+ 			 result.vz[a] = (result.z[i - 1] - result.z[i - 3]) * (result.z[i - 2] - result.z[i - 3]);
+				a++;
+					printf("vz:%f vx:%f vy: %f\n",result.vz[a],result.vx[a],result.vy[a]);
 			}
 
 			result.x[lim - 3] = trans.x[trans.col - 2];
@@ -174,9 +182,9 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			result.y[lim - 1] = trans.y[trans.col - 1];
 			result.z[lim - 1] = trans.z[trans.col - 1];
 
-			result.vx[lim / 3 - 3] = (result.x[lim / 3  - 3] - result.x[lim / 3  - 2]) * (result.x[lim / 3  - 1] - result.x[lim / 3  - 2]);
-			result.vy[lim / 3 - 3] = (result.y[lim / 3  - 3] - result.y[lim / 3  - 2]) * (result.y[lim / 3  - 1] - result.y[lim / 3  - 2]);
-			result.vz[lim / 3 - 3] = (result.z[lim / 3  - 3] - result.z[lim / 3  - 2]) * (result.z[lim / 3  - 1] - result.z[lim / 3  - 2]);
+			 result.vx[vlim - 1] = (result.x[lim  - 1] - result.x[lim  - 3]) * (result.x[lim  - 2] - result.x[lim  - 3]);
+			 result.vy[vlim - 1] = (result.y[lim  - 1] - result.y[lim  - 3]) * (result.y[lim  - 2] - result.y[lim  - 3]);
+			 result.vz[vlim - 1] = (result.z[lim  - 1] - result.z[lim  - 3]) * (result.z[lim  - 2] - result.z[lim  - 3]);
 
 			trans = mx_rotate(trans,td_axis,step);
 			trans1 = mx_rotate(trans1,td_axis,step);
@@ -338,7 +346,7 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 						//mx_print(trans);
 					}
 
-					result = mx_transform(x,y,z);
+					result = mx_transform(result,x,y,z);
 				//printf("result.col:%d\n",result.col);
 			//mx_print(result);
 			//		mx_export(result,color);
@@ -385,7 +393,7 @@ struct Matrix mx_addpoly(struct Matrix mx, double x1, double y1, double z1,
 }
 */
 struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
-						   				  double h, double l, double d){
+						   				                    double h, double l, double d){
 	if(mx.type == 'c'){
 
 		int i;
