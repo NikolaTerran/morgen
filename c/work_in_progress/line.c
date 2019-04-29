@@ -119,7 +119,7 @@ void poly_lines(struct Matrix mx){
 
 	while(i < mx.col){
 		//printf("poly_lines: vx:%f ,vy:%f ,vz:%f\n",mx.vx[a],mx.vy[a],mx.vz[a]);
-		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){	
+		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
 			//printf("pos\n");
 			global_x = realloc(global_x, 3 * (j + 2) * sizeof(int));
 			global_y = realloc(global_y, 3 * (j + 2) * sizeof(int));
@@ -149,10 +149,10 @@ void poly_lines(struct Matrix mx){
 			a++;
 		}
 	}
-
-
 	//exit(0);
 }
+
+
 
 void * drawLine_helper(void * arg){
 	int index = (void *) arg;
@@ -293,7 +293,92 @@ void drawLine(struct Matrix mx, int color[3]){
 	}
 }
 
+void drawLine_mod(int *x, int *y, size, int color[3]){
+	pthread_t thread_id[THREAD];
+	int index[THREAD];
+	global_x = x;
+	global_y = y;
+	//global_size = 0;
+	//poly_lines(mx);
+	global_color[0] = color[0];
+	global_color[1] = color[1];
+	global_color[2] = color[2];
 
+	global_res = size;
+	int i;
+	// for(i = 0; i < mx.col; i+=2){
+	// 	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[i],global_y[i],global_x[i+1],global_y[i+1]);
+	// }
+	for(i = 0; i < THREAD; i++){
+		index[i] = i * 2;
+		pthread_create(&thread_id[i], NULL, drawLine_helper, (void*)index[i]);
+	}
+	for(i = 0; i < THREAD; i++){
+		pthread_join(thread_id[i], NULL);
+	}
+}
+
+void scanLine(struct Matrix mx){
+	int top_y = Y_MIN;
+	int mid_y = Y_MIN;
+	int bot_y = Y_MAX;
+	int top_x;
+	int mid_x;
+	int bot_x;
+	int size = 0;
+	int *x;
+	int *y;
+
+	int i; int t;
+	int j = 0;
+	for(i = 0; i < mx.col; i += 3){
+		if(top_y < mx.y[i]){
+			top_y = mx.y[i];
+			top_x = mx.x[i];}if(top_y < mx.y[i + 1]){
+			top_y = mx.y[i + 1];
+			top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){
+			top_y = mx.y[i + 2];
+			top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){
+			bot_y = mx.y[i];
+			bot_x = mx.x[i];
+}if(bot_y > mx.y[i + 1]){
+			bot_y = mx.y[i + 1];
+			bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){
+			bot_y = mx.y[i + 2];
+			bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){
+			mid_y = mx.y[i];
+			mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){
+			mid_y = mx.y[i + 1];
+			mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){
+			mid_y = mx.y[i + 2];
+			mid_x = mx.x[i + 2];
+		}
+
+		do{
+			size++;
+			x = realloc(x,size);
+			y = realloc(y,size);
+			x[j] = top_x;
+			y[j] = top_y;
+			j++;
+			x[j] = mid_x;
+			y[j] = mid_y;
+			j++;
+			top_y--;
+		}while(top_y > mid_y);
+
+		do{
+			size++;
+			x = realloc(x,size);
+			y = realloc(y,size);
+			x[j] = top_x;
+			y[j] = top_y;
+			j++;
+			top_y--;
+		}while(mid_y > bot_y);
+
+
+}
 
 // struct Array DLMA(
 //     struct Array arr,

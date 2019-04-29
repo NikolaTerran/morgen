@@ -6,9 +6,12 @@ int y_lim;
 int thread_index=-1;
 int global_res = 0;
 int global_color[3];
-int *global_r;      
+int *global_r;
 int *global_g;
 int *global_b;
+
+double *global_z;
+
 int *global_x;
 int *global_y;
 
@@ -20,15 +23,17 @@ void canvas_init(){
 	global_r = malloc(sizeof(int) * x_lim * y_lim);
 	global_g = malloc(sizeof(int) * x_lim * y_lim);
 	global_b = malloc(sizeof(int) * x_lim * y_lim);
+	global_z = malloc(sizeof(double) * x_lim * y_lim);
 
-	int i, j;	
+	int i, j;
 
     for(i = 0; i < y_lim; i++) {
         for (j = 0; j < x_lim; j++) {
         	global_r[i * y_lim + j] = ARR_INIT_R;
         	global_g[i * y_lim + j] = ARR_INIT_G;
         	global_b[i * y_lim + j] = ARR_INIT_B;
-        }
+				//	global_z[i * y_lim + j] = ARR_INIT_Z;
+				}
     }
 }
 
@@ -59,7 +64,9 @@ void * canvas_set_helper(void * arg){
 	pthread_exit(NULL);
 }
 
-void canvas_set_s(int x, int y, int color[]){
+void canvas_set_s(int x, int y,
+	//int z,
+	 int color[]){
 	if(y > Y_MAX || y <= Y_MIN || x >= X_MAX || x < X_MIN){
 		printf("Error: canvas_set_s outof bound\n");
 		printf("Bound: y <= Y_MAX || y > Y_MIN || x < X_MAX  || x >= X_MIN\n");
@@ -86,7 +93,7 @@ void canvas_set_s(int x, int y, int color[]){
 
 void canvas_set_p(int *x,int *y,int res,int color[]){
 
-    pthread_t thread_id[THREAD]; 
+    pthread_t thread_id[THREAD];
  	int index[THREAD];
  	int i;
 
@@ -100,7 +107,7 @@ void canvas_set_p(int *x,int *y,int res,int color[]){
  	global_color[0] = color[0];
  	global_color[1] = color[1];
  	global_color[2] = color[2];
-    // create threads 
+    // create threads
     for(i = 0; i < THREAD; i++){
     	index[i] = i;
         pthread_create(&thread_id[i], NULL, canvas_set_helper, (void *)index[i]);
@@ -125,13 +132,12 @@ void canvas_push(char * filename){
 	write (file, line, strlen(line));
 	for(i = 0; i < y_lim; i++){
 		for(j = 0; j < x_lim; j++){
-			snprintf(line, sizeof(line), "%d %d %d\n", 
+			snprintf(line, sizeof(line), "%d %d %d\n",
 				global_r[i * y_lim + j],
 				global_g[i * y_lim + j],
 				global_b[i * y_lim + j]);
 
 			write(file, line, strlen(line));
-		}		 
+		}
 	}
 }
-

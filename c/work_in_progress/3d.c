@@ -13,8 +13,8 @@
 	0) the color and position of light sources
 	1) the reflective properties of the object
 	2)
-
 */
+
 double cross_pdt(char cord, double x1, double y1, double z1, double x2, double y2, double z2){
 	if(cord == 'x'){
 		return y1 * z2 - z1 * y2;
@@ -258,6 +258,10 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		result = mx_transform(result, x,y,z);
 		mx = mx_addmatrix(result,mx);
 
+		mx_free(result);
+		mx_free(trans1);
+		mx_free(trans);
+
 		return mx;
 	}
 	else{
@@ -436,6 +440,9 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 			//		mx_export(result,color);
 				//	printf("ok\n");
 					mx = mx_addmatrix(result,mx);
+					mx_free(result);
+					mx_free(trans);
+					mx_free(trans1);
 
 					return mx;
 
@@ -669,7 +676,7 @@ struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
 
 		//printf("??\n");
 		mx = mx_addmatrix(result,mx);
-
+		mx_free(result);
 		return mx;
 
 	}else if(mx.type == 'b'){

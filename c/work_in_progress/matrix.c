@@ -235,14 +235,23 @@ struct Matrix mx_set(struct Matrix mx, int row, int col, double val){
  	return mx;
  }
 
- void mx_free(struct Matrix mx){
+void mx_free(struct Matrix mx){
  	if(mx.type == 'a'){
  		if(mx.col != 0){
  			free(mx.x);
  			free(mx.y);
  			free(mx.z);
  		}
- 	}
+ 	}else if(mx.type == 'c'){
+		if(mx.col != 0){
+			free(mx.x);
+			free(mx.y);
+			free(mx.z);
+			free(mx.vx);
+			free(mx.vy);
+			free(mx.vz);
+		}
+	}
  }
 
 
