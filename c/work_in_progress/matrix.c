@@ -38,7 +38,6 @@ int * mx_toint(struct Matrix mx, int *result, int row){
 	return result;
 }
 
-
 void mx_print(struct Matrix mx){
 	int i;
 	for(i = 0; i < mx.col; i++){
@@ -58,8 +57,6 @@ void mx_print(struct Matrix mx){
 	}
 	printf("\n");
 }
-
-
 
 //init default 4 row point matrix
 struct Matrix mx_init(struct Matrix mx, int col){
@@ -197,7 +194,6 @@ struct Matrix mx_addmatrix(struct Matrix src, struct Matrix dst){
 	}
 }
 
-
 //actual math input
 double mx_get(struct Matrix mx, int row, int col){
  	if(row == 0 || col == 0){
@@ -254,7 +250,6 @@ void mx_free(struct Matrix mx){
 	}
  }
 
-
 struct Matrix mx_copy(struct Matrix src, struct Matrix dst){
 	if(src.type == 'b'){
 		dst = mx_init_e(dst,src.col);
@@ -276,15 +271,14 @@ struct Matrix mx_copy(struct Matrix src, struct Matrix dst){
 	return dst;
 }
 
-
-
 void mx_export(struct Matrix mx, int color[]){
 	if(mx.type == 'a'){
 		drawPoint(mx,color);
 	}else if(mx.type == 'b'){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
-		drawLine(mx,color);
+		//drawLine(mx,color);
+		scanLine(mx);
 		//drawPoint(mx,color);
 	}
 }

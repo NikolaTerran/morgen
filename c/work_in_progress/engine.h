@@ -11,9 +11,9 @@
 
 ///////////////////tweak////////////////////////////
 #define INIT_VALUE 0   //init value of EVERYTHING other than Array
-#define t_step 0.05   //drawing distance of curves
+#define t_step 0.1   //drawing distance of curves
 #define ERR_MARGIN 1   //error margin of circles
-#define td_step 0.05   //drawing distance of 3d obj
+#define td_step 0.1   //drawing distance of 3d obj
 #define td_axis 1      //axis of rotation of 3d obj         //0 == x // 1 == y // 2 == z//
 #define THREAD 4      //parallel programming
 
@@ -153,7 +153,7 @@ void db(char * say,double a);
 ///////////////////line/////////////////////////////
 void drawLine(struct Matrix mx, int color[3]);
 struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
-
+void scanLine(struct Matrix mx);
 //////////////////point/////////////////////////////
 void drawPoint(struct Matrix mx, int color[3]);
 struct Matrix mx_addpoint(struct Matrix mx, double x, double y, double z);

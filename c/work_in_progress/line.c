@@ -1,8 +1,13 @@
 #include "engine.h"
 
+/* random snippet
+I = AKa + IpKl(N*L) + IpKs[(2N(N*L)-L)*V]
+	*Specular Reflection is supposed to fade off quickly
+
+*/
+int seed;
 int * global_x;
 int * global_y;
-
 int * global_xx;
 int * global_yy;
 int global_index;
@@ -11,6 +16,12 @@ int global_color[3];
 int global_size;
 //int global_major_axis_counter;
 
+void int_print(int * x, int res){
+	int i;
+	for(i = 0;i < res; i++){
+		printf("int:%d\n");
+	}
+}
 
 struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f){
 	/*if(mx.type != 'b'){
@@ -116,7 +127,6 @@ void poly_lines(struct Matrix mx){
 	int j = 0;
 	int a = 0;
 
-
 	while(i < mx.col){
 		//printf("poly_lines: vx:%f ,vy:%f ,vz:%f\n",mx.vx[a],mx.vy[a],mx.vz[a]);
 		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
@@ -151,8 +161,6 @@ void poly_lines(struct Matrix mx){
 	}
 	//exit(0);
 }
-
-
 
 void * drawLine_helper(void * arg){
 	int index = (void *) arg;
@@ -214,11 +222,8 @@ void * drawLine_helper(void * arg){
 	pthread_exit(NULL);
 }
 
-
 void drawLine(struct Matrix mx, int color[3]){
  	if(mx.type == 'b'){
-
-
 
 			pthread_t thread_id[THREAD];
 		 	int index[THREAD];
@@ -293,7 +298,7 @@ void drawLine(struct Matrix mx, int color[3]){
 	}
 }
 
-void drawLine_mod(int *x, int *y, size, int color[3]){
+void drawLine_mod(int *x, int *y, int size, int color[3]){
 	pthread_t thread_id[THREAD];
 	int index[THREAD];
 	global_x = x;
@@ -318,68 +323,418 @@ void drawLine_mod(int *x, int *y, size, int color[3]){
 	}
 }
 
+int rand_color(){
+	//int red
+	return seed;
+}
+
 void scanLine(struct Matrix mx){
+	seed = 255;
 	int top_y = Y_MIN;
 	int mid_y = Y_MIN;
 	int bot_y = Y_MAX;
 	int top_x;
 	int mid_x;
 	int bot_x;
+	int top_x1;
+	int top_y1;
+
 	int size = 0;
-	int *x;
-	int *y;
+
+	int dx;
+	int dx1;
+	int dx2;
+
+	int dy;
+	int dy1;
+	int dy2;
+
+	double err1 = 0;
+	double err = 0;
+	double errx;
+	double errx1;
 
 	int i; int t;
 	int j = 0;
+
+	int *x;
+	int *y;
+
+	int a = 0;
 	for(i = 0; i < mx.col; i += 3){
-		if(top_y < mx.y[i]){
-			top_y = mx.y[i];
-			top_x = mx.x[i];}if(top_y < mx.y[i + 1]){
-			top_y = mx.y[i + 1];
-			top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){
-			top_y = mx.y[i + 2];
-			top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){
-			bot_y = mx.y[i];
-			bot_x = mx.x[i];
-}if(bot_y > mx.y[i + 1]){
-			bot_y = mx.y[i + 1];
-			bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){
-			bot_y = mx.y[i + 2];
-			bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){
-			mid_y = mx.y[i];
-			mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){
-			mid_y = mx.y[i + 1];
-			mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){
-			mid_y = mx.y[i + 2];
-			mid_x = mx.x[i + 2];
+		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
+			x = malloc(1);
+			y = malloc(1);
+			if(1){
+			if(top_y < mx.y[i]){
+			top_y = mx.y[i];top_x = mx.x[i];}if(top_y < mx.y[i + 1]){
+			top_y = mx.y[i + 1];top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){top_y = mx.y[i + 2];top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){bot_y = mx.y[i];bot_x = mx.x[i];}if(bot_y > mx.y[i + 1]){bot_y = mx.y[i + 1];bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){bot_y = mx.y[i + 2];bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){mid_y = mx.y[i];mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){mid_y = mx.y[i + 1];mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){mid_y = mx.y[i + 2];mid_x = mx.x[i + 2];}}
+			top_x1 = top_x;
+			top_y1 = top_y;
+
+			dx = top_x - bot_x;
+			dx1 = top_x - mid_x;
+			dx2 = mid_x - bot_x;
+
+			dy = top_y - bot_y;
+			dy1 = top_y - mid_y;
+			dy2 = mid_y - bot_y;
+
+		if(dx == 0){
+			printf("hi!\n");
+			errx1 = abs((float)dy1/(float)dx1);
+
+			do{
+				size += 2;
+				x = realloc(x,size * sizeof(int));
+				y = realloc(y,size * sizeof(int));
+				x[j] = top_x;
+				y[j] = top_y;
+				top_y--;
+				j++;
+
+				x[j] = top_x1;
+				y[j] = top_y1;
+				top_y1--;
+				j++;
+				err += errx1;
+				if(err >= 0.5){
+					if(dx1 >= 0){
+						dx1--;
+						top_x1--;
+					}else{
+						dx1++;
+						top_x1++;
+					}
+					err--;
+				}
+			}while(top_y > mid_y);
+			errx1 = abs((double)dy2/(double)dx2);
+
+			do{
+				size += 2;
+				x = realloc(x,size * sizeof(int));
+				y = realloc(y,size * sizeof(int));
+				x[j] = top_x;
+				y[j] = top_y;
+				top_y--;
+				j++;
+
+				x[j] = mid_x;
+				y[j] = mid_y;
+				mid_y--;
+				j++;
+				err += errx1;
+				if(err >= 0.5){
+					if(dx2 >= 0){
+						dx2--;
+						mid_x--;
+					}else{
+						dx2++;
+						mid_x++;
+					}
+					err--;
+				}
+			}while(mid_y > bot_y);
+
+			if(mid_y != bot_y){
+				size += 2;
+				x = realloc(x,size * sizeof(int));
+				y = realloc(y,size * sizeof(int));
+				x[j] = top_x;
+				y[j] = top_y;
+				j++;
+				x[j] = mid_x;
+				y[j] = mid_y;
+			}
+		}
+		else if(dx1 == 0){
+
+				errx = abs((double)dy/(double)dx);
+				do{
+					size += 2;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+					x[j] = top_x;
+					y[j] = top_y;
+					top_y--;
+					j++;
+
+					x[j] = top_x1;
+					y[j] = top_y1;
+					top_y1--;
+					j++;
+					err += errx;
+					if(err >= 0.5){
+						if(dx1 >= 0){
+							dx--;
+							top_x--;
+						}else{
+							dx++;
+							top_x++;
+						}
+						err--;
+					}
+				}while(top_y > mid_y);
+				errx1 = abs((double)dy2/(double)dx2);
+				do{
+					size += 2;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+					x[j] = top_x;
+					y[j] = top_y;
+					top_y--;
+					j++;
+					err1 += errx;
+
+					x[j] = mid_x;
+					y[j] = mid_y;
+					mid_y--;
+					j++;
+					err += errx1;
+					if(err >= 0.5){
+						if(dx >= 0){
+							dx--;
+							top_x--;
+						}else{
+							dx++;
+							top_x++;
+						}
+						err--;
+					}
+					if(err1 >= 0.5){
+						if(dx2 >= 0){
+							dx2--;
+							mid_x--;
+						}else{
+							dx2++;
+							mid_x++;
+						}
+						err1--;
+					}
+				}while(mid_y > bot_y);
+				if(mid_y != bot_y){
+					size += 2 ;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+					x[j] = top_x;
+					y[j] = top_y;
+					j++;
+					x[j] = mid_x;
+					y[j] = mid_y;
+				}
+			}
+
+		else if(dx2 == 0){
+				errx = abs((double)dy/(double)dx);
+				errx1 = abs((double)dy1/(double)dx1);
+				do{
+					size += 2;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+
+
+//printf("hi!\n");
+//printf("hi! size:%d, x:%d,y:%d,j:%d\n",size,x[j],y[j],j);
+				//	x = (int*)realloc(x,size);
+				//	y = (int*)realloc(y,size);
+
+					x[j] = top_x;
+				  y[j] = top_y;
+					top_y--;
+					j++;
+
+					x[j] = top_x1;
+					y[j] = top_y1;
+					top_y1--;
+					j++;
+
+
+
+					err += errx;
+					err1 += errx1;
+					if(err >= 0.5){
+						if(dx >= 0){
+							dx--;
+							top_x--;
+						}else{
+							dx++;
+							top_x++;
+						}
+						err--;
+					}
+					if(err1 >= 0.5){
+						if(dx1 >= 0){
+							dx1--;
+							top_x1--;
+						}else{
+							dx1++;
+							top_x1++;
+						}
+						err1--;
+					}
+				}while(top_y > mid_y);
+
+				do{
+					size += 2;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+					x[j] = top_x;
+					y[j] = top_y;
+					top_y--;
+					j++;
+					err += errx;
+
+					x[j] = mid_x;
+					y[j] = mid_y;
+					mid_y--;
+					j++;
+
+					if(err >= 0.5){
+						if(dx >= 0){
+							dx--;
+							top_x--;
+						}else{
+							dx++;
+							top_x++;
+						}
+						err--;
+					}
+				}while(mid_y > bot_y);
+				if(mid_y != bot_y){
+					size += 2 ;
+					x = realloc(x,size * sizeof(int));
+					y = realloc(y,size * sizeof(int));
+					x[j] = top_x;
+					y[j] = top_y;
+					j++;
+					x[j] = mid_x;
+					y[j] = mid_y;
+				}
+			}
+		else{
+
+					errx = abs((double)dy/(double)dx);
+					errx1 = abs((double)dy1/(double)dx1);
+					do{
+						size += 2;
+						x = realloc(x,size * sizeof(int));
+						y = realloc(y,size * sizeof(int));
+						x[j] = top_x;
+						y[j] = top_y;
+						top_y--;
+						j++;
+
+						x[j] = top_x1;
+						y[j] = top_y1;
+						top_y1--;
+						j++;
+						err += errx;
+						err1 += errx1;
+						if(err >= 0.5){
+							if(dx >= 0){
+								dx--;
+								top_x--;
+							}else{
+								dx++;
+								top_x++;
+							}
+							err--;
+						}
+						if(err1 >= 0.5){
+							if(dx1 >= 0){
+								dx1--;
+								top_x1--;
+							}else{
+								dx1++;
+								top_x1++;
+							}
+							err1--;
+						}
+					}while(top_y > mid_y);
+					errx1 = abs((double)dy2/(double)dx2);
+					do{
+						size += 2;
+						x = realloc(x,size * sizeof(int));
+						y = realloc(y,size * sizeof(int));
+						x[j] = top_x;
+						y[j] = top_y;
+						top_y--;
+						j++;
+						err += errx;
+
+						x[j] = mid_x;
+						y[j] = mid_y;
+						mid_y--;
+						j++;
+						err1 += errx1;
+
+						if(err >= 0.5){
+							if(dx >= 0){
+								dx--;
+								top_x--;
+							}else{
+								dx++;
+								top_x++;
+							}
+							err--;
+						}
+						if(err1 >= 0.5){
+							if(dx2 >= 0){
+								dx2--;
+								mid_x--;
+							}else{
+								dx2++;
+								mid_x++;
+							}
+							err--;
+						}
+					}while(mid_y > bot_y);
+					if(mid_y != bot_y){
+						size += 2 ;
+						x = realloc(x,size * sizeof(int));
+						y = realloc(y,size * sizeof(int));
+						x[j] = top_x;
+						y[j] = top_y;
+						j++;
+						x[j] = mid_x;
+						y[j] = mid_y;
+					}
 		}
 
-		do{
-			size++;
-			x = realloc(x,size);
-			y = realloc(y,size);
-			x[j] = top_x;
-			y[j] = top_y;
-			j++;
-			x[j] = mid_x;
-			y[j] = mid_y;
-			j++;
-			top_y--;
-		}while(top_y > mid_y);
+		int color[3];
 
-		do{
-			size++;
-			x = realloc(x,size);
-			y = realloc(y,size);
-			x[j] = top_x;
-			y[j] = top_y;
-			j++;
-			top_y--;
-		}while(mid_y > bot_y);
+		if(seed % 3 == 0){
+			color[0] = 255;
+			color[1] = 0;
+			color[2] = 0;
+			seed++;
+		}else if(seed % 2 == 0){
+			color[0] = 0;
+			color[1] = 255;
+			color[2] = 0;
+			seed++;
+		}else{
+			color[0] = 0;
+			color[1] = 0;
+			color[2] = 255;
+			seed++;
+		}
 
+		drawLine_mod(x,y,size,color);
+		//canvas_push("this.ppm");
+		j=0;
+		err = 0;
+		err1 = 0;
+		size = 0;
+
+		free(x);
+		free(y);
+	}
+		a++;
+	}
 
 }
-
 // struct Array DLMA(
 //     struct Array arr,
 //     int x,

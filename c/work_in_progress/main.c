@@ -58,6 +58,8 @@ poly = mx_addtorus(poly,0,-100,0,50,100);
 poly = mx_addbox(poly,-200,100,0,100,100,100);
 poly = mx_rotate(poly,0,0.5);
 poly = mx_rotate(poly,1,0.5);
+
+//scanLine(poly);
 mx_export(poly,color);
 
 
