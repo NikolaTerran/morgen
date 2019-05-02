@@ -14,6 +14,8 @@ int global_index;
 int global_res;
 int global_color[3];
 int global_size;
+
+int global_scanline_size;
 //int global_major_axis_counter;
 
 void int_print(int * x, int res){
@@ -55,30 +57,31 @@ void DLMA(int index,int dx,int dy,int axis,int check){
 		int dy2 = dy * 2;
 		int dy2Mindx2 = dy2 - dx2;
 
- 	int index2 = index + 1;
+ 		int index2 = index + 1;
     // calculate the starting error value
     int Error = dy2 - dx;
     // draw the first pixel
- 	canvas_set_s(global_x[index], global_y[index], global_color);
+ 		canvas_set_s(global_x[index], global_y[index], global_color);
     // loop across the major axis
     //0 is x, else is y
     if(axis == 0){
 	    while (dx--){
 	        // move on major axis and minor axis
 	        if (Error > 0){
-	            global_x[index]++;
-			    if(check == 0){
-			        global_y[index]++;
-			    }else{
-					global_y[index]--;
-			    }
+
+					    if(check == 0){
+					        global_y[index]++;
+					    }else{
+							    global_y[index]--;
+					    }
 	            Error += dy2Mindx2;
 	        }
 	        // move on major axis only
 	        else{
-	            global_x[index]++;
 	            Error += dy2;
 	        }
+
+					global_x[index]++;
 	        // draw the next pixel
 	        canvas_set_s(global_x[index], global_y[index], global_color);
 	    }
@@ -86,19 +89,19 @@ void DLMA(int index,int dx,int dy,int axis,int check){
 	    while(dx--){
 	        // move on major axis and minor axis
 	        if (Error > 0){
-				if(check == 0){
-		            global_x[index]++;
+						if(check == 0){
+		          global_x[index]++;
 		        }else{
 		        	global_x[index]--;
 		        }
-		            global_y[index]++;
-		            Error += dy2Mindx2;
-		        }
+		          Error += dy2Mindx2;
+		      }
 	        // move on major axis only
 	        else{
-	            global_y[index]++;
 	            Error += dy2;
 	        }
+
+					global_y[index]++;
 	        // draw the next pixel
 	        canvas_set_s(global_x[index], global_y[index], global_color);
 	    }
@@ -166,27 +169,22 @@ void * drawLine_helper(void * arg){
 	int index = (void *) arg;
 	int index2 = index + 1;
 
-	//for(i = 0; i < mx.col; i+=2){
-		// printf("index:%d\n",index);
-  //   	printf("x:%d ; y:%d ; x1:%d ; y1:%d\n",global_x[index],global_y[index],global_x[index+1],global_y[index+1]);
-    //}
-
 	while(1){
         if(index >= global_res){
         	break;
         }
         int dx = global_x[index2] - global_x[index];
         int dy = global_y[index2] - global_y[index];
-        // if the X axis is the major axis
+      // if the X axis is the major axis
      	if(abs(dx) >= abs(dy)){
          // if x2 < x1, flip the points to have fewer special cases
-      	   if (dx < 0){
-             dx *= -1; dy *= -1;
-             int t = global_x[index];
-             global_x[index] = global_x[index2]; global_x[index2] = t;
-             t = global_y[index];
-             global_y[index] = global_y[index2]; global_y[index2] = t;
-           }
+    	   if (dx < 0){
+           dx *= -1; dy *= -1;
+           int t = global_x[index];
+           global_x[index] = global_x[index2]; global_x[index2] = t;
+           t = global_y[index];
+           global_y[index] = global_y[index2]; global_y[index2] = t;
+         }
          // determine special cases
          if(dy > 0){
              DLMA(index,dx,dy,0,0);
@@ -323,13 +321,140 @@ void drawLine_mod(int *x, int *y, int size, int color[3]){
 	}
 }
 
-int rand_color(){
-	//int red
-	return seed;
+int* sys_random(int * buffer, int size){
+
+	buffer = malloc(sizeof(int) * size );
+	//printf("initiating...this may take several minites\n");
+	FILE* file = fopen("/dev/urandom", "r");
+	fread(buffer, sizeof(int), size ,file);
+	fclose(file);
+
+	return buffer;
+}
+
+int* DLMA_mod(int *input,int x, int y, int dx,int dy,int axis, int check_dir){
+    // calculate some constants
+		int ddx;
+		int ddy;
+		int ddyMinddx;
+		int Error;
+
+		if("first line"){
+			ddx = dx * 2;
+			ddy = dy * 2;
+			ddyMinddx = ddy - ddx;
+	    Error = ddy - dx;
+		}
+    // draw the first pixel
+    // loop across the major axis
+    // 0 is x, else is y
+
+		//assume input realloc is 2
+		int size = 2;
+		int j = 0;
+		input[j] = x;
+		j++;
+		input[j] = y;
+		j++;
+		size += 2;
+		input = realloc(input,size * sizeof(int));
+		global_scanline_size++;
+
+    if(axis == 0){
+	    while (dx--){
+	        // move on major axis and minor axis
+	        if (Error > 0){
+					    if(check_dir == 0){
+					        y++;
+					    }else{
+							    y--;
+					    }
+	            Error += ddyMinddx;
+	        }
+	        // move on major axis only
+	        else{
+	            Error += ddy;
+	        }
+					x++;
+
+					input[j] = x;
+					j++;
+					input[j] = y;
+					j++;
+					size += 2;
+					input = realloc(input,size * sizeof(int));
+					global_scanline_size++;
+	        // draw the next pixel
+	    }
+		}else{
+	    while(dx--){
+	        // move on major axis and minor axis
+	        if (Error > 0){
+						if(check_dir == 0){
+		          x++;
+		        }else{
+		        	x--;
+		        }
+		          Error += ddyMinddx;
+		      }
+	        // move on major axis only
+	        else{
+	            Error += ddy;
+	        }
+
+					input[j] = x;
+					j++;
+					input[j] = y;
+					j++;
+					global_scanline_size++;
+					size += 2;
+					input = realloc(input,size * sizeof(int));
+	        // draw the next pixel
+	    }
+	}
+
+		return input;
+}
+
+int* DLSA_mod(int *input,int x, int y, int dx,int axis){
+    // draw the first pixel
+		int size = 2;
+		int j = 0;
+		input[j] = x;
+		j++;
+		input[j] = y;
+		j++;
+		size += 2;
+		input = realloc(input,size * sizeof(int));
+		global_scanline_size++;
+    // loop across the major axis and draw the rest of the pixels
+    if(axis == 0){
+	    while(dx--){
+					x++;
+					input[j] = x;
+					j++;
+					input[j] = y;
+					j++;
+					size += 2;
+					input = realloc(input,size * sizeof(int));
+					global_scanline_size++;
+    	}
+    }else{
+	    while (dx--){
+	    	y++;
+				input[j] = x;
+				j++;
+				input[j] = y;
+				j++;
+				size += 2;
+				input = realloc(input,size * sizeof(int));
+				global_scanline_size++;
+    	}
+    }
+		return input;
 }
 
 void scanLine(struct Matrix mx){
-	seed = 255;
 	int top_y = Y_MIN;
 	int mid_y = Y_MIN;
 	int bot_y = Y_MAX;
@@ -349,388 +474,102 @@ void scanLine(struct Matrix mx){
 	int dy1;
 	int dy2;
 
-	double err1 = 0;
-	double err = 0;
-	double errx;
-	double errx1;
+	int *line;
+	int *line1;
+	int *line2;
 
-	int i; int t;
-	int j = 0;
-
-	int *x;
-	int *y;
-
+	global_scanline_size = 0;
 	int a = 0;
+	int i;
+
 	for(i = 0; i < mx.col; i += 3){
+		int * buffer;
+		buffer = sys_random(buffer,3);
+
+		buffer[0] = abs(buffer[0]  % 255);
+		buffer[1] = abs(buffer[1]  % 255);
+		buffer[2] = abs(buffer[2]  % 255);
+
 		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
-			x = malloc(1);
-			y = malloc(1);
-			if(1){
+
+			line = malloc(2 * sizeof(int));
+			line1 = malloc(2 * sizeof(int));
+			line2 = malloc(2 * sizeof(int));
+			if("get coord"){
 			if(top_y < mx.y[i]){
 			top_y = mx.y[i];top_x = mx.x[i];}if(top_y < mx.y[i + 1]){
-			top_y = mx.y[i + 1];top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){top_y = mx.y[i + 2];top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){bot_y = mx.y[i];bot_x = mx.x[i];}if(bot_y > mx.y[i + 1]){bot_y = mx.y[i + 1];bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){bot_y = mx.y[i + 2];bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){mid_y = mx.y[i];mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){mid_y = mx.y[i + 1];mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){mid_y = mx.y[i + 2];mid_x = mx.x[i + 2];}}
+			top_y = mx.y[i + 1];top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){top_y = mx.y[i + 2];top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){bot_y = mx.y[i];bot_x = mx.x[i];}if(bot_y > mx.y[i + 1]){bot_y = mx.y[i + 1];bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){bot_y = mx.y[i + 2];bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){mid_y = mx.y[i];mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){mid_y = mx.y[i + 1];mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){mid_y = mx.y[i + 2];mid_x = mx.x[i + 2];}
 			top_x1 = top_x;
 			top_y1 = top_y;
-
-			dx = top_x - bot_x;
-			dx1 = top_x - mid_x;
-			dx2 = mid_x - bot_x;
-
-			dy = top_y - bot_y;
-			dy1 = top_y - mid_y;
-			dy2 = mid_y - bot_y;
-
-		if(dx == 0){
-			printf("hi!\n");
-			errx1 = abs((float)dy1/(float)dx1);
-
-			do{
-				size += 2;
-				x = realloc(x,size * sizeof(int));
-				y = realloc(y,size * sizeof(int));
-				x[j] = top_x;
-				y[j] = top_y;
-				top_y--;
-				j++;
-
-				x[j] = top_x1;
-				y[j] = top_y1;
-				top_y1--;
-				j++;
-				err += errx1;
-				if(err >= 0.5){
-					if(dx1 >= 0){
-						dx1--;
-						top_x1--;
-					}else{
-						dx1++;
-						top_x1++;
-					}
-					err--;
-				}
-			}while(top_y > mid_y);
-			errx1 = abs((double)dy2/(double)dx2);
-
-			do{
-				size += 2;
-				x = realloc(x,size * sizeof(int));
-				y = realloc(y,size * sizeof(int));
-				x[j] = top_x;
-				y[j] = top_y;
-				top_y--;
-				j++;
-
-				x[j] = mid_x;
-				y[j] = mid_y;
-				mid_y--;
-				j++;
-				err += errx1;
-				if(err >= 0.5){
-					if(dx2 >= 0){
-						dx2--;
-						mid_x--;
-					}else{
-						dx2++;
-						mid_x++;
-					}
-					err--;
-				}
-			}while(mid_y > bot_y);
-
-			if(mid_y != bot_y){
-				size += 2;
-				x = realloc(x,size * sizeof(int));
-				y = realloc(y,size * sizeof(int));
-				x[j] = top_x;
-				y[j] = top_y;
-				j++;
-				x[j] = mid_x;
-				y[j] = mid_y;
-			}
 		}
-		else if(dx1 == 0){
+			if("get dx"){
+				dx = top_x - bot_x;
+				dx1 = top_x - mid_x;
+				dx2 = mid_x - bot_x;
 
-				errx = abs((double)dy/(double)dx);
-				do{
-					size += 2;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
-					x[j] = top_x;
-					y[j] = top_y;
-					top_y--;
-					j++;
-
-					x[j] = top_x1;
-					y[j] = top_y1;
-					top_y1--;
-					j++;
-					err += errx;
-					if(err >= 0.5){
-						if(dx1 >= 0){
-							dx--;
-							top_x--;
-						}else{
-							dx++;
-							top_x++;
-						}
-						err--;
-					}
-				}while(top_y > mid_y);
-				errx1 = abs((double)dy2/(double)dx2);
-				do{
-					size += 2;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
-					x[j] = top_x;
-					y[j] = top_y;
-					top_y--;
-					j++;
-					err1 += errx;
-
-					x[j] = mid_x;
-					y[j] = mid_y;
-					mid_y--;
-					j++;
-					err += errx1;
-					if(err >= 0.5){
-						if(dx >= 0){
-							dx--;
-							top_x--;
-						}else{
-							dx++;
-							top_x++;
-						}
-						err--;
-					}
-					if(err1 >= 0.5){
-						if(dx2 >= 0){
-							dx2--;
-							mid_x--;
-						}else{
-							dx2++;
-							mid_x++;
-						}
-						err1--;
-					}
-				}while(mid_y > bot_y);
-				if(mid_y != bot_y){
-					size += 2 ;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
-					x[j] = top_x;
-					y[j] = top_y;
-					j++;
-					x[j] = mid_x;
-					y[j] = mid_y;
-				}
+				dy = top_y - bot_y;
+				dy1 = top_y - mid_y;
+				dy2 = mid_y - bot_y;
+			//	printf("dy:%f\n",dy);
 			}
+			printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
+			// if the X axis is the major axis
+			if(abs(dx) >= abs(dy)){
+			 // if x2 < x1, flip the points to have fewer special cases
+				 if (dx < 0){
+					 dx *= -1; dy *= -1;
+					 int t = top_x;
+					 top_x = bot_x; bot_x = t;
+					 t = top_y;
+					 top_y = bot_y; bot_y = t;
+				 }
+				 //printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
+				 if(dy > 0){printf("run?\n");
+						 line = DLMA_mod(line,top_x,top_y,dx,dy,1,1);
+				 }else if (dx < 0){
 
-		else if(dx2 == 0){
-				errx = abs((double)dy/(double)dx);
-				errx1 = abs((double)dy1/(double)dx1);
-				do{
-					size += 2;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
+	 					 line = DLMA_mod(line,top_x,top_y,dy,-dx,1,1);
+				 }else{
+						 line = DLSA_mod(line,top_x,top_y,dx,0);
+				 }
+	 	 	}
+	  	// else the Y axis is the major axis
+	  	else{
+
+			 // if y2 < y1, flip the points to have fewer special cases
+			 if (dy < 0){
+				 dx *= -1; dy *= -1;
+				 int t = top_x;
+				 top_x = bot_x; bot_x = t;
+				 t = top_y;
+				 top_y = bot_y; bot_y = t;
+			 }
+			 if (dx > 0){
+						line = DLMA_mod(line,top_y,top_x,dy,dx,1,0);
+			 }else{
+						line = DLSA_mod(line,top_y,top_x,dy,1);
+			 }
+	 		}
 
 
-//printf("hi!\n");
-//printf("hi! size:%d, x:%d,y:%d,j:%d\n",size,x[j],y[j],j);
-				//	x = (int*)realloc(x,size);
-				//	y = (int*)realloc(y,size);
+			int color[3];
+			color[0] = buffer[0];//buffer[0] % 255;
+			color[1] = buffer[1];//buffer[1] % 255;
+			color[2] = buffer[2];//buffer[2] % 255;
 
-					x[j] = top_x;
-				  y[j] = top_y;
-					top_y--;
-					j++;
-
-					x[j] = top_x1;
-					y[j] = top_y1;
-					top_y1--;
-					j++;
-
-
-
-					err += errx;
-					err1 += errx1;
-					if(err >= 0.5){
-						if(dx >= 0){
-							dx--;
-							top_x--;
-						}else{
-							dx++;
-							top_x++;
-						}
-						err--;
-					}
-					if(err1 >= 0.5){
-						if(dx1 >= 0){
-							dx1--;
-							top_x1--;
-						}else{
-							dx1++;
-							top_x1++;
-						}
-						err1--;
-					}
-				}while(top_y > mid_y);
-
-				do{
-					size += 2;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
-					x[j] = top_x;
-					y[j] = top_y;
-					top_y--;
-					j++;
-					err += errx;
-
-					x[j] = mid_x;
-					y[j] = mid_y;
-					mid_y--;
-					j++;
-
-					if(err >= 0.5){
-						if(dx >= 0){
-							dx--;
-							top_x--;
-						}else{
-							dx++;
-							top_x++;
-						}
-						err--;
-					}
-				}while(mid_y > bot_y);
-				if(mid_y != bot_y){
-					size += 2 ;
-					x = realloc(x,size * sizeof(int));
-					y = realloc(y,size * sizeof(int));
-					x[j] = top_x;
-					y[j] = top_y;
-					j++;
-					x[j] = mid_x;
-					y[j] = mid_y;
-				}
+			//drawLine_mod(x,y,size,color);
+			//canvas_push("this.ppm");
+			int j = 0;
+			while(j < global_scanline_size){
+				printf("x:%d , y:%d\n",line[j],line[j+1]);
+				j += 2;
 			}
-		else{
-
-					errx = abs((double)dy/(double)dx);
-					errx1 = abs((double)dy1/(double)dx1);
-					do{
-						size += 2;
-						x = realloc(x,size * sizeof(int));
-						y = realloc(y,size * sizeof(int));
-						x[j] = top_x;
-						y[j] = top_y;
-						top_y--;
-						j++;
-
-						x[j] = top_x1;
-						y[j] = top_y1;
-						top_y1--;
-						j++;
-						err += errx;
-						err1 += errx1;
-						if(err >= 0.5){
-							if(dx >= 0){
-								dx--;
-								top_x--;
-							}else{
-								dx++;
-								top_x++;
-							}
-							err--;
-						}
-						if(err1 >= 0.5){
-							if(dx1 >= 0){
-								dx1--;
-								top_x1--;
-							}else{
-								dx1++;
-								top_x1++;
-							}
-							err1--;
-						}
-					}while(top_y > mid_y);
-					errx1 = abs((double)dy2/(double)dx2);
-					do{
-						size += 2;
-						x = realloc(x,size * sizeof(int));
-						y = realloc(y,size * sizeof(int));
-						x[j] = top_x;
-						y[j] = top_y;
-						top_y--;
-						j++;
-						err += errx;
-
-						x[j] = mid_x;
-						y[j] = mid_y;
-						mid_y--;
-						j++;
-						err1 += errx1;
-
-						if(err >= 0.5){
-							if(dx >= 0){
-								dx--;
-								top_x--;
-							}else{
-								dx++;
-								top_x++;
-							}
-							err--;
-						}
-						if(err1 >= 0.5){
-							if(dx2 >= 0){
-								dx2--;
-								mid_x--;
-							}else{
-								dx2++;
-								mid_x++;
-							}
-							err--;
-						}
-					}while(mid_y > bot_y);
-					if(mid_y != bot_y){
-						size += 2 ;
-						x = realloc(x,size * sizeof(int));
-						y = realloc(y,size * sizeof(int));
-						x[j] = top_x;
-						y[j] = top_y;
-						j++;
-						x[j] = mid_x;
-						y[j] = mid_y;
-					}
+			free(line);
+			free(line1);
+			free(line2);
+			exit(0);
 		}
-
-		int color[3];
-
-		if(seed % 3 == 0){
-			color[0] = 255;
-			color[1] = 0;
-			color[2] = 0;
-			seed++;
-		}else if(seed % 2 == 0){
-			color[0] = 0;
-			color[1] = 255;
-			color[2] = 0;
-			seed++;
-		}else{
-			color[0] = 0;
-			color[1] = 0;
-			color[2] = 255;
-			seed++;
-		}
-
-		drawLine_mod(x,y,size,color);
-		//canvas_push("this.ppm");
-		j=0;
-		err = 0;
-		err1 = 0;
-		size = 0;
-
-		free(x);
-		free(y);
-	}
+		free(buffer);
 		a++;
 	}
 

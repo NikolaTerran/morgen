@@ -146,7 +146,7 @@ struct Matrix mx_addhermite(struct Matrix mx, double x1, double y1, double x2, d
 ////////////////////general//////////////////////////
 void initialize(int array[][X_MAX - X_MIN][3], int color[]);
 void push(int array[][X_MAX - X_MIN][3],int file);
-int* sys_random(int size);
+int* sys_random(int * buffer, int size);
 void db(char * say,double a);
 
 
