@@ -82,7 +82,7 @@ void canvas_set_s(int x, int y,
 		if(x < X_MIN){
 			printf("DEBUG: x is suppose to be >= %d but is %d\n",X_MIN,x);
 		}
-		//exit(1);
+		exit(1);
 	}else{
     int local_y =  0 - y;
     global_r[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[0];

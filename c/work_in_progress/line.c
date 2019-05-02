@@ -15,7 +15,9 @@ int global_res;
 int global_color[3];
 int global_size;
 
-int global_scanline_size;
+//int * ;
+//int * 1;
+//int * 2;
 //int global_major_axis_counter;
 
 void int_print(int * x, int res){
@@ -358,12 +360,14 @@ int* DLMA_mod(int *input,int x, int y, int dx,int dy,int axis, int check_dir){
 		j++;
 		size += 2;
 		input = realloc(input,size * sizeof(int));
-		global_scanline_size++;
+
+		//linesize++;
 
     if(axis == 0){
 	    while (dx--){
 	        // move on major axis and minor axis
 	        if (Error > 0){
+
 					    if(check_dir == 0){
 					        y++;
 					    }else{
@@ -373,6 +377,7 @@ int* DLMA_mod(int *input,int x, int y, int dx,int dy,int axis, int check_dir){
 	        }
 	        // move on major axis only
 	        else{
+
 	            Error += ddy;
 	        }
 					x++;
@@ -383,13 +388,17 @@ int* DLMA_mod(int *input,int x, int y, int dx,int dy,int axis, int check_dir){
 					j++;
 					size += 2;
 					input = realloc(input,size * sizeof(int));
-					global_scanline_size++;
+
+					//linesize++;
 	        // draw the next pixel
 	    }
 		}else{
+			//printf("err:%d,errx:%d,step:%d\n",Error,ddyMinddx,ddy);
 	    while(dx--){
 	        // move on major axis and minor axis
+					//printf("ddy:%d,y:%d\n",dx,y);
 	        if (Error > 0){
+
 						if(check_dir == 0){
 		          x++;
 		        }else{
@@ -402,17 +411,21 @@ int* DLMA_mod(int *input,int x, int y, int dx,int dy,int axis, int check_dir){
 	            Error += ddy;
 	        }
 
+					y++;
 					input[j] = x;
 					j++;
 					input[j] = y;
 					j++;
-					global_scanline_size++;
+					;
+					//linesize++;
 					size += 2;
 					input = realloc(input,size * sizeof(int));
 	        // draw the next pixel
 	    }
 	}
-
+		//printf("input:%d\n",input[j - 1]);
+		input[j] = X_MAX;
+		printf("input:%d,,,,j:%d\n",input[j - 1],j);
 		return input;
 }
 
@@ -426,7 +439,7 @@ int* DLSA_mod(int *input,int x, int y, int dx,int axis){
 		j++;
 		size += 2;
 		input = realloc(input,size * sizeof(int));
-		global_scanline_size++;
+		;
     // loop across the major axis and draw the rest of the pixels
     if(axis == 0){
 	    while(dx--){
@@ -437,7 +450,7 @@ int* DLSA_mod(int *input,int x, int y, int dx,int axis){
 					j++;
 					size += 2;
 					input = realloc(input,size * sizeof(int));
-					global_scanline_size++;
+					;
     	}
     }else{
 	    while (dx--){
@@ -448,9 +461,10 @@ int* DLSA_mod(int *input,int x, int y, int dx,int axis){
 				j++;
 				size += 2;
 				input = realloc(input,size * sizeof(int));
-				global_scanline_size++;
+				;
     	}
     }
+		input[j] = X_MAX;
 		return input;
 }
 
@@ -478,11 +492,16 @@ void scanLine(struct Matrix mx){
 	int *line1;
 	int *line2;
 
-	global_scanline_size = 0;
+	int *x;
+	int *y;
+
+	int x1;
+	int y1;
+
 	int a = 0;
 	int i;
 
-	for(i = 0; i < mx.col; i += 3){
+	for(i = 0; i < 3; i += 3){
 		int * buffer;
 		buffer = sys_random(buffer,3);
 
@@ -495,12 +514,39 @@ void scanLine(struct Matrix mx){
 			line = malloc(2 * sizeof(int));
 			line1 = malloc(2 * sizeof(int));
 			line2 = malloc(2 * sizeof(int));
+
 			if("get coord"){
-			if(top_y < mx.y[i]){
-			top_y = mx.y[i];top_x = mx.x[i];}if(top_y < mx.y[i + 1]){
-			top_y = mx.y[i + 1];top_x = mx.x[i + 1];}if(top_y < mx.y[i + 2]){top_y = mx.y[i + 2];top_x = mx.x[i + 2];}if(bot_y > mx.y[i]){bot_y = mx.y[i];bot_x = mx.x[i];}if(bot_y > mx.y[i + 1]){bot_y = mx.y[i + 1];bot_x = mx.x[i + 1];}if(bot_y > mx.y[i + 2]){bot_y = mx.y[i + 2];bot_x = mx.x[i + 2];}if(mx.y[i] != bot_y && mx.y[i] != top_y){mid_y = mx.y[i];mid_x = mx.x[i];}if(mx.y[i + 1] != bot_y && mx.y[i + 1] != top_y){mid_y = mx.y[i + 1];mid_x = mx.x[i + 1];}if(mx.y[i + 2] != bot_y && mx.y[i + 2] != top_y){mid_y = mx.y[i + 2];mid_x = mx.x[i + 2];}
-			top_x1 = top_x;
-			top_y1 = top_y;
+			if(top_y < round(mx.y[i])){
+				top_y = round(mx.y[i]);
+				top_x = round(mx.x[i]);}
+			if(top_y < round(mx.y[i + 1])){
+				top_y = round(mx.y[i + 1]);
+				top_x = round(mx.x[i + 1]);}
+			if(top_y < round(mx.y[i + 2])){
+				top_y = round(mx.y[i + 2]);
+				top_x = round(mx.x[i + 2]);}
+			if(bot_y > round(mx.y[i])){
+				bot_y = round(mx.y[i]);
+				bot_x = round(mx.x[i]);}
+			if(bot_y > round(mx.y[i + 1])){
+				//printf("?????\n");
+				bot_y = round(mx.y[i + 1]);
+				bot_x = round(mx.x[i + 1]);}
+			if(bot_y > round(mx.y[i + 2])){
+				//printf("lololoasdsad\n");
+				//printf("round:mx.y:%f\n",mx.y[i+2]);
+				bot_y = round(mx.y[i + 2]);
+				bot_x = round(mx.x[i + 2]);}
+				//printf("bbbbbbot_y:%d\n",bot_y);
+			if(round(mx.y[i]) != bot_y && round(mx.y[i]) != top_y){
+				mid_y = round(mx.y[i]);
+				mid_x = round(mx.x[i]);}
+			if(round(mx.y[i + 1]) != bot_y && round(mx.y[i + 1]) != top_y){
+				mid_y = round(mx.y[i + 1]);
+				mid_x = round(mx.x[i + 1]);}
+			if(round(mx.y[i + 2]) != bot_y && round(mx.y[i + 2]) != top_y){
+				mid_y = round(mx.y[i + 2]);
+				mid_x = round(mx.x[i + 2]);}
 		}
 			if("get dx"){
 				dx = top_x - bot_x;
@@ -510,27 +556,34 @@ void scanLine(struct Matrix mx){
 				dy = top_y - bot_y;
 				dy1 = top_y - mid_y;
 				dy2 = mid_y - bot_y;
-			//	printf("dy:%f\n",dy);
+				//printf("dy2:%d\n",dy2);
 			}
-			printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
+
+			//printf("top_x:%d,top_y:%d\n",top_x,top_y);
+			//printf("mid_x:%d,mid_y:%d\n",mid_x,mid_y);
+			//printf("bot_x:%d,bot_y:%d\n",bot_x,bot_y);
+
 			// if the X axis is the major axis
+
 			if(abs(dx) >= abs(dy)){
 			 // if x2 < x1, flip the points to have fewer special cases
-				 if (dx < 0){
+			   x1 = bot_x;
+				 y1 = bot_y;
+
+			 	if (dx < 0){
 					 dx *= -1; dy *= -1;
-					 int t = top_x;
-					 top_x = bot_x; bot_x = t;
-					 t = top_y;
-					 top_y = bot_y; bot_y = t;
+					 x1 = top_x;
+					 y1 = top_y;
+					// printf("nonono\n");
 				 }
 				 //printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
-				 if(dy > 0){printf("run?\n");
-						 line = DLMA_mod(line,top_x,top_y,dx,dy,1,1);
+				 if(dy > 0){
+					 //printf("nonono\n");
+						 line = DLMA_mod(line,x1,y1,dx,dy,0,0);
 				 }else if (dx < 0){
-
-	 					 line = DLMA_mod(line,top_x,top_y,dy,-dx,1,1);
+	 					 line = DLMA_mod(line,x1,y1,dy,-dx,0,1);
 				 }else{
-						 line = DLSA_mod(line,top_x,top_y,dx,0);
+						 line = DLSA_mod(line,x1,y1,dx,0);
 				 }
 	 	 	}
 	  	// else the Y axis is the major axis
@@ -545,11 +598,92 @@ void scanLine(struct Matrix mx){
 				 top_y = bot_y; bot_y = t;
 			 }
 			 if (dx > 0){
-						line = DLMA_mod(line,top_y,top_x,dy,dx,1,0);
+
+						line = DLMA_mod(line,bot_x,bot_y,dy,dx,1,0);
+			 }else if(dx < 0){
+				 printf("calld?\n");
 			 }else{
 						line = DLSA_mod(line,top_y,top_x,dy,1);
 			 }
 	 		}
+
+
+
+			if(abs(dx2) >= abs(dy2)){
+			 // if x2 < x1, flip the points to have fewer special cases
+			 		x1 = bot_x;
+					y1 = bot_y;
+				 if (dx2 < 0){
+					 dx2 *= -1; dy2 *= -1;
+					 x1 = mid_x;
+					 y1 = mid_y;
+				 }
+
+				 //printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
+				 if(dx2 > 0){
+						 line2 = DLMA_mod(line2,x1,y1,dx2,dy2,0,0);
+				 }else if(dx2 < 0){
+
+						 line2 = DLMA_mod(line2,x1,y1,dx2,-dy2,0,1);
+				 }else{
+						 line2 = DLSA_mod(line2,x1,y1,dx2,0);
+				 }
+			}
+			else{
+			 if (dy2 < 0){
+				 dx2 *= -1; dy2 *= -1;
+				 int t = mid_x;
+				 mid_x = bot_x; bot_x = t;
+				 t = mid_y;
+				 mid_y = bot_y; bot_y = t;
+			 }
+			 if (dx2 > 0){
+				 //printf("run4\n");
+				line2 = DLMA_mod(line2,bot_x,bot_y,dy2,dx2,1,0);
+			 }else if(dx2 < 0){
+				 //printf("dy2:%d,dx2:%d\n",dy2,dx2);
+				line2 = DLMA_mod(line2,bot_x,bot_y,dy2,-dx2,1,1);
+			 }else{
+				line2 = DLSA_mod(line2,bot_y,bot_x,dy2,1);
+			 }
+			}
+
+
+			if(abs(dx1) >= abs(dy1)){
+			 // if x2 < x1, flip the points to have fewer special cases
+			 	x1 = mid_x;
+				y1 = mid_y;
+				 if (dx1 < 0){
+					 dx1 *= -1; dy1 *= -1;
+					 x1 = top_x;
+					 y1 = top_y;
+				 }
+				 //printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
+				 if(dy1 > 0){
+						 line1 = DLMA_mod(line1,x1,y1,dx1,dy1,0,0);
+				 }else if (dx1 < 0){
+					 printf("called?\n");
+						 line1 = DLMA_mod(line1,x1,y1,dy1,-dx1,0,1);
+				 }else{
+						 line1 = DLSA_mod(line1,mid_x,mid_y,dx1,0);
+				 }
+			}
+			else{
+			 if (dy1 < 0){
+				 dx1 *= -1; dy2 *= -1;
+				 int t = mid_x;
+				 mid_x = top_x; top_x = t;
+				 t = mid_y;
+				 mid_y = top_y; top_y = t;
+			 }
+			 if (dx > 0){
+						line1 = DLMA_mod(line1,mid_x,mid_y,dy1,dx1,1,0);
+			 }else if(dx < 0){
+				 		line1 = DLMA_mod(line1,mid_x,mid_y,dy1,-dx1,1,1);
+			 }else{
+						line1 = DLSA_mod(line1,mid_y,mid_x,dy1,1);
+			 }
+			}
 
 
 			int color[3];
@@ -557,23 +691,118 @@ void scanLine(struct Matrix mx){
 			color[1] = buffer[1];//buffer[1] % 255;
 			color[2] = buffer[2];//buffer[2] % 255;
 
-			//drawLine_mod(x,y,size,color);
+
 			//canvas_push("this.ppm");
-			int j = 0;
-			while(j < global_scanline_size){
-				printf("x:%d , y:%d\n",line[j],line[j+1]);
-				j += 2;
+			int line_count = 0;
+			int line_count1 = 0;
+			int result_count = 0;
+
+			int xy_size = 4;
+			x = malloc( xy_size * sizeof(int));
+			y = malloc( xy_size * sizeof(int));
+
+			if(line2[line_count + 2] == X_MAX){
+				printf("lol\n");
+				/*
+				while(line2[line_count1] != X_MAX){
+				x[result_count] = line[line_count];
+				line_count++;
+				y[result_count] = line[line_count];
+				result_count++; line_count++;
+				x[result_count] = line2[line_count1];
+				line_count1++;
+				y[result_count] = line2[line_count1];
+				result_count++; line_count1++;
+				xy_size += 4;
+				x = realloc(x, xy_size * sizeof(int));
+				y = realloc(y, xy_size * sizeof(int));
 			}
+
+				line_count1 = 0;
+
+				while(line1[line_count1] != X_MAX){
+				x[result_count] = line[line_count];
+				line_count++;
+				y[result_count] = line[line_count];
+				result_count++; line_count++;
+				x[result_count] = line1[line_count1];
+				line_count1++;
+				y[result_count] = line1[line_count1];
+				result_count++; line_count1++;
+				xy_size += 4;
+				x = realloc(x, xy_size * sizeof(int));
+				y = realloc(y, xy_size * sizeof(int));
+			}
+			 	*/
+		 }else if(line1[line_count + 2] == X_MAX){
+			 printf("lala\n");
+		 }
+
+
+			int ok = 0;
+			//printf(":%d\n",);
+			//exit(0);
+
+
+			printf("bot_x:%d,bot_y:%d\n",bot_x,bot_y);
+
+			while(line2[ok] != X_MAX){
+				printf("line2 x:%d,y:%d\n",line2[ok],line2[ok+1]);
+				ok+=2;
+			}
+			ok = 0;
+
+			printf("mid_x:%d,mid_y:%d\n",mid_x,mid_y);
+			while(line1[ok] != X_MAX){
+				printf("line1 x:%d,y:%d\n",line1[ok],line1[ok+1]);
+				ok+=2;
+			}
+			printf("top_x:%d,top_y:%d\n",top_x,top_y);
+			ok = 0;
+			while(line[ok] != X_MAX){
+				printf("line x:%d, y:%d\n",line[ok],line[ok + 1]);
+				ok+=2;
+			}
+			// while(ok < xy_size){
+			// 	printf("x:%d, y:%d\n",x[ok],y[ok]);
+			// 	ok++;
+			// }
+
+			ok = 0;
+			printf("mx.x:%f,mx.y:%f\n",mx.x[0],mx.y[0]);
+			printf("mx.x:%f,mx.y:%f\n",mx.x[1],mx.y[1]);
+			printf("mx.x:%f,mx.y:%f\n",mx.x[2],mx.y[2]);
+
+			//exit(0);
+
+		//	drawLine_mod(x,y,xy_size - 10,color);
+			//canvas_push("hi.ppm");
+
+			//exit(0);
+			// while(line1[j] != X_MAX){
+			// 	//printf(":%d\n",);
+			// 	printf("x:%d , y:%d\n",line1[j],line1[j+1]);
+			// 	j += 2;
+			// }
+
 			free(line);
 			free(line1);
 			free(line2);
-			exit(0);
+			free(x);
+			free(y);
+			if(a == 10){
+				//exit(0);
+			}
+
 		}
 		free(buffer);
 		a++;
 	}
 
 }
+
+/*
+if("legacy"){
 // struct Array DLMA(
 //     struct Array arr,
 //     int x,
@@ -739,37 +968,39 @@ void scanLine(struct Matrix mx){
 
 
 
-/*
-struct Array drawLine(struct Array arr, struct Edge ed, int color[3]){
-	int * x;
-	int * y;
-	int * x1;
-	int * y1;
+// /*
+// struct Array drawLine(struct Array arr, struct Edge ed, int color[3]){
+// 	int * x;
+// 	int * y;
+// 	int * x1;
+// 	int * y1;
+//
+// 	x = ed_toint(ed,x,0,0);
+// 	y = ed_toint(ed,y,1,0);
+// 	x1 = ed_toint(ed,x1,0,1);
+// 	y1 = ed_toint(ed,x1,1,1);
+//
+// 	int * d_x;
+// 	int * d_y;
+// 	int * d_x1;
+// 	int * d_y1;
+// 	int * d_r;
+// 	int * d_g;
+// 	int * d_b;
+//
+// 	int edge_num = ed.col/2;
+//
+// 	int edge_size = edge_num * sizeof(int);
+// 	int size = (X_MAX - X_MIN) * (Y_MAX - Y_MIN) * sizeof(int);
+//
+//
+//     gp_drawline<<<edge_num,1>>>(d_r, d_g, d_b,
+// 							    d_x, d_y,
+// 							    d_x1, d_y1,
+// 							    color[0],color[1],color[2]);
+//
+//     return arr;
+// }
 
-	x = ed_toint(ed,x,0,0);
-	y = ed_toint(ed,y,1,0);
-	x1 = ed_toint(ed,x1,0,1);
-	y1 = ed_toint(ed,x1,1,1);
-
-	int * d_x;
-	int * d_y;
-	int * d_x1;
-	int * d_y1;
-	int * d_r;
-	int * d_g;
-	int * d_b;
-
-	int edge_num = ed.col/2;
-
-	int edge_size = edge_num * sizeof(int);
-	int size = (X_MAX - X_MIN) * (Y_MAX - Y_MIN) * sizeof(int);
-
-
-    gp_drawline<<<edge_num,1>>>(d_r, d_g, d_b,
-							    d_x, d_y,
-							    d_x1, d_y1,
-							    color[0],color[1],color[2]);
-
-    return arr;
 }
 */
