@@ -40,6 +40,12 @@ canvas_init();
 struct Matrix point;
 point = mx_init(point,0);
 
+//int * x = malloc(sizeof(int));
+//x[0] = 24;
+//int * y = x;
+//free(y);
+//printf("exit no error!\n");
+//exit(0);
 
 int color[3];
 color[0] = 0;
@@ -49,21 +55,14 @@ color[2] = 0;
 struct Matrix poly;
 poly = mx_init_p(poly,0);
 
-//poly = mx_addsphere(poly,0,0,0,200);
-
 poly = mx_addsphere(poly,120,150,0,75);
 poly = mx_addtorus(poly,0,-100,0,50,100);
-//poly = mx_rotate(poly,0,0.5);
 
 poly = mx_addbox(poly,-200,100,0,100,100,100);
 poly = mx_rotate(poly,0,0.5);
 poly = mx_rotate(poly,1,0.5);
 
-//scanLine(poly);
 mx_export(poly,color);
-
-
-//mx_export(edge,"ok.ppm");
 
 printf("hi\n");
 canvas_push("hi.ppm");
