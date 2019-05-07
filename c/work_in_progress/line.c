@@ -9,6 +9,7 @@ I = AKa + IpKl(N*L) + IpKs[(2N(N*L)-L)*V]
 int seed;
 int * global_x;
 int * global_y;
+int * global_z;
 int * global_xx;
 int * global_yy;
 int global_index;
@@ -76,6 +77,11 @@ void DLMA(int index,int dx,int dy,int axis,int check){
     if(axis == 0){
 	    while (dx--){
 	        // move on major axis and minor axis
+					if(global_y[index] > Y_MAX || global_y[index] <= Y_MIN || global_x[index] >= X_MAX || global_x[index] < X_MIN){
+						printf("out of bound\n");
+						break;
+					}
+
 	        if (Error > 0){
 
 					    if(check == 0){
@@ -92,10 +98,16 @@ void DLMA(int index,int dx,int dy,int axis,int check){
 
 					global_x[index]++;
 	        // draw the next pixel
+
+
 	        canvas_set_s(global_x[index], global_y[index], global_color);
 	    }
 	}else{
 	    while(dx--){
+				if(global_y[index] > Y_MAX || global_y[index] <= Y_MIN || global_x[index] >= X_MAX || global_x[index] < X_MIN){
+					printf("out of bound\n");
+					break;
+				}
 	        // move on major axis and minor axis
 	        if (Error > 0){
 						if(check == 0){
@@ -123,11 +135,19 @@ void DLSA(int index,int dx,int axis){
     // loop across the major axis and draw the rest of the pixels
     if(axis == 0){
 	    while (dx--){
+				if(global_y[index] > Y_MAX || global_y[index] <= Y_MIN || global_x[index] >= X_MAX || global_x[index] < X_MIN){
+					printf("out of bound\n");
+					break;
+				}
 	    	global_x[index]++;
         	canvas_set_s(global_x[index], global_y[index], global_color);
     	}
     }else{
 	    while (dx--){
+				if(global_y[index] > Y_MAX || global_y[index] <= Y_MIN || global_x[index] >= X_MAX || global_x[index] < X_MIN){
+					printf("out of bound\n");
+					break;
+				}
 	    	global_y[index]++;
         	canvas_set_s(global_x[index], global_y[index], global_color);
     	}
@@ -184,15 +204,26 @@ void * drawLine_helper(void * arg){
         }
         int dx = global_x[index2] - global_x[index];
         int dy = global_y[index2] - global_y[index];
+				int dz = global_z[index2] - global_z[index];
       // if the X axis is the major axis
-     	if(abs(dx) >= abs(dy)){
+				int max = abs(dx);
+				if(abs(dy) > max){
+					max = abs(dy);
+				}
+				if(abs(dz) > max){
+					max = abs(dz);
+				}
+
+     	if(max == abs(dx)){
          // if x2 < x1, flip the points to have fewer special cases
     	   if (dx < 0){
-           dx *= -1; dy *= -1;
+           dx *= -1; dy *= -1; dz *= -1;
            int t = global_x[index];
            global_x[index] = global_x[index2]; global_x[index2] = t;
            t = global_y[index];
            global_y[index] = global_y[index2]; global_y[index2] = t;
+					 t = global_z[index];
+           global_z[index] = global_z[index2]; global_z[index2] = t;
          }
          // determine special cases
          if(dy > 0){
@@ -204,7 +235,7 @@ void * drawLine_helper(void * arg){
          }
      }
      // else the Y axis is the major axis
-     else{
+     else if(max == abs(dy)){
          // if y2 < y1, flip the points to have fewer special cases
          if (dy < 0){
              dx *= -1;
@@ -222,7 +253,9 @@ void * drawLine_helper(void * arg){
          }else{
               DLSA(index,dy,1);
          }
-     }
+     }else{
+
+		 }
         index += 2 * THREAD;
         index2 += 2 * THREAD;
 	}
@@ -268,9 +301,6 @@ void drawLine(struct Matrix mx, int color[3]){
 	}else if(mx.type == 'c'){
 			pthread_t thread_id[THREAD];
 		 	int index[THREAD];
-
-
-
 		 	//global_x = mx_toint(mx,global_x,1);
 		 	//global_y = mx_toint(mx,global_y,2);
 			global_size = 0;
@@ -331,10 +361,13 @@ void drawLine_mod(int color[3]){
 
 int* sys_random(int * buffer, int size){
 
-	buffer = malloc(sizeof(int) * size );
+	buffer = malloc(sizeof(int) * size);
+	//printf("gotit!\n");
 	//printf("initiating...this may take several minites\n");
 	FILE* file = fopen("/dev/urandom", "r");
+	//printf("gotit!\n");
 	fread(buffer, sizeof(int), size ,file);
+	//printf("gotit!\n");
 	fclose(file);
 
 	return buffer;
@@ -380,7 +413,8 @@ void DLMA_mod(int x, int y, int dx,int dy,int axis, int check_dir, int line){
     if(axis == 0){
 			//printf("err:%d,errx:%d,step:%d\n",Error,ddyMinddx,ddy);
 			//printf("dy:%d\n",dy);
-	    while (dx--){
+	    while (dx--){//printf("err!\n");
+
 	        // move on major axis and minor axis
 	        if (Error > 0){
 
@@ -438,26 +472,35 @@ void DLMA_mod(int x, int y, int dx,int dy,int axis, int check_dir, int line){
 		//printf("input:%d\n",input[j - 1]);
 		x_input[j] = X_MAX;
 		y_input[j] = X_MAX;
-		//printf("x_input:%d,,,,j:%d\n",x_input[j - 1],j);
+		j++;
+		//
 		//printf("y_input:%d,,,,j:%d\n",y_input[j - 1],j);
 
 		if(line == 0){
-			//x_line = malloc(j * sizeof(int));
-			//y_line = malloc(j * sizeof(int));
-			x_line = x_input;
-		//	printf("x_line:%d\n x_input[0]:%d\n",x_line[0],x_input[0]);
-			y_line = y_input;
+			x_line = malloc(j * sizeof(int));
+			y_line = malloc(j * sizeof(int));
+			//x_line = x_input;
+			memcpy(x_line,x_input,j  * sizeof(int));
+			memcpy(y_line,y_input,j  * sizeof(int));
+
+			//y_line = y_input;
+			//free(x_input);
+
 		}else if(line == 1){
-			//x_line1 = malloc(j * sizeof(int));
-			//y_line1 = malloc(j * sizeof(int));
-			x_line1 = x_input;
-			y_line1 = y_input;
+			x_line1 = malloc(j * sizeof(int));
+			y_line1 = malloc(j * sizeof(int));
+			memcpy(x_line1,x_input,j * sizeof(int));
+			memcpy(y_line1,y_input,j * sizeof(int));
 		}else if(line == 2){
-			//x_line2 = malloc(j * sizeof(int));
-			//y_line2 = malloc(j * sizeof(int));
-			x_line2 = x_input;
-			y_line2 = y_input;
+			x_line2 = malloc(j * sizeof(int));
+			y_line2 = malloc(j * sizeof(int));
+			memcpy(x_line2,x_input,j * sizeof(int));
+			memcpy(y_line2,y_input,j * sizeof(int));
 		}
+
+		free(x_input);
+		free(y_input);
+	//	printf("x_input:%d,,,,x_line:%d\n",x_input[0],x_line[0]);
 }
 
 void DLSA_mod(int x, int y, int dx,int axis, int line){
@@ -471,14 +514,18 @@ void DLSA_mod(int x, int y, int dx,int axis, int line){
 
 		x_input = malloc(size * sizeof(int));
 		y_input = malloc(size * sizeof(int));
-
+		//exit(0);
 		x_input[j] = x;
 		y_input[j] = y;
 		j++;
 		size++;
+		x_input = realloc(x_input,size * sizeof(int));
+		y_input = realloc(y_input,size * sizeof(int));
     // loop across the major axis and draw the rest of the pixels
-    if(axis == 0){
+		//exit(0);
+		if(axis == 0){//printf("called!\n");
 	    while(dx--){
+
 					x++;
 					x_input[j] = x;
 					y_input[j] = y;
@@ -488,38 +535,55 @@ void DLSA_mod(int x, int y, int dx,int axis, int line){
 					y_input = realloc(y_input,size * sizeof(int));
     	}
     }else{
+			//printf("called!asdsad\n");
 	    while (dx--){
 	    	y++;
+				//exit(0);
 				x_input[j] = x;
 				y_input[j] = y;
 				j++;
 				size++;
 				x_input = realloc(x_input,size * sizeof(int));
 				y_input = realloc(y_input,size * sizeof(int));
-    	}
+
+			}
     }
+		//exit(0);
 		x_input[j] = X_MAX;
 		y_input[j] = X_MAX;
-
-		printf("DLSA debugging:\n");
+		j++;
+		//printf("DLSA debugging:\n");
 		// int lala = 0;
 		// while(x_input[lala] != X_MAX){
 		// 	printf("x: %d || y:%d\n",x_input[lala],y_input[lala]);
 		// }
-
+		//exit(0);
 		if(line == 0){
-			x_input = x_line;
-			y_input = y_line;
+			x_line = malloc(j * sizeof(int));
+			y_line = malloc(j * sizeof(int));
+			//x_line = x_input;
+			memcpy(x_line,x_input,j * sizeof(int));
+			memcpy(y_line,y_input,j * sizeof(int));
+
+			//y_line = y_input;
+			//free(x_input);
+
 		}else if(line == 1){
-			x_input = x_line1;
-			y_input = y_line1;
+			x_line1 = malloc(j * sizeof(int));
+			y_line1 = malloc(j * sizeof(int));
+			memcpy(x_line1,x_input,j * sizeof(int));
+			memcpy(y_line1,y_input,j * sizeof(int));
 		}else if(line == 2){
-			x_input = x_line2;
-			y_input = y_line2;
+			x_line2 = malloc(j * sizeof(int));
+			y_line2 = malloc(j * sizeof(int));
+			memcpy(x_line2,x_input,j * sizeof(int));
+			memcpy(y_line2,y_input,j * sizeof(int));
 		}
 
-}
+		free(x_input);
+		free(y_input);
 
+}
 
 void purification(){
 	int counter = 0;
@@ -540,50 +604,105 @@ void purification(){
 	global_x = malloc(sizeof(int));
 	global_y = malloc(sizeof(int));
 
+
+	// while(y_line[odd] != X_MAX){
+	// 	printf("x_line:%d, y_line:%d\n",x_line[odd],y_line[odd]);
+	// 	odd++;
+	// }
+	// odd = 0;
+	// while(y_line1[odd] != X_MAX){
+	// 	printf("x_line1:%d, y_line1:%d\n",x_line1[odd],y_line1[odd]);
+	// 	odd++;
+	// }
+	// odd = 0;
+	// while(y_line2[odd] != X_MAX){
+	// 	printf("y_line2:%d, x_line2:%d\n",x_line2[odd],y_line2[odd]);
+	// 	odd++;
+	// }
+//	exit(0);
+
+	//exit(0);
+
+//int_size++;
+//x[0] = 100;
+ //x = realloc(x,int_size * sizeof(int));
+ //exit(0);
 	while(y_line[counter] != X_MAX){
-		if(y_line[counter] != y_line[counter - 1] && counter != 0){
+		//printf("sdasd\n");
+		// if(counter == 18){
+		// 	printf("18:%d, 17:%d, 19:%d\n",y_line[18],y_line[17],y_line[19]);
+		// 	//exit(0);
+		// }
+		//
+		// if(counter == 18){
+		// 	printf("16:%d, 15:%d, 14:%d\n",y_line[16],y_line[15],y_line[14]);
+		// 	//exit(0);
+		// }
+		// if(counter == 18){
+		// 	printf("13:%d, 12:%d, 11:%d\n",y_line[13],y_line[12],y_line[11]);
+		// 	exit(0);
+		// }
+
+		if(counter != 0 && y_line[counter] != y_line[counter - 1]){
+			//printf("wf\n");
 			y[index] = y_line[counter];
 			x[index] = x_line[counter];
 			int_size++;
 			index++;
 			x = realloc(x,int_size * sizeof(int));
 			y = realloc(y,int_size * sizeof(int));
-	//
+
+
 		}else if(counter == 0){
-			// printf("wf\n");
+
+
 			// printf("y:%d, x:%d\n",x_line[counter],y_line[counter]);
+
 			y[index] = y_line[counter];
 			x[index] = x_line[counter];
+			//exit(0);
 			int_size++;
 			index++;
+
 			x = realloc(x,int_size * sizeof(int));
 			y = realloc(y,int_size * sizeof(int));
+			//exit(0);
 		}
 
+
 		if(y_line[counter+1]==X_MAX){
+
+			//printf("this!\n");
 			y[index] = y_line[counter];
 			x[index] = x_line[counter];
+
 			int_size++;
 			index++;
+			//printf("fasdsadaut!\n");
 			x = realloc(x,int_size * sizeof(int));
 			y = realloc(y,int_size * sizeof(int));
-			if(y[index-2] == y[index-1]){
-				//index--;
-				//printf("x_index-2:%d, y_index-2:%d\n",x[index-2],y[index-2]);
-				//printf("x_index-1:%d, y_index-1:%d\n",x[index-1],y[index-1]);
-				y[index-2] = y[index-1];
-				x[index-2] = x[index-1];
-				index--;
-			}
+			//printf("fasdsadaut!\n");
+							if(y[index-2] == y[index-1]){
+								//index--;
+								//printf("x_index-2:%d, y_index-2:%d\n",x[index-2],y[index-2]);
+								//printf("x_index-1:%d, y_index-1:%d\n",x[index-1],y[index-1]);
+
+								y[index-2] = y[index-1];
+								x[index-2] = x[index-1];
+								index--;
+							}
+							//printf("fasdsadaut!\n");
 		}
+		//exit(0);
 		counter++;
 	}
 
 	int_size = 1;
 	counter = 0;
 
+	//exit(0);
 	while(y_line1[counter] != X_MAX){
-		if(y_line1[counter] != y_line1[counter - 1] && counter != 0){
+		if(counter != 0 && y_line1[counter] != y_line1[counter - 1] ){
 			y1[index1] = y_line1[counter];
 			x1[index1] = x_line1[counter];
 			int_size++;
@@ -625,8 +744,9 @@ void purification(){
 	int_size = 1;
 	counter = 0;
 
+
 	while(y_line2[counter] != X_MAX){
-		if(y_line2[counter] != y_line2[counter - 1] && counter != 0){
+		if(counter != 0 && y_line2[counter] != y_line2[counter - 1]){
 			y2[index2] = y_line2[counter];
 			x2[index2] = x_line2[counter];
 			int_size++;
@@ -637,14 +757,15 @@ void purification(){
 			}else if(counter == 0){
 				int check = 0;
 				while(check < index1){
-					printf("y1[check]:%d  lin2%d\n",y1[check],y_line2[counter]);
+					//printf("y1[check]:%d  lin2%d\n",y1[check],y_line2[counter]);
 					if(y1[check] == y_line2[counter]){
-						printf("y2[counter]:%d\n",y_line2[counter]);
-						while(y2[counter + 1] == y2[counter]){
-
+					//	printf("y2[counter]:%d\n",y_line2[counter]);
+						while(y_line2[counter + 1] == y_line2[counter]){
+							//printf("y2 counter+1:%d,,y2 counter:%d\n",y2[counter+1],y2[counter]);
 							counter++;
 						}
-						printf("y2[counter]:%d\n",y_line2[counter]);
+						counter++;
+					//	printf("y2[counter]:%d\n",y_line2[counter]);
 						break;
 					}
 					check++;
@@ -663,7 +784,7 @@ void purification(){
 			if(y_line2[counter+1]==X_MAX){
 				int check = 0;
 				while(check < index1){
-					printf("y2[index2]:%d   y1:check:%d\n",y2[index2 -1],y1[check]);
+					//printf("y2[index2]:%d   y1:check:%d\n",y2[index2 -1],y1[check]);
 					if(y1[check] == y2[index2 - 1]){
 						index2--;
 						break;
@@ -737,32 +858,32 @@ void purification(){
 		ok++;
 	}
 
-	int test = 0;
-	// while(test < global_size){
-	// 	printf("global_x[test]:%d, global_y[test]:%d\n",global_x[test],global_y[test]);
+	// int test = 0;
+	// // while(test < global_size){
+	// // 	printf("global_x[test]:%d, global_y[test]:%d\n",global_x[test],global_y[test]);
+	// // 	test++;
+	// // }
+	// printf("index2:%d\n",index);
+	// while(test < index){
+	// 	printf("xline:%d , yline:%d\n",x[test],y[test]);
+	// 	//printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
+	// 	//printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
 	// 	test++;
 	// }
-	printf("index2:%d\n",index);
-	while(test < index){
-		printf("xline:%d , yline:%d\n",x[test],y[test]);
-		//printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
-		//printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
-		test++;
-	}
-	test = 0;
-	while(test < index2){
-		//printf("xline:%d , yline:%d\n",x[test],y[test]);
-		printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
-		//printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
-		test++;
-	}
-	test =0;
-	while(test < index1){
-		//printf("xline:%d , yline:%d\n",x[test],y[test]);
-		//printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
-		printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
-		test++;
-	}
+	// test = 0;
+	// while(test < index2){
+	// 	//printf("xline:%d , yline:%d\n",x[test],y[test]);
+	// 	printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
+	// 	//printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
+	// 	test++;
+	// }
+	// test =0;
+	// while(test < index1){
+	// 	//printf("xline:%d , yline:%d\n",x[test],y[test]);
+	// 	//printf("xline2:%d , yline2:%d\n",x2[test],y2[test]);
+	// 	printf("xline1:%d , yline1:%d\n",x1[test],y1[test]);
+	// 	test++;
+	// }
 	//sleep(5);
 
 	free(x);
@@ -795,18 +916,23 @@ void scanLine(struct Matrix mx){
 	int a = 0;
 	int i;
 
+	//FILE* file = fopen("/dev/urandom", "w+");
 	for(i = 0; i < mx.col; i += 3){
 		int * buffer;
+		//while(){
 		buffer = sys_random(buffer,3);
+		//}
 
 		buffer[0] = abs(buffer[0]  % 255);
 		buffer[1] = abs(buffer[1]  % 255);
 		buffer[2] = abs(buffer[2]  % 255);
 
 		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
-			printf("mx.y[i]:%f  %f   %f\n",mx.y[i], mx.y[i + 1], mx.y[i+2]);
+			//
+			// printf("mx.y[i]:%f  %f   %f\n",mx.y[i], mx.y[i + 1], mx.y[i+2]);
+			// printf("mx.x[i]:%f  %f   %f\n",mx.x[i], mx.x[i + 1], mx.x[i+2]);
 			//sleep(3);
-		if("get coord"){
+	if("get coord"){
 			if(top_y < round(mx.y[i])){
 				top_y = round(mx.y[i]);
 				top_x = round(mx.x[i]);}
@@ -832,12 +958,21 @@ void scanLine(struct Matrix mx){
 			if(round(mx.y[i]) != bot_y && round(mx.y[i]) != top_y){
 				mid_y = round(mx.y[i]);
 				mid_x = round(mx.x[i]);}
-			if(round(mx.y[i + 1]) != bot_y && round(mx.y[i + 1]) != top_y){
+			else if(round(mx.y[i + 1]) != bot_y && round(mx.y[i + 1]) != top_y){
 				mid_y = round(mx.y[i + 1]);
 				mid_x = round(mx.x[i + 1]);}
-			if(round(mx.y[i + 2]) != bot_y && round(mx.y[i + 2]) != top_y){
+			else if(round(mx.y[i + 2]) != bot_y && round(mx.y[i + 2]) != top_y){
 				mid_y = round(mx.y[i + 2]);
 				mid_x = round(mx.x[i + 2]);}
+				else if(round(mx.x[i]) != bot_x && round(mx.x[i]) != top_x){
+					mid_y = round(mx.y[i]);
+					mid_x = round(mx.x[i]);}
+					else if(round(mx.x[i + 1]) != bot_x && round(mx.x[i + 1]) != top_x){
+						mid_y = round(mx.y[i + 1]);
+						mid_x = round(mx.x[i + 1]);}
+						else if(round(mx.x[i + 2]) != bot_x && round(mx.x[i + 2]) != top_x){
+							mid_y = round(mx.y[i + 2]);
+							mid_x = round(mx.x[i + 2]);}
 		}
 			if("get dx"){
 				dx = top_x - bot_x;
@@ -849,6 +984,7 @@ void scanLine(struct Matrix mx){
 				dy2 = mid_y - bot_y;
 				//printf("dy2:%d\n",dy2);
 			}
+
 
 			if(abs(dx) >= abs(dy)){
 			 // if x2 < x1, flip the points to have fewer special cases
@@ -866,7 +1002,7 @@ void scanLine(struct Matrix mx){
 					 //printf("nonono\n");
 						 DLMA_mod(x1,y1,dx,dy,0,0,0);
 				 }else if (dy < 0){
-	 					 DLMA_mod(x1,y1,dy,-dx,0,1,0);
+	 					 DLMA_mod(x1,y1,dx,-dy,0,1,0);
 				 }else{
 						 DLSA_mod(x1,y1,dx,0,0);
 				 }
@@ -884,11 +1020,13 @@ void scanLine(struct Matrix mx){
 			 if (dx > 0){
 						DLMA_mod(x1,y1,dy,dx,1,0,0);
 			 }else if(dx < 0){
-					  DLMA_mod(x1,y1,dy,dx,1,1,0);
+					  DLMA_mod(x1,y1,dy,-dx,1,1,0);
 			 }else{
 						DLSA_mod(x1,y1,dy,1,0);
 			 }
 	 		}
+
+
 
 
 			if(abs(dx2) >= abs(dy2)){
@@ -922,12 +1060,12 @@ void scanLine(struct Matrix mx){
 			 }
 			 if (dx2 > 0){
 				 //printf("run4\n");
-				DLMA_mod(bot_x,bot_y,dy2,dx2,1,0,2);
-			 }else if(dx2 < 0){
+				DLMA_mod(x1,y1,dy2,dx2,1,0,2);
+			}else if(dx2 < 0){
 				 //printf("dy2:%d,dx2:%d\n",dy2,dx2);
-				DLMA_mod(bot_x,bot_y,dy2,-dx2,1,1,2);
+				DLMA_mod(x1,y1,dy2,-dx2,1,1,2);
 			 }else{
-				DLSA_mod(bot_y,bot_x,dy2,1,2);
+				DLSA_mod(x1,y1,dy2,1,2);
 			 }
 			}
 
@@ -941,36 +1079,45 @@ void scanLine(struct Matrix mx){
 					 x1 = top_x;
 					 y1 = top_y;
 				 }
+
 				 //printf("top_x:%d,bot_x:%d,top_y:%d,bot_y:%d\n",top_x,bot_x,top_y,bot_y);
 				 if(dy1 > 0){
 						 DLMA_mod(x1,y1,dx1,dy1,0,0,1);
-				 }else if (dy1 < 0){
+				 }else if(dy1 < 0){
 						 DLMA_mod(x1,y1,dx1,-dy1,0,1,1);
 				 }else{
-						 DLSA_mod(mid_x,mid_y,dx1,0,1);
+					 //printf("x1:%d,y1:%d\n",x1,y1);
+						 DLSA_mod(x1,y1,dx1,0,1);
 				 }
 			}
 			else{
+				// x1 = top_x;
+				// y1 = top_y;
 				x1 = mid_x;
 				y1 = mid_y;
 				 if (dy1 < 0){
 					 dx1 *= -1; dy1 *= -1;
 					 x1 = top_x;
 					 y1 = top_y;
+					 // x1 = mid_x;
+					 // y1 = mid_y;
 				 }
-			 if (dx > 0){
-						DLMA_mod(mid_x,mid_y,dy1,dx1,1,0,1);
-			 }else if(dx < 0){
-				 		DLMA_mod(mid_x,mid_y,dy1,-dx1,1,1,1);
+			 if (dx1 > 0){
+				 //printf("this!\n" );
+						DLMA_mod(x1,y1,dy1,dx1,1,0,1);
+			 }else if(dx1 < 0){
+				 		DLMA_mod(x1,y1,dy1,-dx1,1,1,1);
 			 }else{
-						DLSA_mod(mid_y,mid_x,dy1,1,1);
+						DLSA_mod(x1,y1,dy1,1,1);
 			 }
 			}
 
+		// 	printf("x_line:%d\n",x_line[0]);
+		// exit(0);
 			//
-			printf("top_x:%d,top_y:%d\n",top_x,top_y);
-			printf("mid_x:%d,mid_y:%d\n",mid_x,mid_y);
-			printf("bot_x:%d,bot_y:%d\n",bot_x,bot_y);
+			// printf("top_x:%d,top_y:%d\n",top_x,top_y);
+			// printf("mid_x:%d,mid_y:%d\n",mid_x,mid_y);
+			// printf("bot_x:%d,bot_y:%d\n",bot_x,bot_y);
 			// int ok = 0;
 			// while(x_line[ok] != X_MAX){
 			// 		printf("x_line: %d\n", x_line[ok]);
@@ -980,12 +1127,15 @@ void scanLine(struct Matrix mx){
 			purification();
 
 
+			//printf("fault?\n");
+
 			int color[3];
 			color[0] = buffer[0];//buffer[0] % 255;
 			color[1] = buffer[1];//buffer[1] % 255;
 			color[2] = buffer[2];//buffer[2] % 255;
 
 			drawLine_mod(color);
+				//exit(0);
 			//canvas_push("this.ppm");
 			int line_count = 0;
 			int line_count1 = 0;
@@ -998,8 +1148,12 @@ void scanLine(struct Matrix mx){
 
 			 free(x_line);  // <--this is global
 			 free(y_line);
+
 			 free(x_line1);
 			 free(y_line1);
+			 free(y_line2);
+			 free(x_line2);
+
 			 top_y = Y_MIN;
 			 mid_y = Y_MIN;
 			 bot_y = Y_MAX;

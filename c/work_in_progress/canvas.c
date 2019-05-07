@@ -10,11 +10,11 @@ int *global_r;
 int *global_g;
 int *global_b;
 
-double *global_z;
+
 
 int *global_x;
 int *global_y;
-
+int *global_z;
 
 void canvas_init(){
 	y_lim = Y_MAX - Y_MIN;
@@ -32,7 +32,7 @@ void canvas_init(){
         	global_r[i * y_lim + j] = ARR_INIT_R;
         	global_g[i * y_lim + j] = ARR_INIT_G;
         	global_b[i * y_lim + j] = ARR_INIT_B;
-				//	global_z[i * y_lim + j] = ARR_INIT_Z;
+					global_z[i * y_lim + j] = ARR_INIT_Z;
 				}
     }
 }
@@ -65,7 +65,7 @@ void * canvas_set_helper(void * arg){
 }
 
 void canvas_set_s(int x, int y,
-	//int z,
+	 int z,
 	 int color[]){
 	if(y > Y_MAX || y <= Y_MIN || x >= X_MAX || x < X_MIN){
 		printf("Error: canvas_set_s outof bound\n");
@@ -82,13 +82,20 @@ void canvas_set_s(int x, int y,
 		if(x < X_MIN){
 			printf("DEBUG: x is suppose to be >= %d but is %d\n",X_MIN,x);
 		}
-		exit(1);
+		//exit(1);
 	}else{
     int local_y =  0 - y;
-    global_r[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[0];
-    global_g[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[1];
-    global_b[(local_y + Y_MAX) * x_lim + x + X_MAX] = global_color[2];
-}
+		int val = (local_y + Y_MAX) * x_lim + x + X_MAX;
+		if(global_z[val] == ARR_INIT_Z){
+			global_r[val] = global_color[0];
+			global_g[val] = global_color[1];
+			global_b[val] = global_color[2];
+		}else if(z < global_z[val]){
+			global_r[val] = global_color[0];
+			global_g[val] = global_color[1];
+			global_b[val] = global_color[2];
+		}
+	}
 }
 
 void canvas_set_p(int *x,int *y,int res,int color[]){

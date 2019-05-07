@@ -40,12 +40,15 @@ canvas_init();
 struct Matrix point;
 point = mx_init(point,0);
 
-//int * x = malloc(sizeof(int));
-//x[0] = 24;
-//int * y = x;
-//free(y);
-//printf("exit no error!\n");
-//exit(0);
+// int * x = malloc(sizeof(int));
+// x[0] = 24;
+// int * y;
+// y = malloc(sizeof(int));
+// memcpy(y,x,4);
+// free(x);
+// //printf("exit no error!\n");
+// printf("y[0]:%d\n",y[0]);
+// exit(0);
 
 int color[3];
 color[0] = 0;
@@ -57,10 +60,46 @@ poly = mx_init_p(poly,0);
 
 poly = mx_addsphere(poly,120,150,0,75);
 poly = mx_addtorus(poly,0,-100,0,50,100);
+poly = mx_addtorus(poly,0,-100,-100,50,100);
 
 poly = mx_addbox(poly,-200,100,0,100,100,100);
 poly = mx_rotate(poly,0,0.5);
 poly = mx_rotate(poly,1,0.5);
+
+// poly = mx_addpoint(poly,0,0,0);
+// poly = mx_addpoint(poly,0,50,0);
+// poly = mx_addpoint(poly,50,0,0);
+//
+// poly = mx_addpoint(poly,50,50,0);
+// poly = mx_addpoint(poly,0,50,0);
+// poly = mx_addpoint(poly,50,0,0);
+//
+// poly = mx_addpoint(poly,0,0,0);
+// poly = mx_addpoint(poly,0,-50,0);
+// poly = mx_addpoint(poly,50,0,0);
+//
+// poly = mx_addpoint(poly,50,-50,0);
+// poly = mx_addpoint(poly,0,-50,0);
+// poly = mx_addpoint(poly,50,0,0);
+//
+// poly = mx_addpoint(poly,0,0,0);
+// poly = mx_addpoint(poly,-50,0,0);
+// poly = mx_addpoint(poly,0,50,0);
+//
+// poly = mx_addpoint(poly,-50,50,0);
+// poly = mx_addpoint(poly,-50,0,0);
+// poly = mx_addpoint(poly,0,50,0);
+//
+// poly = mx_addpoint(poly,0,-50,0);
+// poly = mx_addpoint(poly,0,0,0);
+// poly = mx_addpoint(poly,-50,0,0);
+//
+// poly = mx_addpoint(poly,-50,-50,0);
+// poly = mx_addpoint(poly,0,-50,0);
+// poly = mx_addpoint(poly,-50,0,0);
+
+
+
 
 mx_export(poly,color);
 
