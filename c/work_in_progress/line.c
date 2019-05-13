@@ -5,7 +5,7 @@ I = AKa + IpKl(N*L) + IpKs[(2N(N*L)-L)*V]
 	*Specular Reflection is supposed to fade off quickly
 
 */
-
+int global_db;
 int seed;
 int * global_x;
 int * global_y;
@@ -41,7 +41,8 @@ void int_print(int * x, int res){
 	}
 }
 
-struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f){
+struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c,
+												 double d, double e, double f){
 	/*if(mx.type != 'b'){
 		printf("Err: mx_addedge, incompatible matrix type, force quitting the program\n");
 		exit(1);
@@ -116,9 +117,10 @@ void * drawLine_helper(void * arg){
 				break;
 			}
 		 //printf("index2:%d,,,index:%d\n",index2,index);
+		 /*
 		 if(global_y[index] > Y_MAX || global_y[index] <= Y_MIN || global_x[index] >= X_MAX || global_x[index] < X_MIN ||
 		    global_y[index2] > Y_MAX || global_y[index2] <= Y_MIN || global_x[index2] >= X_MAX || global_x[index2] < X_MIN){
-		 }else{
+		 }else{*/
 				 int i, dx, dy, dz, abx, aby, abz, x_inc, y_inc, z_inc, err_1, err_2, dx2, dy2, dz2;
 				 if("assignment"){
 				 dx = global_x[index2] - global_x[index];
@@ -194,7 +196,7 @@ void * drawLine_helper(void * arg){
 				 }
 				 index += 2 * THREAD;
 		     index2 += 2 * THREAD;
-	 		}
+	 		//}
 	}
 	pthread_exit(NULL);
 }
@@ -343,26 +345,10 @@ void purification(){
 	global_y = malloc(sizeof(int));
 	global_z = malloc(sizeof(int));
 
-// 	while(y_line[counter] != X_MAX){
-// 		printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
-// 		counter++;
-// 	}
-// 	printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
-// 	counter = 0;
-// 	while(y_line1[counter] != X_MAX){
-// 		printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
-// 		counter++;
-// 	}
-// 	printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
-// 	counter = 0;
-// 	while(y_line2[counter] != X_MAX){
-// 		printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
-// 		counter++;
-// 	}
-// printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
-// 	printf("purged!\n");
 
-counter = 0;
+
+  counter = 0;
+
 	while(y_line[counter] != X_MAX){
 
 		if(counter != 0 && y_line[counter] != y_line[counter - 1]){
@@ -423,7 +409,6 @@ counter = 0;
 
 
 
-
 	int_size = 1;
 	counter = 0;
 
@@ -480,9 +465,10 @@ counter = 0;
 
 
 	while(y_line2[counter] != X_MAX){
-		if(index == index1){
+		 if(index == index1){
+		 	//printf("hahaha!\n");
 			break;
-		}
+		 }
 		if(counter != 0 && y_line2[counter] != y_line2[counter - 1]){
 			y2[index2] = y_line2[counter];
 			x2[index2] = x_line2[counter];
@@ -494,6 +480,7 @@ counter = 0;
 			z2 = realloc(z2,int_size * sizeof(int));
 	//		printf("y:%d, x:%d\n",y[index - 1],x[index - 1]);
 			}else if(counter == 0){
+
 				int check = 0;
 				while(check < index1){
 					//printf("y1[check]:%d  lin2%d\n",y1[check],y_line2[counter]);
@@ -517,6 +504,8 @@ counter = 0;
 				x2 = realloc(x2,int_size * sizeof(int));
 				y2 = realloc(y2,int_size * sizeof(int));
 				z2 = realloc(z2,int_size * sizeof(int));
+
+
 				// printf("wf\n");
 				// printf("y:%d, x:%d\n",x_line[counter],y_line[counter]);
 
@@ -537,28 +526,55 @@ counter = 0;
 
 		counter++;
 	}
-//
-// 	int i = 0;
-// 		while(i < index){
-// 			printf("x:%d , y:%d , z:%d\n",x[i],y[i],z[i]);
-// 			i++;
-// 		}
-//
-//
-//
-// 		i = 0;
-// 		while(i < index1){
-// 			printf("x1:%d , y1:%d , z1:%d\n",x1[i],y1[i],z1[i]);
-// 			i++;
-// 		}
-//
-// printf("index2:%d\n",index2);
-//
-// 				i = 0;
-// 				while(i < index2){
-// 					printf("x2:%d , y2:%d , z2:%d\n",x2[i],y2[i],z2[i]);
-// 					i++;
-// 				}
+
+
+
+if(global_db >= 123){
+	printf("index:%d   index1:%d\n",index,index1);
+
+	counter = 0;
+		while(y_line[counter] != X_MAX){
+			printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
+			counter++;
+		}
+		printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
+		counter = 0;
+		while(y_line1[counter] != X_MAX){
+			printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
+			counter++;
+		}
+		printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
+		counter = 0;
+		while(y_line2[counter] != X_MAX){
+			printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
+			counter++;
+		}
+	printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
+		printf("purged!\n");
+
+
+
+	int i = 0;
+		while(i < index){
+			printf("x:%d , y:%d , z:%d\n",x[i],y[i],z[i]);
+			i++;
+		}
+		i = 0;
+		while(i < index1){
+			printf("x1:%d , y1:%d , z1:%d\n",x1[i],y1[i],z1[i]);
+			i++;
+		}
+printf("index2:%d\n",index2);
+				i = 0;
+				while(i < index2){
+					printf("x2:%d , y2:%d , z2:%d\n",x2[i],y2[i],z2[i]);
+					i++;
+				}
+
+	exit(0);
+}
+
+
 
 
 	int ok;
@@ -568,6 +584,8 @@ counter = 0;
 	int oh = 0;
 	global_size = 0;
 	counter = 0;
+
+
 
 	while(ok < index){
 		//printf("ok!:%d\n",ok);
@@ -628,10 +646,16 @@ counter = 0;
 	free(z1);
 	free(z2);
 	free(z);
+
+
+	global_db++;
 	 //return size;
 }
 
+
+
 void scanLine(struct Matrix mx){
+	global_db = 0;
 	int top_y = Y_MIN;
 	int mid_y = Y_MIN;
 	int bot_y = Y_MAX;
@@ -767,6 +791,8 @@ void scanLine(struct Matrix mx){
 					x_line[0] = x1;
 					y_line[0] = y1;
 					z_line[0] = z1;
+
+
 					//canvas_set_s(global_x[index],global_y[index],global_z[index],global_color);
 					err_1 = dy2 - abx;
 					err_2 = dz2 - abx;
@@ -824,6 +850,7 @@ void scanLine(struct Matrix mx){
 				x_line[0] = x1;
 				y_line[0] = y1;
 				z_line[0] = z1;
+
 					err_1 = dy2 - abz;
 					err_2 = dx2 - abz;
 					for (j = 0; j < abz; j++) {
@@ -1070,9 +1097,12 @@ void scanLine(struct Matrix mx){
 					z_line2[abz] = X_MAX;
 			}
 //
-// printf("top_x:%d , mid_x:%d , bot_x:%d\n",top_x,mid_x,bot_x);
-// printf("top_y:%d , mid_y:%d , bot_y:%d\n",top_y,mid_y,bot_y);
-// printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
+
+if(global_db >= 123){
+printf("top_x:%d , mid_x:%d , bot_x:%d\n",top_x,mid_x,bot_x);
+printf("top_y:%d , mid_y:%d , bot_y:%d\n",top_y,mid_y,bot_y);
+printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
+}
 
 			purification();
 

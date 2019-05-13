@@ -162,7 +162,7 @@ void canvas_set_s(int x, int y,
 			global_g[val] = color[1];
 			global_b[val] = color[2];
 			global_canvas_z[val] = z;
-		}else if(z < global_canvas_z[val]){
+		}else if(z > global_canvas_z[val]){
 			//printf("global_canvas_val:%d\n",global_canvas_z[val]);
 			global_r[val] = color[0];
 			global_g[val] = color[1];

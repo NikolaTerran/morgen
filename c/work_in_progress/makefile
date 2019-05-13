@@ -1,5 +1,5 @@
 all: engine.h main.o point.o canvas.o line.o curve.o matrix.o trans.o 3d.o
-	gcc 3d.o matrix.o point.o main.o canvas.o curve.o line.o trans.o -lm -lpthread -g
+	gcc -g 3d.o matrix.o point.o main.o canvas.o curve.o line.o trans.o -lm -lpthread
 	./a.out
 
 main.o: main.c engine.h
@@ -33,3 +33,6 @@ run:
 
 clean:
 	rm *.o *.out parser *.ppm *.png
+
+debug:
+	valgrind --leak-check=full ./a.out
