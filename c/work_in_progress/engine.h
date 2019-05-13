@@ -34,6 +34,15 @@
 #define ARR_INIT_G 255
 #define ARR_INIT_B 255
 #define ARR_INIT_Z 1000000
+
+struct Layer{
+	int *r;
+	int *g;
+	int *b;
+	int *z;
+};
+
+struct Layer lay_init();
 // struct Array arr_init(struct Array arr);
 // struct Array arr_set(struct Array arr, int *x, int *y, int res, int color[]);
 // void arr_push(struct Array arr, char * filename);
@@ -41,7 +50,7 @@
 void canvas_init();
 void canvas_push(char * filename);
 void canvas_set_p(int *x,int *y,int res,int color[]);
-void canvas_set_s(int x, int y, int color[]);
+void canvas_set_s(int x, int y, int z,int color[]);
 ///////////////////3d///////////////////////////////
 struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, double r);
 struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double r, double d);
@@ -154,6 +163,7 @@ void db(char * say,double a);
 void drawLine(struct Matrix mx, int color[3]);
 struct Matrix mx_addedge(struct Matrix mx, double a, double b, double c, double d, double e, double f);
 void scanLine(struct Matrix mx);
+void drawLine_test(int x, int y, int z, int x1, int y1, int z1, int color[3]);
 //////////////////point/////////////////////////////
 void drawPoint(struct Matrix mx, int color[3]);
 struct Matrix mx_addpoint(struct Matrix mx, double x, double y, double z);

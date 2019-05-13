@@ -33,7 +33,7 @@
 int * mx_toint(struct Matrix mx, int *result, int row){
 	int i;
 	for(i = 0;i < mx.col;i++){
-		result[i] = mx_get(mx, row, i + 1);
+		result[i] = round(mx_get(mx, row, i + 1));
 	}
 	return result;
 }
@@ -275,6 +275,8 @@ void mx_export(struct Matrix mx, int color[]){
 	if(mx.type == 'a'){
 		drawPoint(mx,color);
 	}else if(mx.type == 'b'){
+		//printf("Whj\n");
+		printf("mx.z:%f\n",mx.z[1]);
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
 		//drawLine(mx,color);
