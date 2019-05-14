@@ -529,50 +529,50 @@ void purification(){
 
 
 
-if(global_db >= 123){
-	printf("index:%d   index1:%d\n",index,index1);
-
-	counter = 0;
-		while(y_line[counter] != X_MAX){
-			printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
-			counter++;
-		}
-		printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
-		counter = 0;
-		while(y_line1[counter] != X_MAX){
-			printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
-			counter++;
-		}
-		printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
-		counter = 0;
-		while(y_line2[counter] != X_MAX){
-			printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
-			counter++;
-		}
-	printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
-		printf("purged!\n");
-
-
-
-	int i = 0;
-		while(i < index){
-			printf("x:%d , y:%d , z:%d\n",x[i],y[i],z[i]);
-			i++;
-		}
-		i = 0;
-		while(i < index1){
-			printf("x1:%d , y1:%d , z1:%d\n",x1[i],y1[i],z1[i]);
-			i++;
-		}
-printf("index2:%d\n",index2);
-				i = 0;
-				while(i < index2){
-					printf("x2:%d , y2:%d , z2:%d\n",x2[i],y2[i],z2[i]);
-					i++;
-				}
-
-	exit(0);
-}
+// if(global_db >= 123){
+// 	printf("index:%d   index1:%d\n",index,index1);
+//
+// 	counter = 0;
+// 		while(y_line[counter] != X_MAX){
+// 			printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
+// 			counter++;
+// 		}
+// 		printf("x:%d , y:%d , z:%d\n",x_line[counter],y_line[counter],z_line[counter]);
+// 		counter = 0;
+// 		while(y_line1[counter] != X_MAX){
+// 			printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
+// 			counter++;
+// 		}
+// 		printf("x1:%d , y1:%d , z1:%d\n",x_line1[counter],y_line1[counter],z_line1[counter]);
+// 		counter = 0;
+// 		while(y_line2[counter] != X_MAX){
+// 			printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
+// 			counter++;
+// 		}
+// 	printf("x2:%d , y2:%d , z2:%d\n",x_line2[counter],y_line2[counter],z_line2[counter]);
+// 		printf("purged!\n");
+//
+//
+//
+// 	int i = 0;
+// 		while(i < index){
+// 			printf("x:%d , y:%d , z:%d\n",x[i],y[i],z[i]);
+// 			i++;
+// 		}
+// 		i = 0;
+// 		while(i < index1){
+// 			printf("x1:%d , y1:%d , z1:%d\n",x1[i],y1[i],z1[i]);
+// 			i++;
+// 		}
+// printf("index2:%d\n",index2);
+// 				i = 0;
+// 				while(i < index2){
+// 					printf("x2:%d , y2:%d , z2:%d\n",x2[i],y2[i],z2[i]);
+// 					i++;
+// 				}
+//
+// 	exit(0);
+// }
 
 
 
@@ -765,7 +765,7 @@ void scanLine(struct Matrix mx){
 							mid_x = round(mx.x[i + 2]);
 						mid_z = round(mx.z[i + 2]);}
 		}
-
+			if("line"){
 			x_line = malloc(sizeof(int));
 			y_line = malloc(sizeof(int));
 			z_line = malloc(sizeof(int));
@@ -791,8 +791,6 @@ void scanLine(struct Matrix mx){
 					x_line[0] = x1;
 					y_line[0] = y1;
 					z_line[0] = z1;
-
-
 					//canvas_set_s(global_x[index],global_y[index],global_z[index],global_color);
 					err_1 = dy2 - abx;
 					err_2 = dz2 - abx;
@@ -815,9 +813,12 @@ void scanLine(struct Matrix mx){
 							y_line[j + 1] = y1;
 							z_line[j + 1] = z1;
 					}
-					x_line[abx] = X_MAX;
-					y_line[abx] = X_MAX;
-					z_line[abx] = X_MAX;
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
 			} else if ((aby >= abx) && (aby >= abz)) {
 					x_line[0] = x1;
 					y_line[0] = y1;
@@ -843,9 +844,12 @@ void scanLine(struct Matrix mx){
 							y_line[j + 1] = y1;
 							z_line[j + 1] = z1;
 					}
-					x_line[aby] = X_MAX;
-					y_line[aby] = X_MAX;
-					z_line[aby] = X_MAX;
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
 			} else {
 				x_line[0] = x1;
 				y_line[0] = y1;
@@ -872,15 +876,20 @@ void scanLine(struct Matrix mx){
 							y_line[j + 1] = y1;
 							z_line[j + 1] = z1;
 					}
-					x_line[abz] = X_MAX;
-					y_line[abz] = X_MAX;
-					z_line[abz] = X_MAX;
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
 			}
-			x_line1 = malloc(sizeof(int));
-			y_line1 = malloc(sizeof(int));
-			z_line1 = malloc(sizeof(int));
+		}
 
-			if("assignment"){
+			if("line1"){
+			if("assignment1"){
+				x_line1 = malloc(sizeof(int));
+				y_line1 = malloc(sizeof(int));
+				z_line1 = malloc(sizeof(int));
 				dx = top_x - mid_x;
 				dy = top_y - mid_y;
 				dz = top_z - mid_z;
@@ -899,7 +908,7 @@ void scanLine(struct Matrix mx){
 			}
 			if ((abx >= aby) && (abx >= abz)) {
 
-
+//if(global_db >= 123){printf("\nabx:%d      this!\n",abx);}
 					x_line1[0] = x1;
 					y_line1[0] = y1;
 					z_line1[0] = z1;
@@ -907,6 +916,7 @@ void scanLine(struct Matrix mx){
 					err_1 = dy2 - abx;
 					err_2 = dz2 - abx;
 					for (j = 0; j < abx; j++) {
+
 							x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
 							y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
 							z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
@@ -925,9 +935,15 @@ void scanLine(struct Matrix mx){
 							y_line1[j + 1] = y1;
 							z_line1[j + 1] = z1;
 					}
-					x_line1[abx] = X_MAX;
-					y_line1[abx] = X_MAX;
-					z_line1[abx] = X_MAX;
+					// if(global_db >= 123){
+					// 	printf("x:%d   y:%d\n",x_line1[abx],y_line1[abx] );
+					// }
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
 			} else if ((aby >= abx) && (aby >= abz)) {
 					x_line1[0] = x1;
 					y_line1[0] = y1;
@@ -953,10 +969,16 @@ void scanLine(struct Matrix mx){
 							y_line1[j + 1] = y1;
 							z_line1[j + 1] = z1;
 					}
-					x_line1[aby] = X_MAX;
-					y_line1[aby] = X_MAX;
-					z_line1[aby] = X_MAX;
+					if("terminating X_MAX"){
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
+				}
 			} else {
+
 				x_line1[0] = x1;
 				y_line1[0] = y1;
 				z_line1[0] = z1;
@@ -981,15 +1003,20 @@ void scanLine(struct Matrix mx){
 							y_line1[j + 1] = y1;
 							z_line1[j + 1] = z1;
 					}
-					x_line1[abz] = X_MAX;
-					y_line1[abz] = X_MAX;
-					z_line1[abz] = X_MAX;
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
 			}
+		}
 
-			x_line2 = malloc(sizeof(int));
-			y_line2 = malloc(sizeof(int));
-			z_line2 = malloc(sizeof(int));
-			if("assignment"){
+			if("line2"){
+			if("assignment2"){
+				x_line2 = malloc(sizeof(int));
+				y_line2 = malloc(sizeof(int));
+				z_line2 = malloc(sizeof(int));
 				dx = mid_x - bot_x;
 				dy = mid_y - bot_y;
 				dz = mid_z - bot_z;
@@ -1035,9 +1062,12 @@ void scanLine(struct Matrix mx){
 							y_line2[j + 1] = y1;
 							z_line2[j + 1] = z1;
 					}
-					x_line2[abx] = X_MAX;
-					y_line2[abx] = X_MAX;
-					z_line2[abx] = X_MAX;
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
 			} else if ((aby >= abx) && (aby >= abz)) {
 					x_line2[0] = x1;
 					y_line2[0] = y1;
@@ -1063,9 +1093,12 @@ void scanLine(struct Matrix mx){
 							y_line2[j + 1] = y1;
 							z_line2[j + 1] = z1;
 					}
-					x_line2[aby] = X_MAX;
-					y_line2[aby] = X_MAX;
-					z_line2[aby] = X_MAX;
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
 			} else {
 			//	printf("bot_y:%d\n",bot_y);
 				x_line2[0] = x1;
@@ -1092,17 +1125,20 @@ void scanLine(struct Matrix mx){
 							y_line2[j + 1] = y1;
 							z_line2[j + 1] = z1;
 					}
-					x_line2[abz] = X_MAX;
-					y_line2[abz] = X_MAX;
-					z_line2[abz] = X_MAX;
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
 			}
-//
+		}
 
-if(global_db >= 123){
-printf("top_x:%d , mid_x:%d , bot_x:%d\n",top_x,mid_x,bot_x);
-printf("top_y:%d , mid_y:%d , bot_y:%d\n",top_y,mid_y,bot_y);
-printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
-}
+// if(global_db >= 123){
+// printf("top_x:%d , mid_x:%d , bot_x:%d\n",top_x,mid_x,bot_x);
+// printf("top_y:%d , mid_y:%d , bot_y:%d\n",top_y,mid_y,bot_y);
+// printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
+// }
 
 			purification();
 
@@ -1134,6 +1170,521 @@ printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
 
 }
 
+void reflection(struct Matrix mx){
+	global_db = 0;
+	int top_y = Y_MIN;
+	int mid_y = Y_MIN;
+	int bot_y = Y_MAX;
+	int top_x;
+	int mid_x;
+	int bot_x;
+	int top_z;
+	int mid_z;
+	int bot_z;
+	int size = 0;
+	int dx;
+	int dx1;
+	int dx2;
+	int dy;
+	int dy1;
+	int dy2;
+	int dz;
+	int dz1;
+	int dz2;
+	int x1;
+	int y1;
+	int z1;
+	int a = 0;
+	int i;
+	int j;
+  int abx, aby, abz, x_inc, y_inc, z_inc, err_1, err_2;
+
+	//FILE* file = fopen("/dev/urandom", "w+");
+	for(i = 0; i < mx.col; i += 3){
+
+		//printf("jjjjjjjjjjjjj:%d\n",j);
+		int * buffer;
+		//while(){
+		buffer = sys_random(buffer,3);
+		//}
+
+		buffer[0] = abs(buffer[0]  % 255);
+		buffer[1] = abs(buffer[1]  % 255);
+		buffer[2] = abs(buffer[2]  % 255);
+
+		//printf("dddddddddddot:%d\n",dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]));
+		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
+
+			if("get coord"){
+			if(top_y < round(mx.y[i])){
+				top_y = round(mx.y[i]);
+				top_x = round(mx.x[i]);
+				top_z = round(mx.z[i]);}
+			if(top_y < round(mx.y[i + 1])){
+				top_y = round(mx.y[i + 1]);
+				top_x = round(mx.x[i + 1]);
+				top_z = round(mx.z[i + 1]);}
+			if(top_y < round(mx.y[i + 2])){
+				top_y = round(mx.y[i + 2]);
+				top_x = round(mx.x[i + 2]);
+				top_z = round(mx.x[i + 2]);}
+			if(bot_y > round(mx.y[i])){
+				bot_y = round(mx.y[i]);
+				bot_x = round(mx.x[i]);
+				bot_z = round(mx.z[i]);}
+			if(bot_y > round(mx.y[i + 1])){
+				//printf("?????\n");
+				bot_y = round(mx.y[i + 1]);
+				bot_x = round(mx.x[i + 1]);
+				bot_z = round(mx.z[i + 1]);}
+			if(bot_y > round(mx.y[i + 2])){
+				//printf("lololoasdsad\n");
+				//printf("round:mx.y:%f\n",mx.y[i+2]);
+				bot_y = round(mx.y[i + 2]);
+				bot_x = round(mx.x[i + 2]);
+			bot_z = round(mx.z[i + 2]);}
+				//printf("bbbbbbot_y:%d\n",bot_y);
+			if(round(mx.y[i]) != bot_y && round(mx.y[i]) != top_y){
+				mid_y = round(mx.y[i]);
+				mid_x = round(mx.x[i]);
+			mid_z = round(mx.z[i]);}
+			else if(round(mx.y[i + 1]) != bot_y && round(mx.y[i + 1]) != top_y){
+				mid_y = round(mx.y[i + 1]);
+				mid_x = round(mx.x[i + 1]);
+			mid_z = round(mx.z[i + 1]);}
+			else if(round(mx.y[i + 2]) != bot_y && round(mx.y[i + 2]) != top_y){
+				mid_y = round(mx.y[i + 2]);
+				mid_x = round(mx.x[i + 2]);
+			mid_z = round(mx.z[i + 2]);}
+				else if(round(mx.x[i]) != bot_x && round(mx.x[i]) != top_x){
+					mid_y = round(mx.y[i]);
+					mid_x = round(mx.x[i]);
+				mid_z = round(mx.z[i]);}
+					else if(round(mx.x[i + 1]) != bot_x && round(mx.x[i + 1]) != top_x){
+						mid_y = round(mx.y[i + 1]);
+						mid_x = round(mx.x[i + 1]);
+					mid_z = round(mx.z[i + 1]);}
+						else if(round(mx.x[i + 2]) != bot_x && round(mx.x[i + 2]) != top_x){
+							mid_y = round(mx.y[i + 2]);
+							mid_x = round(mx.x[i + 2]);
+						mid_z = round(mx.z[i + 2]);}
+						else if(round(mx.z[i]) != bot_z && round(mx.z[i]) != top_z){
+							mid_y = round(mx.y[i ]);
+							mid_x = round(mx.x[i ]);
+						mid_z = round(mx.z[i ]);}
+						else if(round(mx.z[i + 1]) != bot_z && round(mx.z[i + 1]) != top_z){
+							mid_y = round(mx.y[i + 1]);
+							mid_x = round(mx.x[i + 1]);
+						mid_z = round(mx.z[i + 1]);}
+						else if(round(mx.z[i + 2]) != bot_z && round(mx.z[i + 2]) != top_z){
+							mid_y = round(mx.y[i + 2]);
+							mid_x = round(mx.x[i + 2]);
+						mid_z = round(mx.z[i + 2]);}
+		}
+			if("line"){
+			x_line = malloc(sizeof(int));
+			y_line = malloc(sizeof(int));
+			z_line = malloc(sizeof(int));
+			if("assignment"){
+				dx = top_x - bot_x;
+				dy = top_y - bot_y;
+				dz = top_z - bot_z;
+				x_inc = (dx < 0) ? -1 : 1;
+				abx = abs(dx);
+				y_inc = (dy < 0) ? -1 : 1;
+				aby = abs(dy);
+				z_inc = (dz < 0) ? -1 : 1;
+				abz = abs(dz);
+				dx2 = abx * 2;
+				dy2 = aby * 2;
+				dz2 = abz * 2;
+				x1 = bot_x;
+				y1 = bot_y;
+				z1 = bot_z;
+
+			}
+			if ((abx >= aby) && (abx >= abz)) {
+					x_line[0] = x1;
+					y_line[0] = y1;
+					z_line[0] = z1;
+					//canvas_set_s(global_x[index],global_y[index],global_z[index],global_color);
+					err_1 = dy2 - abx;
+					err_2 = dz2 - abx;
+					for (j = 0; j < abx; j++) {
+							x_line = realloc(x_line,(j + 2) * sizeof(int));
+							y_line = realloc(y_line,(j + 2) * sizeof(int));
+							z_line = realloc(z_line,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dx2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dx2;
+							}
+							err_1 += dy2;
+							err_2 += dz2;
+							x1 += x_inc;
+							x_line[j + 1] = x1;
+							y_line[j + 1] = y1;
+							z_line[j + 1] = z1;
+					}
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
+			} else if ((aby >= abx) && (aby >= abz)) {
+					x_line[0] = x1;
+					y_line[0] = y1;
+					z_line[0] = z1;
+					err_1 = dx2 - aby;
+					err_2 = dz2 - aby;
+					for (j = 0; j < aby; j++) {
+							x_line = realloc(x_line,(j + 2) * sizeof(int));
+							y_line = realloc(y_line,(j + 2) * sizeof(int));
+							z_line = realloc(z_line,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									x1 += x_inc;
+									err_1 -= dy2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dy2;
+							}
+							err_1 += dx2;
+							err_2 += dz2;
+							y1 += y_inc;
+							x_line[j + 1] = x1;
+							y_line[j + 1] = y1;
+							z_line[j + 1] = z1;
+					}
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
+			} else {
+				x_line[0] = x1;
+				y_line[0] = y1;
+				z_line[0] = z1;
+
+					err_1 = dy2 - abz;
+					err_2 = dx2 - abz;
+					for (j = 0; j < abz; j++) {
+						x_line = realloc(x_line,(j + 2) * sizeof(int));
+						y_line = realloc(y_line,(j + 2) * sizeof(int));
+						z_line = realloc(z_line,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dz2;
+							}
+							if (err_2 > 0) {
+									x1 += x_inc;
+									err_2 -= dz2;
+							}
+							err_1 += dy2;
+							err_2 += dx2;
+							z1 += z_inc;
+							x_line[j + 1] = x1;
+							y_line[j + 1] = y1;
+							z_line[j + 1] = z1;
+					}
+					x_line = realloc(x_line,(j + 2) * sizeof(int));
+					y_line = realloc(y_line,(j + 2) * sizeof(int));
+					z_line = realloc(z_line,(j + 2) * sizeof(int));
+					x_line[j + 1] = X_MAX;
+					y_line[j + 1] = X_MAX;
+					z_line[j + 1] = X_MAX;
+			}
+		}
+
+			if("line1"){
+			if("assignment1"){
+				x_line1 = malloc(sizeof(int));
+				y_line1 = malloc(sizeof(int));
+				z_line1 = malloc(sizeof(int));
+				dx = top_x - mid_x;
+				dy = top_y - mid_y;
+				dz = top_z - mid_z;
+				x_inc = (dx < 0) ? -1 : 1;
+				abx = abs(dx);
+				y_inc = (dy < 0) ? -1 : 1;
+				aby = abs(dy);
+				z_inc = (dz < 0) ? -1 : 1;
+				abz = abs(dz);
+				dx2 = abx * 2;
+				dy2 = aby * 2;
+				dz2 = abz * 2;
+				x1 = mid_x;
+				y1 = mid_y;
+				z1 = mid_z;
+			}
+			if ((abx >= aby) && (abx >= abz)) {
+
+//if(global_db >= 123){printf("\nabx:%d      this!\n",abx);}
+					x_line1[0] = x1;
+					y_line1[0] = y1;
+					z_line1[0] = z1;
+					//canvas_set_s(global_x[index],global_y[index],global_z[index],global_color);
+					err_1 = dy2 - abx;
+					err_2 = dz2 - abx;
+					for (j = 0; j < abx; j++) {
+
+							x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+							y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+							z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dx2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dx2;
+							}
+							err_1 += dy2;
+							err_2 += dz2;
+							x1 += x_inc;
+							x_line1[j + 1] = x1;
+							y_line1[j + 1] = y1;
+							z_line1[j + 1] = z1;
+					}
+					// if(global_db >= 123){
+					// 	printf("x:%d   y:%d\n",x_line1[abx],y_line1[abx] );
+					// }
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
+			} else if ((aby >= abx) && (aby >= abz)) {
+					x_line1[0] = x1;
+					y_line1[0] = y1;
+					z_line1[0] = z1;
+					err_1 = dx2 - aby;
+					err_2 = dz2 - aby;
+					for (j = 0; j < aby; j++) {
+							x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+							y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+							z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									x1 += x_inc;
+									err_1 -= dy2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dy2;
+							}
+							err_1 += dx2;
+							err_2 += dz2;
+							y1 += y_inc;
+							x_line1[j + 1] = x1;
+							y_line1[j + 1] = y1;
+							z_line1[j + 1] = z1;
+					}
+					if("terminating X_MAX"){
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
+				}
+			} else {
+
+				x_line1[0] = x1;
+				y_line1[0] = y1;
+				z_line1[0] = z1;
+					err_1 = dy2 - abz;
+					err_2 = dx2 - abz;
+					for (j = 0; j < abz; j++) {
+						x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+						y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+						z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dz2;
+							}
+							if (err_2 > 0) {
+									x1 += x_inc;
+									err_2 -= dz2;
+							}
+							err_1 += dy2;
+							err_2 += dx2;
+							z1 += z_inc;
+							x_line1[j + 1] = x1;
+							y_line1[j + 1] = y1;
+							z_line1[j + 1] = z1;
+					}
+					x_line1 = realloc(x_line1,(j + 2) * sizeof(int));
+					y_line1 = realloc(y_line1,(j + 2) * sizeof(int));
+					z_line1 = realloc(z_line1,(j + 2) * sizeof(int));
+					x_line1[j + 1] = X_MAX;
+					y_line1[j + 1] = X_MAX;
+					z_line1[j + 1] = X_MAX;
+			}
+		}
+
+			if("line2"){
+			if("assignment2"){
+				x_line2 = malloc(sizeof(int));
+				y_line2 = malloc(sizeof(int));
+				z_line2 = malloc(sizeof(int));
+				dx = mid_x - bot_x;
+				dy = mid_y - bot_y;
+				dz = mid_z - bot_z;
+				x_inc = (dx < 0) ? -1 : 1;
+				abx = abs(dx);
+				y_inc = (dy < 0) ? -1 : 1;
+				aby = abs(dy);
+				z_inc = (dz < 0) ? -1 : 1;
+				abz = abs(dz);
+				dx2 = abx * 2;
+				dy2 = aby * 2;
+				dz2 = abz * 2;
+				x1 = bot_x;
+				y1 = bot_y;
+				z1 = bot_z;
+			}
+			if ((abx >= aby) && (abx >= abz)) {
+
+
+
+					x_line2[0] = x1;
+					y_line2[0] = y1;
+					z_line2[0] = z1;
+					//canvas_set_s(global_x[index],global_y[index],global_z[index],global_color);
+					err_1 = dy2 - abx;
+					err_2 = dz2 - abx;
+					for (j = 0; j < abx; j++) {
+							x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+							y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+							z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dx2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dx2;
+							}
+							err_1 += dy2;
+							err_2 += dz2;
+							x1 += x_inc;
+							x_line2[j + 1] = x1;
+							y_line2[j + 1] = y1;
+							z_line2[j + 1] = z1;
+					}
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
+			} else if ((aby >= abx) && (aby >= abz)) {
+					x_line2[0] = x1;
+					y_line2[0] = y1;
+					z_line2[0] = z1;
+					err_1 = dx2 - aby;
+					err_2 = dz2 - aby;
+					for (j = 0; j < aby; j++) {
+							x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+							y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+							z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									x1 += x_inc;
+									err_1 -= dy2;
+							}
+							if (err_2 > 0) {
+									z1 += z_inc;
+									err_2 -= dy2;
+							}
+							err_1 += dx2;
+							err_2 += dz2;
+							y1 += y_inc;
+							x_line2[j + 1] = x1;
+							y_line2[j + 1] = y1;
+							z_line2[j + 1] = z1;
+					}
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
+			} else {
+			//	printf("bot_y:%d\n",bot_y);
+				x_line2[0] = x1;
+				y_line2[0] = y1;
+				z_line2[0] = z1;
+					err_1 = dy2 - abz;
+					err_2 = dx2 - abz;
+					for (j = 0; j < abz; j++) {
+						x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+						y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+						z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+							if (err_1 > 0) {
+									y1 += y_inc;
+									err_1 -= dz2;
+							}
+							if (err_2 > 0) {
+									x1 += x_inc;
+									err_2 -= dz2;
+							}
+							err_1 += dy2;
+							err_2 += dx2;
+							z1 += z_inc;
+							x_line2[j + 1] = x1;
+							y_line2[j + 1] = y1;
+							z_line2[j + 1] = z1;
+					}
+					x_line2 = realloc(x_line2,(j + 2) * sizeof(int));
+					y_line2 = realloc(y_line2,(j + 2) * sizeof(int));
+					z_line2 = realloc(z_line2,(j + 2) * sizeof(int));
+					x_line2[j + 1] = X_MAX;
+					y_line2[j + 1] = X_MAX;
+					z_line2[j + 1] = X_MAX;
+			}
+		}
+
+// if(global_db >= 123){
+// printf("top_x:%d , mid_x:%d , bot_x:%d\n",top_x,mid_x,bot_x);
+// printf("top_y:%d , mid_y:%d , bot_y:%d\n",top_y,mid_y,bot_y);
+// printf("top_z:%d , mid_z:%d , bot_z:%d\n",top_z,mid_z,bot_z);
+// }
+
+			purification();
+
+			int color[3];
+			color[0] = buffer[0];//buffer[0] % 255;
+			color[1] = buffer[1];//buffer[1] % 255;
+			color[2] = buffer[2];//buffer[2] % 255;
+
+			drawLine_mod(color);
+
+		 free(x_line);  // <--this is global
+		 free(y_line);
+		 free(z_line);
+		 free(x_line1);
+		 free(y_line1);
+		 free(z_line1);
+		 free(y_line2);
+		 free(x_line2);
+		 free(z_line2);
+
+		 top_y = Y_MIN;
+		 mid_y = Y_MIN;
+		 bot_y = Y_MAX;
+		}
+		free(buffer);
+		a++;
+		//printf("j:%d\n",j);
+	}
+
+}
 
 void drawLine_test(int x, int y, int z, int x1, int y1, int z1, int color[3]){
     int i, dx, dy, dz, abx, aby, abz, x_inc, y_inc, z_inc, err_1, err_2, dx2, dy2, dz2;

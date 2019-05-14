@@ -48,9 +48,9 @@ struct Matrix poly;
 struct Matrix edge;
 
 poly = mx_init_p(poly,0);
-// poly = mx_addsphere(poly,0,0,0,100);
+poly = mx_addsphere(poly,0,0,0,100);
 //poly = mx_addbox(poly,0,0,0,50,100,100);
-//poly = mx_addbox(poly,50,50,50,50,100,100);
+poly = mx_addbox(poly,50,50,50,50,100,100);
 poly = mx_addtorus(poly,0,0,0,50,100);
 // poly = mx_addpoint(poly,0,0,0);
 // poly = mx_addpoint(poly,50,0,0);
@@ -60,8 +60,8 @@ poly = mx_addtorus(poly,0,0,0,50,100);
 // poly = mx_addpoint(poly,50,0,0);
 // poly = mx_addpoint(poly,25,-50,0);
 
- // poly = mx_rotate(poly,0,0.5);
- // poly = mx_rotate(poly,1,0.5);
+  poly = mx_rotate(poly,0,0.5);
+  poly = mx_rotate(poly,1,0.5);
 
 mx_export(poly,color);
 
