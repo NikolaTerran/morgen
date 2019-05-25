@@ -271,7 +271,7 @@ struct Matrix mx_copy(struct Matrix src, struct Matrix dst){
 	return dst;
 }
 
-void mx_export(struct Matrix mx, int color[]){
+void mx_export(struct Matrix mx, struct Light lt, int color[]){
 	if(mx.type == 'a'){
 		drawPoint(mx,color);
 	}else if(mx.type == 'b'){
@@ -280,7 +280,8 @@ void mx_export(struct Matrix mx, int color[]){
 		drawLine(mx,color);
 	}else if(mx.type == 'c'){
 		//drawLine(mx,color);
-		scanLine(mx);
+		//scanLine(mx);
+		reflection(mx,lt);
 		//drawPoint(mx,color);
 	}
 }

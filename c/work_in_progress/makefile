@@ -1,5 +1,5 @@
-all: engine.h main.o point.o canvas.o line.o curve.o matrix.o trans.o 3d.o
-	gcc -g 3d.o matrix.o point.o main.o canvas.o curve.o line.o trans.o -lm -lpthread
+all: engine.h main.o point.o canvas.o line.o curve.o matrix.o trans.o 3d.o light.o
+	gcc -g 3d.o matrix.o point.o main.o canvas.o curve.o line.o trans.o light.o -lm -lpthread
 	./a.out
 
 main.o: main.c engine.h
@@ -15,6 +15,8 @@ point.o: point.c engine.h
 	gcc -c point.c
 #parser.o: parser.c engine.h
 #	gcc -c parser.c
+light.o: light.c engine.h
+	gcc -c light.c
 
 curve.o: curve.c engine.h
 	gcc -c curve.c

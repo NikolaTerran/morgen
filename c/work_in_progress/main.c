@@ -47,11 +47,21 @@ color[2] = 0;
 struct Matrix poly;
 struct Matrix edge;
 
+struct Light light0;
+light0 = light_init(0,1,1,
+                    255,255,255,
+                    255,255,0,
+                    255,255,255,
+                    0,1,0,
+                    8);
+//printf("ok!\n");
+//exit(0);
+
 poly = mx_init_p(poly,0);
-poly = mx_addsphere(poly,0,0,0,100);
+poly = mx_addsphere(poly,0,0,0,75);
 //poly = mx_addbox(poly,0,0,0,50,100,100);
-poly = mx_addbox(poly,50,50,50,50,100,100);
-poly = mx_addtorus(poly,0,0,0,50,100);
+poly = mx_addbox(poly,150,150,0,50,50,50);
+poly = mx_addtorus(poly,0,0,0,30,150);
 // poly = mx_addpoint(poly,0,0,0);
 // poly = mx_addpoint(poly,50,0,0);
 // poly = mx_addpoint(poly,25,50,0);
@@ -63,7 +73,7 @@ poly = mx_addtorus(poly,0,0,0,50,100);
   poly = mx_rotate(poly,0,0.5);
   poly = mx_rotate(poly,1,0.5);
 
-mx_export(poly,color);
+mx_export(poly,light0,color);
 
 
 printf("hi\n");

@@ -652,8 +652,6 @@ void purification(){
 	 //return size;
 }
 
-
-
 void scanLine(struct Matrix mx){
 	global_db = 0;
 	int top_y = Y_MIN;
@@ -1170,7 +1168,7 @@ void scanLine(struct Matrix mx){
 
 }
 
-void reflection(struct Matrix mx){
+void reflection(struct Matrix mx,struct Light lt){
 	global_db = 0;
 	int top_y = Y_MIN;
 	int mid_y = Y_MIN;
@@ -1201,16 +1199,6 @@ void reflection(struct Matrix mx){
 
 	//FILE* file = fopen("/dev/urandom", "w+");
 	for(i = 0; i < mx.col; i += 3){
-
-		//printf("jjjjjjjjjjjjj:%d\n",j);
-		int * buffer;
-		//while(){
-		buffer = sys_random(buffer,3);
-		//}
-
-		buffer[0] = abs(buffer[0]  % 255);
-		buffer[1] = abs(buffer[1]  % 255);
-		buffer[2] = abs(buffer[2]  % 255);
 
 		//printf("dddddddddddot:%d\n",dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]));
 		if(dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a]) >= 0){
@@ -1659,11 +1647,77 @@ void reflection(struct Matrix mx){
 			purification();
 
 			int color[3];
-			color[0] = buffer[0];//buffer[0] % 255;
-			color[1] = buffer[1];//buffer[1] % 255;
-			color[2] = buffer[2];//buffer[2] % 255;
+			double ltdouble = lt_dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a],
+							  							lt.light_x[0],lt.light_y[0],lt.light_z[0]) * lt.drc[0];
+			int lt_r = round(ltdouble * lt.diffused_r[0]);
+			int lt_g = round(ltdouble * lt.diffused_g[0]);
+			int lt_b = round(ltdouble * lt.diffused_b[0]);
 
+			double rfx = refect_vector('x', mx.vx[a],mx.vy[a],mx.vz[a], lt.light_x[0],lt.light_y[0],lt.light_z[0]);
+			double rfy = refect_vector('y', mx.vx[a],mx.vy[a],mx.vz[a], lt.light_x[0],lt.light_y[0],lt.light_z[0]);
+			double rfz = refect_vector('z', mx.vx[a],mx.vy[a],mx.vz[a], lt.light_x[0],lt.light_y[0],lt.light_z[0]);
+
+			double rf = dot_pdt(rfx, rfy, rfz) * lt.src[0];
+			int lt_sr = round(rf * lt.specular_r[0]);
+			int lt_sg = round(rf * lt.specular_g[0]);
+			int lt_sb = round(rf * lt.specular_b[0]);
+
+			color[0] = lt.ambient_r * lt.arc + lt_r;// +  lt_dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a],
+																			//						lt.light_x[0],lt.light_y[0],lt.light_z[0]) * lt.drc[0] * lt.diffused_r[0];//buffer[0] % 255;
+			color[1] = lt.ambient_g * lt.arc + lt_g;// +  lt_dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a],
+																				//						lt.light_x[0],lt.light_y[0],lt.light_z[0]) * lt.drc[0] * lt.diffused_g[0];//buffer[1] % 255;
+			color[2] = lt.ambient_b * lt.arc + lt_b;// +  lt_dot_pdt(mx.vx[a],mx.vy[a],mx.vz[a],
+																				//						lt.light_x[0],lt.light_y[0],lt.light_z[0]) * lt.drc[0] * lt.diffused_b[0];//buffer[2] % 255;
+			if(lt_sr > lt_r && lt_sg > lt_g && lt_sb > lt_b){
+				color[0] = lt_sr;
+				color[1] = lt_sg;
+				color[2] = lt_sb;
+			}
+
+			if(color[0] > 255){
+				color[0] = 255;
+				color[1] = 255;
+				color[2] = 255;
+			}
+			if(color[0] < 0){
+				color[0] = 0;
+				color[1] = 0;
+				color[2] = 0;
+			}
+			if(color[1] > 255){
+				color[0] = 255;
+				color[1] = 255;
+				color[2] = 255;
+			}
+			if(color[1] < 0){
+				color[0] = 0;
+				color[1] = 0;
+				color[2] = 0;
+			}
+			if( color[2] < 0){
+				color[0] = 0;
+				color[1] = 0;
+				color[2] = 0;
+			}
+			if(color[2] > 255){
+				color[0] = 255;
+				color[1] = 255;
+				color[2] = 255;
+			}
 			drawLine_mod(color);
+
+			//printf("lt_r:%f\n",
+			//	ltdouble);
+			// printf("ltr:%d ",lt_r);
+			// printf("ltg:%d ",lt_g);
+			// printf("ltb:%d\n",lt_b);
+	    // printf("color:%d\n",color[0]);
+			// printf("color1:%d\n",color[1]);
+			// printf("color2:%d\n",color[2]);
+			// printf("mx.vx:%f\n",mx.vx[a] * 255);
+			// printf("mx.vy:%f\n",mx.vy[a]);
+			// printf("mx.vz:%f\n",mx.vz[a]);
+
 
 		 free(x_line);  // <--this is global
 		 free(y_line);
@@ -1679,7 +1733,6 @@ void reflection(struct Matrix mx){
 		 mid_y = Y_MIN;
 		 bot_y = Y_MAX;
 		}
-		free(buffer);
 		a++;
 		//printf("j:%d\n",j);
 	}

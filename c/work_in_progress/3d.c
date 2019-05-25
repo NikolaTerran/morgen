@@ -74,6 +74,11 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 		double t = M_PI / 2;
 		double step = M_PI * td_step;
 
+	 	double holdx;
+		double holdy;
+		double holdz;
+		double holdr;
+
 		struct Matrix trans;
 		struct Matrix trans1;
 		struct Matrix result;
@@ -113,7 +118,6 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			result.vy = realloc(result.vy,vlim * sizeof(double));
 			result.vz = realloc(result.vz,vlim * sizeof(double));
 
-
 			i = result.col;
 			a = i / 3;
 			j = 0;
@@ -147,9 +151,14 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			vz1 = result.z[i - 1] - result.z[i - 3];
 			vz2 = result.z[i - 2] - result.z[i - 3];
 
-			result.vx[a] = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
-			result.vy[a] = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
-			result.vz[a] = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdx = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdy = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdz = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+			result.vx[a] = holdx / holdr;
+			result.vy[a] = holdy / holdr;
+			result.vz[a] = holdz / holdr;
 		//	db_dot_pdt(result.vx[a],result.vy[a],result.vz[a]);
 
 			a++;
@@ -181,9 +190,16 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 				vz1 = result.z[i - 1] - result.z[i - 3];
 				vz2 = result.z[i - 2] - result.z[i - 3];
 
-				result.vx[a] = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
-				result.vy[a] = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
-				result.vz[a] = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+				holdx = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
+				holdy = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
+				holdz = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+				holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+				result.vx[a] = holdx / holdr;
+				result.vy[a] = holdy / holdr;
+				result.vz[a] = holdz / holdr;
+
+
 		//		db_dot_pdt(result.vx[a],result.vy[a],result.vz[a]);
 				a++;
 
@@ -212,9 +228,16 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 				vz1 = result.z[i - 1] - result.z[i - 3];
 				vz2 = result.z[i - 2] - result.z[i - 3];
 
-			result.vx[a] = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
-			result.vy[a] = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
-			result.vz[a] = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdx = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdy = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdz = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+			holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+			result.vx[a] = holdx / holdr;
+			result.vy[a] = holdy / holdr;
+			result.vz[a] = holdz / holdr;
+
+
 	//db_dot_pdt(result.vx[a],result.vy[a],result.vz[a]);
 				a++;
 
@@ -240,9 +263,15 @@ struct Matrix mx_addsphere(struct Matrix mx, double x, double y, double z, doubl
 			vz1 = result.z[lim  - 1] - result.z[lim  - 3];
 			vz2 = result.z[lim  - 2] - result.z[lim  - 3];
 
-			 result.vx[vlim - 1] = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
-			 result.vy[vlim - 1] = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
-			 result.vz[vlim - 1] = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+
+			 holdx = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
+			 holdy = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
+			 holdz = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+			 holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+			 result.vx[a] = holdx / holdr;
+			 result.vy[a] = holdy / holdr;
+			 result.vz[a] = holdz / holdr;
 		//	 db_dot_pdt(result.vx[vlim - 1],result.vy[vlim - 1],result.vz[vlim - 1]);
 			trans = mx_rotate(trans,td_axis,step);
 			trans1 = mx_rotate(trans1,td_axis,step);
@@ -276,6 +305,10 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 		double step = M_PI * td_step;
 		struct Matrix trans;
 		struct Matrix result;
+
+
+
+
 		result = mx_init(result,0);
 		trans = mx_init(trans,0);
 
@@ -309,6 +342,11 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 					struct Matrix trans;
 					struct Matrix trans1;
 					struct Matrix result;
+
+					double holdx;
+					double holdy;
+					double holdz;
+					double holdr;
 
 					trans = mx_init(trans,0);
 					trans1 = mx_init(trans1,0);
@@ -381,9 +419,14 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 							vz2 = result.z[i - 2] - result.z[i - 3];
 
 
-							result.vx[a] = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
-							result.vy[a] = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
-							result.vz[a] = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+						holdx = cross_pdt('x',vx2,vy2,vz2,vx1,vy1,vz1);
+						holdy = cross_pdt('y',vx2,vy2,vz2,vx1,vy1,vz1);
+					  holdz = cross_pdt('z',vx2,vy2,vz2,vx1,vy1,vz1);
+							holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+							result.vx[a] = holdx / holdr;
+							result.vy[a] = holdy / holdr;
+							result.vz[a] = holdz / holdr;
 
 							a++;
 
@@ -412,10 +455,14 @@ struct Matrix mx_addtorus(struct Matrix mx, double x, double y, double z, double
 							vz1 = result.z[i - 1] - result.z[i - 3];
 							vz2 = result.z[i - 2] - result.z[i - 3];
 
+						holdx = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
+						holdy = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
+						holdz = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+						holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
 
-						result.vx[a] = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
-						result.vy[a] = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
-						result.vz[a] = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+						result.vx[a] = holdx / holdr;
+						result.vy[a] = holdy / holdr;
+						result.vz[a] = holdz / holdr;
 						  a++;
 
 						}
@@ -458,6 +505,7 @@ struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
 	if(mx.type == 'c'){
 
 		int i,j,a;
+		double holdx, holdy, holdz, holdr;
 		struct Matrix result;
 		result = mx_init_p(result,36);
 
@@ -666,9 +714,20 @@ struct Matrix mx_addbox(struct Matrix mx, double x1, double y1, double z1,
 			vz1 = result.z[i] - result.z[i - 2];
 			vz2 = result.z[i - 1] - result.z[i - 2];
 
-			result.vx[a] = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
-			result.vy[a] = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
-			result.vz[a] = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+
+			// result.vx[a] = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
+			// result.vy[a] = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
+			// result.vz[a] = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+
+			holdx = cross_pdt('x',vx1,vy1,vz1,vx2,vy2,vz2);
+			holdy = cross_pdt('y',vx1,vy1,vz1,vx2,vy2,vz2);
+			holdz = cross_pdt('z',vx1,vy1,vz1,vx2,vy2,vz2);
+			holdr = sqrt(holdx * holdx + holdy * holdy + holdz * holdz);
+
+			result.vx[a] = holdx / holdr;
+			result.vy[a] = holdy / holdr;
+			result.vz[a] = holdz / holdr;
+
 			a++;
 		//	i--;
 
