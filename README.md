@@ -1,5 +1,1 @@
-# !!!!!IMPORTANT NOTE!!!!!!!
-# Stuck on a bug this morning that cause me unable to assign value to matrix,
-# took me 2 hrs to find out that i passed wrong pointer to realloc.
-# what the ...
-# i hate c ...
+
